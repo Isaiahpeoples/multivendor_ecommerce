@@ -41,18 +41,15 @@ import { CategoryFormSchema } from "@/lib/schema";
 import { useToast } from "@/hooks/use-toast";
 interface CategoryDetailsProps {
   data?: Category;
-  cloudinary_key: string;
 }
-const CategoryDetails: FC<CategoryDetailsProps> = ({
-  data,
-  cloudinary_key,
-}) => {
+
+const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
   // Initializing necessary hooks
-  const { toast } = useToast(); // Hook for displaying toast messages
-  const router = useRouter(); // Hook for routing
+  const { toast } = useToast() // Hook for displaying toast messages
+  const router = useRouter() // Hook for routing
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
-    mode: "onChange", // Form validation mode
+    mode: 'onChange', // Form validation mode
     resolver: zodResolver(CategoryFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
@@ -61,9 +58,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
       url: data?.url,
       featured: data?.featured,
     },
-  });
+  })
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
@@ -72,9 +69,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
         image: [{ url: data?.image }],
         url: data?.url,
         featured: data?.featured,
-      });
+      })
     }
-  }, [data, form]);
+  }, [data, form])
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof CategoryFormSchema>) => {
     try {
@@ -87,29 +84,29 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
         featured: values.featured,
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      })
       // Displaying success message
       toast({
         title: data?.id
-          ? "Category has been updated."
+          ? 'Category has been updated.'
           : `Congratulations! '${response?.name}' is now created.`,
-      });
+      })
       // Redirect or Refresh data
       if (data?.id) {
-        router.refresh();
+        router.refresh()
       } else {
-        router.push("/dashboard/admin/categories");
+        router.push('/dashboard/admin/categories')
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error);
+      console.log(error)
       toast({
-        variant: "destructive",
-        title: "Oops!",
+        variant: 'destructive',
+        title: 'Oops!',
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -118,7 +115,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
           <CardDescription>
             {data?.id
               ? `Update ${data?.name} category information.`
-              : " Lets create a category. You can edit category later from the categories table or the category page."}
+              : ' Lets create a category. You can edit category later from the categories table or the category page.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -135,7 +132,6 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
                     <FormControl>
                       <ImageUpload
                         type="profile"
-                        cloudinary_key={cloudinary_key}
                         value={field.value.map((image) => image.url)}
                         disabled={isLoading}
                         onChange={(url) => field.onChange([{ url }])}
@@ -203,16 +199,16 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
               />
               <Button type="submit" disabled={isLoading}>
                 {isLoading
-                  ? "loading..."
+                  ? 'loading...'
                   : data?.id
-                  ? "Save category information"
-                  : "Create category"}
+                  ? 'Save category information'
+                  : 'Create category'}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
     </AlertDialog>
-  );
-};
+  )
+}
 export default CategoryDetails;

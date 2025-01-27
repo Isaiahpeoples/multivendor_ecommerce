@@ -1,9 +1,12 @@
 'use client'
+
 // React, Next.js
 import { FC, useEffect, useState } from 'react'
 import Image from 'next/image'
+
 // Cloudinary
 import { CldUploadWidget } from 'next-cloudinary'
+
 interface ImageUploadProps {
   disabled?: boolean
   onChange: (value: string) => void
@@ -11,8 +14,8 @@ interface ImageUploadProps {
   value: string[]
   type: 'standard' | 'profile' | 'cover'
   dontShowPreview?: boolean
-  cloudinary_key: string
 }
+
 const ImageUpload: FC<ImageUploadProps> = ({
   disabled,
   onChange,
@@ -20,7 +23,6 @@ const ImageUpload: FC<ImageUploadProps> = ({
   value,
   type,
   dontShowPreview,
-  cloudinary_key,
 }) => {
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
@@ -35,7 +37,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   }
   if (type === 'profile') {
     return (
-      <div className="relative rounded-full w-52 h-52 inset-x-96 bg-gray-200 border-2 border-white shadow-2xl overflow-visible">
+      <div className="relative rounded-full w-52 h-52  bg-gray-200 border-2 border-white shadow-2xl overflow-visible">
         {value.length > 0 && (
           <Image
             src={value[0]}
@@ -45,7 +47,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
             className="w-52 h-52 rounded-full object-cover absolute top-0 left-0 bottom-0 right-0"
           />
         )}
-        <CldUploadWidget onSuccess={onUpload} uploadPreset={cloudinary_key}>
+        <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m">
           {({ open }) => {
             const onClick = () => {
               open()

@@ -1,10 +1,10 @@
 import * as z from 'zod'
-
+// Catgeory form schema
 export const CategoryFormSchema = z.object({
   name: z
     .string({
       required_error: 'Category name is required.',
-      invalid_type_error: 'Category name must be a string.',
+      invalid_type_error: 'Category nale must be a string.',
     })
     .min(2, { message: 'Category name must be at least 2 characters long.' })
     .max(50, { message: 'Category name cannot exceed 50 characters.' })

@@ -1,54 +1,58 @@
-'use client'
-
+"use client";
 // React
-import { FC, useEffect } from 'react'
-
+import { FC, useEffect } from "react";
 // Prisma model
-import { Category } from '@prisma/client'
-
-//Form handling utilities
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-
+import { Category } from "@prisma/client";
+// Form handling utilities
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 // Schema
-import { CategoryFormSchema } from '@/lib/schema'
 
 // UI Components
-import { AlertDialog } from '@radix-ui/react-alert-dialog'
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Button } from '@/components/ui/button'
-import ImageUpload from '../shared/image-upload'
+  FormDescription,
+} from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import ImageUpload from "../shared/image-upload";
+// Queries
+import { upsertCategory } from "@/queries/category";
+// Utils
+import { v4 } from "uuid";
 
+import { useRouter } from "next/navigation";
+import { CategoryFormSchema } from "@/lib/schema";
+import { useToast } from "@/hooks/use-toast";
 interface CategoryDetailsProps {
-  data?: Category
-  cloudinary_key: string
+  data?: Category;
+  cloudinary_key: string;
 }
-
 const CategoryDetails: FC<CategoryDetailsProps> = ({
   data,
   cloudinary_key,
 }) => {
+  // Initializing necessary hooks
+  const { toast } = useToast(); // Hook for displaying toast messages
+  const router = useRouter(); // Hook for routing
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
-    mode: 'onChange', // Form validation mode
+    mode: "onChange", // Form validation mode
     resolver: zodResolver(CategoryFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
@@ -57,11 +61,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
       url: data?.url,
       featured: data?.featured,
     },
-  })
-
+  });
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting
-
+  const isLoading = form.formState.isSubmitting;
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
@@ -70,14 +72,44 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
         image: [{ url: data?.image }],
         url: data?.url,
         featured: data?.featured,
-      })
+      });
     }
-  }, [data, form])
+  }, [data, form]);
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof CategoryFormSchema>) => {
-    console.log(values)
-  }
-
+    try {
+      // Upserting category data
+      const response = await upsertCategory({
+        id: data?.id ? data.id : v4(),
+        name: values.name,
+        image: values.image[0].url,
+        url: values.url,
+        featured: values.featured,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      // Displaying success message
+      toast({
+        title: data?.id
+          ? "Category has been updated."
+          : `Congratulations! '${response?.name}' is now created.`,
+      });
+      // Redirect or Refresh data
+      if (data?.id) {
+        router.refresh();
+      } else {
+        router.push("/dashboard/admin/categories");
+      }
+    } catch (error: any) {
+      // Handling form submission errors
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Oops!",
+        description: error.toString(),
+      });
+    }
+  };
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -86,7 +118,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
           <CardDescription>
             {data?.id
               ? `Update ${data?.name} category information.`
-              : ' Lets create a category. You can edit category later from the categories table or the category page.'}
+              : " Lets create a category. You can edit category later from the categories table or the category page."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -171,17 +203,16 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({
               />
               <Button type="submit" disabled={isLoading}>
                 {isLoading
-                  ? 'loading...'
+                  ? "loading..."
                   : data?.id
-                  ? 'Save category information'
-                  : 'Create category'}
+                  ? "Save category information"
+                  : "Create category"}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
     </AlertDialog>
-  )
-}
-
-export default CategoryDetails
+  );
+};
+export default CategoryDetails;

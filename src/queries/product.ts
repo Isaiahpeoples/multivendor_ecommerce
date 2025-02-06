@@ -6,7 +6,7 @@ import { ProductWithVariantType } from '@/lib/types'
 import { generateUniqueSlug } from '@/lib/utils'
 // Clerk
 import { currentUser } from '@clerk/nextjs/server'
-import { create } from 'domain'
+
 // Slugify
 import slugify from 'slugify'
 // Function: upsertProduct
@@ -62,6 +62,18 @@ export const upsertProduct = async (
       description: product.description,
       slug: productSlug,
       brand: product.brand,
+      specs: {
+        create: product.product_specs.map((spec) => ({
+          name: spec.name,
+          value: spec.value,
+        })),
+      },
+      questions: {
+        create: product.questions.map((question) => ({
+          question: question.question,
+          answer: question.answer,
+        })),
+      },
       store: { connect: { id: store.id } },
       category: { connect: { id: product.categoryId } },
       subCategory: { connect: { id: product.subCategoryId } },
@@ -73,8 +85,15 @@ export const upsertProduct = async (
       variantDescription: product.variantDescription,
       slug: variantSlug,
       isSale: product.isSale,
+      saleEndDate: product.isSale ? product.saleEndDate : '',
       sku: product.sku,
       keywords: product.keywords.join(','),
+      specs: {
+        create: product.variant_specs.map((spec) => ({
+          name: spec.name,
+          value: spec.value,
+        })),
+      },
       images: {
         create: product.images.map((image, index) => ({
           url: image.url,
@@ -84,6 +103,7 @@ export const upsertProduct = async (
           order: index, // Add order to maintain the original input sequence
         })),
       },
+      variantImage: product.variantImage,
       colors: {
         create: product.colors.map((color) => ({
           name: color.color,

@@ -11,18 +11,19 @@ export default async function AdminCategoriesPage() {
     // Checking if no categories are found
     if (!categories) return null; // If no categories found, return null
     return (
-        <DataTable
-            actionButtonText={
-                <>
-                    <Plus size={15} />
-                    Create category
-                </>
-            }
-            modalChildren={<CategoryDetails />}
-            filterValue="name"
-            data={categories}
-            searchPlaceholder="Search category name..."
-            columns={columns}
-        />
-    );
+      <DataTable
+        actionButtonText={
+          <>
+            <Plus size={15} />
+            Create category
+          </>
+        }
+        modalChildren={<CategoryDetails />}
+        newTabLink="/dashboard/admin/categories/new"
+        filterValue="name"
+        data={categories}
+        searchPlaceholder="Search category name..."
+        columns={columns}
+      />
+    )
 }

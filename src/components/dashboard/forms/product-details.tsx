@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 // Prisma model
-import { Category, Store, SubCategory } from '@prisma/client'
+import { Category, OfferTag, Store, SubCategory } from '@prisma/client'
 // Form handling utilities
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
@@ -55,11 +55,13 @@ import {
 interface ProductDetailsProps {
   data?: Partial<ProductWithVariantType>
   categories: Category[]
+  offerTags: OfferTag[]
   storeUrl: string
 }
 const ProductDetails: FC<ProductDetailsProps> = ({
   data,
   categories,
+  offerTags,
   storeUrl,
 }) => {
   // Initializing necessary hooks
@@ -89,6 +91,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({
       variantDescription: data?.variantDescription,
       images: data?.images || [],
       categoryId: data?.categoryId,
+      offerTagId: data?.offerTagId,
       subCategoryId: data?.subCategoryId,
       brand: data?.brand,
       sku: data?.sku,
@@ -131,6 +134,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({
           images: values.images,
           categoryId: values.categoryId,
           subCategoryId: values.subCategoryId,
+          offerTagId: values.offerTagId,
           isSale: values.isSale || false,
           brand: values.brand,
           sku: values.sku,
@@ -398,6 +402,42 @@ const ProductDetails: FC<ProductDetailsProps> = ({
                   />
                 )}
               </div>
+
+              {/* Offer Tag */}
+              <FormField
+                disabled={isLoading}
+                control={form.control}
+                name="offerTagId"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Product Offer tag</FormLabel>
+                    <Select
+                      disabled={isLoading || categories.length == 0}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            defaultValue={field.value}
+                            placeholder="Select an offer tag"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {offerTags &&
+                          offerTags.map((offer) => (
+                            <SelectItem key={offer.id} value={offer.id}>
+                              {offer.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* Brand, Sku */}
               <div className="flex flex-col lg:flex-row gap-4">
                 <FormField
@@ -513,8 +553,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({
                 {isLoading
                   ? 'loading...'
                   : data?.productId && data.variantId
-                  ? 'Save store information'
-                  : 'Create store'}
+                  ? 'Save product information'
+                  : 'Create product'}
               </Button>
             </form>
           </Form>

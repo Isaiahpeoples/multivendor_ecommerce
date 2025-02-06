@@ -15,24 +15,25 @@ export type SubCategoryWithCategoryType = Prisma.PromiseReturnType<
 
 // Product + variant
 export type ProductWithVariantType = {
-  productId: string;
-  variantId: string;
-  name: string;
-  description: string;
-  variantName: string;
-  variantDescription: string;
-  images: { url: string }[];
-  categoryId: string;
-  subCategoryId: string;
-  isSale: boolean;
-  brand: string;
-  sku: string;
-  colors: { color: string }[];
-  sizes: { size: string; quantity: number; price: number; discount: number }[];
-  keywords: string[];
-  createdAt: Date;
-  updatedAt: Date;
-};
+  productId: string
+  variantId: string
+  name: string
+  description: string
+  variantName: string
+  variantDescription: string
+  images: { url: string }[]
+  categoryId: string
+  offerTagId: string
+  subCategoryId: string
+  isSale: boolean
+  brand: string
+  sku: string
+  colors: { color: string }[]
+  sizes: { size: string; quantity: number; price: number; discount: number }[]
+  keywords: string[]
+  createdAt: Date
+  updatedAt: Date
+}
 // Store product
 export type StoreProductType = Prisma.PromiseReturnType<
   typeof getAllStoreProducts

@@ -1,7 +1,7 @@
 'use client'
 
 // React, Next.js imports
-import { useParams, useRouter } from 'next/navigation'
+
 
 // UI components
 import { AlertDialog } from '@/components/ui/alert-dialog'

@@ -67,55 +67,58 @@ enum StoreStatus {
 }
 
 model Store {
-  id                     String      @id @default(uuid())
-  name                   String
-  description            String      @db.Text
-  email                  String      @unique
-  phone                  String
-  url                    String      @unique
-  logo                   String
-  cover                  String
-  status                 StoreStatus @default(PENDING)
-  averageRating          Float       @default(0)
-  featured               Boolean     @default(false)
-    returnPolicy           String
-  defaultShippingService           String? @default("")
-  defaultShippingFeePerItem Float @default(0)
-  defaultShippingFeeForSecondItem Float @default(0)
-  defaultShippingFeePerKg Float @default(0)
-  defaultShippingFeeForAll Float @default(0)
-  defaultDeliveryTimeMin Int
-  defaultDeliveryTimeMax Int
+  id                                  String      @id @default(uuid())
+  name                                String
+  description                         String      @db.Text
+  email                               String      @unique
+  phone                               String
+  url                                 String      @unique
+  logo                                String
+  cover                               String
+  status                              StoreStatus @default(PENDING)
+  averageRating                       Float       @default(0)
+  featured                            Boolean     @default(false)
+  returnPolicy                        String      @default("Return in 30 days.")
+  defaultShippingService              String      @default("International Delivery")
+  defaultShippingFeePerItem           Float       @default(0)
+  defaultShippingFeeForAdditionalItem Float       @default(0)
+  defaultShippingFeePerKg             Float       @default(0)
+  defaultShippingFeeFixed             Float       @default(0)
+  defaultDeliveryTimeMin              Int         @default(7)
+  defaultDeliveryTimeMax              Int         @default(31)
 
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @default(now()) @updatedAt
-  userId                 String
-  user                   User        @relation("UserStores", fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  userId    String
+  user      User     @relation("UserStores", fields: [userId], references: [id])
 
-  products Product[] @relation("StoreToProduct")
+  products      Product[]      @relation("StoreToProduct")
+  shippingRates ShippingRate[] @relation("StoreShippingRates")
 
   @@index([userId])
 }
 
 model Product {
-  id            String           @id @default(uuid())
-  name          String
+  id          String @id @default(uuid())
+  name        String
   description String @db.LongText
-  slug          String           @unique
-  brand         String
-  rating        Float            @default(0)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @default(now()) @updatedAt
-  storeId       String
-  store         Store            @relation("StoreToProduct", fields: [storeId], references: [id])
-    variants  ProductVariant[] @relation("ProductToProductVariant")
+  slug        String @unique
+  brand       String
+  rating      Float  @default(0)
+  sales       Int    @default(0)
+
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+  storeId   String
+  store     Store            @relation("StoreToProduct", fields: [storeId], references: [id])
+  variants  ProductVariant[] @relation("ProductToProductVariant")
   specs     Spec[]           @relation("ProductSpec")
   questions Question[]       @relation("ProductQuestion")
 
   categoryId    String
-  category      Category         @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  category      Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
   subCategoryId String
-  subCategory   SubCategory      @relation("SubCategoryToProduct", fields: [subCategoryId], references: [id])
+  subCategory   SubCategory @relation("SubCategoryToProduct", fields: [subCategoryId], references: [id])
 
   offerTagId String?
   offerTag   OfferTag? @relation("OfferTagToProduct", fields: [offerTagId], references: [id])
@@ -127,24 +130,26 @@ model Product {
 }
 
 model ProductVariant {
-  id                 String                @id @default(uuid())
+  id                 String  @id @default(uuid())
   variantName        String
-    variantDescription String? @db.LongText
+  variantDescription String? @db.LongText
   variantImage       String
-  slug               String                @unique
-  isSale             Boolean               @default(false)
- saleEndDate        String?
+  slug               String  @unique
+  isSale             Boolean @default(false)
+  saleEndDate        String?
   sku                String
   keywords           String
-  productId          String
-  product            Product               @relation("ProductToProductVariant", fields: [productId], references: [id])
-  sizes              Size[]                @relation("ProductVariantSizes")
-  images             ProductVariantImage[] @relation("ProductVariantToVariantImage")
-  colors             Color[]               @relation("ProductVariantColors")
-   specs  Spec[]                @relation("ProductVariantSpec")
+  sales              Int     @default(0)
 
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @default(now()) @updatedAt
+  productId String
+  product   Product               @relation("ProductToProductVariant", fields: [productId], references: [id])
+  sizes     Size[]                @relation("ProductVariantSizes")
+  images    ProductVariantImage[] @relation("ProductVariantToVariantImage")
+  colors    Color[]               @relation("ProductVariantColors")
+  specs     Spec[]                @relation("ProductVariantSpec")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([productId])
 }
@@ -192,32 +197,65 @@ model Color {
 model OfferTag {
   id        String    @id @default(uuid())
   name      String
-  url  String
+  url       String
   products  Product[] @relation("OfferTagToProduct")
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Spec {
-  id    String @id @default(uuid())
-  name  String
-  value String
+  id        String          @id @default(uuid())
+  name      String
+  value     String
   productId String?
-  product   Product? @relation("ProductSpec", fields: [productId], references: [id], onDelete: Cascade)
+  product   Product?        @relation("ProductSpec", fields: [productId], references: [id], onDelete: Cascade)
   variantId String?
   variant   ProductVariant? @relation("ProductVariantSpec", fields: [variantId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now()) @updatedAt
+
   @@index([productId])
   @@index([variantId])
 }
 
 model Question {
-  id String @id @default(uuid())
-  question String
-  answer   String
+  id        String   @id @default(uuid())
+  question  String
+  answer    String
   productId String
-  product   Product @relation("ProductQuestion", fields: [productId], references: [id], onDelete: Cascade)
+  product   Product  @relation("ProductQuestion", fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([productId])
+}
+
+model Country {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  code          String         @unique
+  shippingRates ShippingRate[] @relation("CountryShippingRates")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+}
+
+model ShippingRate {
+  id                           String   @id @default(uuid())
+  shippingService              String
+  shippingFeePerItem           Float
+  shippingFeeForAdditionalItem Float
+  shippingFeePerKg             Float
+  shippingFeeFixed             Float
+  deliveryTimeMin              Int
+  deliveryTimeMax              Int
+  returnPolicy                 String
+  countryId                    String
+  country                      Country  @relation("CountryShippingRates", fields: [countryId], references: [id])
+  storeId                      String
+  store                        Store    @relation("StoreShippingRates", fields: [storeId], references: [id])
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @default(now()) @updatedAt
+
+  @@index([countryId])
+  @@index([storeId])
 }

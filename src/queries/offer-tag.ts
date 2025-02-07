@@ -9,8 +9,17 @@ import { OfferTag } from '@prisma/client'
 export const getAllOfferTags = async () => {
   // Retrieve all offer tags from the database
   const offerTgas = await db.offerTag.findMany({
+    include: {
+      products: {
+        select: {
+          id: true,
+        },
+      },
+    },
     orderBy: {
-      updatedAt: 'asc',
+      products: {
+        _count: 'desc', // Order by the count of associated products in descending order
+      },
     },
   })
   return offerTgas

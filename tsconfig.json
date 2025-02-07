@@ -19,8 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "@/public/*": ["./public/*"]
+    },
+        "typeRoots": ["./node_modules/@types", "./@types"]
   },
   "include": [
     "next-env.d.ts",

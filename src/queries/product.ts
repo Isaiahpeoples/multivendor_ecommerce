@@ -1,8 +1,11 @@
-'use server'
+"use server";
+
 // DB
-import { db } from '@/lib/db'
+import { db } from "@/lib/db";
+
 // Types
 import {
+  Country,
   FreeShippingWithCountriesType,
   ProductPageType,
   ProductShippingDetailsType,
@@ -11,18 +14,19 @@ import {
   SortOrder,
   VariantImageType,
   VariantSimplified,
-} from '@/lib/types'
-import { FreeShipping, Store } from '@prisma/client'
+} from "@/lib/types";
+import { FreeShipping, Store } from "@prisma/client";
+
 // Clerk
-import { currentUser } from '@clerk/nextjs/server'
+import { currentUser } from "@clerk/nextjs/server";
 
 // Slugify
-import slugify from 'slugify'
-import { generateUniqueSlug } from '@/lib/utils'
+import slugify from "slugify";
+import { generateUniqueSlug } from "@/lib/utils";
 
 // Cookies
-import { getCookie } from 'cookies-next'
-import { cookies } from 'next/headers'
+import { getCookie } from "cookies-next";
+import { cookies } from "next/headers";
 
 // Function: upsertProduct
 // Description: Upserts a product and its variant into the database, ensuring proper association with the store.
@@ -37,40 +41,48 @@ export const upsertProduct = async (
 ) => {
   try {
     // Retrieve current user
-    const user = await currentUser()
+    const user = await currentUser();
+
     // Check if user is authenticated
-    if (!user) throw new Error('Unauthenticated.')
+    if (!user) throw new Error("Unauthenticated.");
+
     // Ensure user has seller privileges
-    if (user.privateMetadata.role !== 'SELLER')
+    if (user.privateMetadata.role !== "SELLER")
       throw new Error(
-        'Unauthorized Access: Seller Privileges Required for Entry.'
-      )
+        "Unauthorized Access: Seller Privileges Required for Entry."
+      );
+
     // Ensure product data is provided
-    if (!product) throw new Error('Please provide product data.')
+    if (!product) throw new Error("Please provide product data.");
+
     // Check if the product already exists
     const existingProduct = await db.product.findUnique({
       where: { id: product.productId },
-    })
+    });
+
     // Find the store by URL
-    const store = await db.store.findUnique({ where: { url: storeUrl } })
-    if (!store) throw new Error('Store not found.')
+    const store = await db.store.findUnique({ where: { url: storeUrl } });
+    if (!store) throw new Error("Store not found.");
+
     // Generate unique slugs for product and variant
     const productSlug = await generateUniqueSlug(
       slugify(product.name, {
-        replacement: '-',
+        replacement: "-",
         lower: true,
         trim: true,
       }),
-      'product'
-    )
+      "product"
+    );
+
     const variantSlug = await generateUniqueSlug(
       slugify(product.variantName, {
-        replacement: '-',
+        replacement: "-",
         lower: true,
         trim: true,
       }),
-      'productVariant'
-    )
+      "productVariant"
+    );
+
     // Common data for product and variant
     const commonProductData = {
       name: product.name,
@@ -94,16 +106,17 @@ export const upsertProduct = async (
       subCategory: { connect: { id: product.subCategoryId } },
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
-    }
+    };
+
     const commonVariantData = {
       variantName: product.variantName,
       variantDescription: product.variantDescription,
       slug: variantSlug,
       isSale: product.isSale,
-      saleEndDate: product.isSale ? product.saleEndDate : '',
+      saleEndDate: product.isSale ? product.saleEndDate : "",
       sku: product.sku,
       weight: product.weight,
-      keywords: product.keywords.join(','),
+      keywords: product.keywords.join(","),
       specs: {
         create: product.variant_specs.map((spec) => ({
           name: spec.name,
@@ -113,7 +126,7 @@ export const upsertProduct = async (
       images: {
         create: product.images.map((image, index) => ({
           url: image.url,
-          alt: image.url.split('/').pop() || '',
+          alt: image.url.split("/").pop() || "",
           createdAt: product.createdAt, // Ensuring the image creation time is consistent
           updatedAt: product.updatedAt, // Ensuring the image update time is consistent
           order: index, // Add order to maintain the original input sequence
@@ -135,14 +148,15 @@ export const upsertProduct = async (
       },
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
-    }
+    };
+
     // If product exists, create a variant
     if (existingProduct) {
       const variantData = {
         ...commonVariantData,
         product: { connect: { id: product.productId } },
-      }
-      return await db.productVariant.create({ data: variantData })
+      };
+      return await db.productVariant.create({ data: variantData });
     } else {
       // Otherwise, create a new product with variants
       const productData = {
@@ -156,14 +170,15 @@ export const upsertProduct = async (
             },
           ],
         },
-      }
-      return await db.product.create({ data: productData })
+      };
+      return await db.product.create({ data: productData });
     }
   } catch (error) {
-    console.log(error)
-    throw error
+    console.log(error);
+    throw error;
   }
-}
+};
+
 // Function: getProductVariant
 // Description: Retrieves details of a specific product variant from the database.
 // Access Level: Public
@@ -205,8 +220,8 @@ export const getProductVariant = async (
         },
       },
     },
-  })
-  if (!product) return
+  });
+  if (!product) return;
   return {
     productId: product?.id,
     variantId: product?.variants[0].id,
@@ -222,9 +237,10 @@ export const getProductVariant = async (
     sku: product.variants[0].sku,
     colors: product.variants[0].colors,
     sizes: product.variants[0].sizes,
-    keywords: product.variants[0].keywords.split(','),
-  }
-}
+    keywords: product.variants[0].keywords.split(","),
+  };
+};
+
 // Function: getProductMainInfo
 // Description: Retrieves the main information of a specific product from the database.
 // Access Level: Public
@@ -237,8 +253,9 @@ export const getProductMainInfo = async (productId: string) => {
     where: {
       id: productId,
     },
-  })
-  if (!product) return null
+  });
+  if (!product) return null;
+
   // Return the main information of the product
   return {
     productId: product.id,
@@ -248,8 +265,9 @@ export const getProductMainInfo = async (productId: string) => {
     categoryId: product.categoryId,
     subCategoryId: product.subCategoryId,
     storeId: product.storeId,
-  }
-}
+  };
+};
+
 // Function: getAllStoreProducts
 // Description: Retrieves all products from a specific store based on the store URL.
 // Access Level: Public
@@ -258,8 +276,9 @@ export const getProductMainInfo = async (productId: string) => {
 // Returns: Array of products from the specified store, including category, subcategory, and variant details.
 export const getAllStoreProducts = async (storeUrl: string) => {
   // Retrieve store details from the database using the store URL
-  const store = await db.store.findUnique({ where: { url: storeUrl } })
-  if (!store) throw new Error('Please provide a valid store URL.')
+  const store = await db.store.findUnique({ where: { url: storeUrl } });
+  if (!store) throw new Error("Please provide a valid store URL.");
+
   // Retrieve all products associated with the store
   const products = await db.product.findMany({
     where: {
@@ -270,7 +289,7 @@ export const getAllStoreProducts = async (storeUrl: string) => {
       subCategory: true,
       variants: {
         include: {
-          images: { orderBy: { order: 'asc' } },
+          images: { orderBy: { order: "asc" } },
           colors: true,
           sizes: true,
         },
@@ -282,9 +301,11 @@ export const getAllStoreProducts = async (storeUrl: string) => {
         },
       },
     },
-  })
-  return products
-}
+  });
+
+  return products;
+};
+
 // Function: deleteProduct
 // Description: Deletes a product from the database.
 // Permission Level: Seller only
@@ -293,20 +314,24 @@ export const getAllStoreProducts = async (storeUrl: string) => {
 // Returns: Response indicating success or failure of the deletion operation.
 export const deleteProduct = async (productId: string) => {
   // Get current user
-  const user = await currentUser()
+  const user = await currentUser();
+
   // Check if user is authenticated
-  if (!user) throw new Error('Unauthenticated.')
+  if (!user) throw new Error("Unauthenticated.");
+
   // Ensure user has seller privileges
-  if (user.privateMetadata.role !== 'SELLER')
+  if (user.privateMetadata.role !== "SELLER")
     throw new Error(
-      'Unauthorized Access: Seller Privileges Required for Entry.'
-    )
+      "Unauthorized Access: Seller Privileges Required for Entry."
+    );
+
   // Ensure product data is provided
-  if (!productId) throw new Error('Please provide product id.')
+  if (!productId) throw new Error("Please provide product id.");
+
   // Delete product from the database
-  const response = await db.product.delete({ where: { id: productId } })
-  return response
-}
+  const response = await db.product.delete({ where: { id: productId } });
+  return response;
+};
 
 // Function: getProducts
 // Description: Retrieves products based on various filters and returns only variants that match the filters. Supports pagination.
@@ -324,13 +349,14 @@ export const getProducts = async (
   pageSize: number = 10
 ) => {
   // Default values for page and pageSize
-  const currentPage = page
-  const limit = pageSize
-  const skip = (currentPage - 1) * limit
+  const currentPage = page;
+  const limit = pageSize;
+  const skip = (currentPage - 1) * limit;
+
   // Construct the base query
   const wherClause: any = {
     AND: [],
-  }
+  };
 
   // Apply store filter (using store URL)
   if (filters.store) {
@@ -339,11 +365,12 @@ export const getProducts = async (
         url: filters.store,
       },
       select: { id: true },
-    })
+    });
     if (store) {
-      wherClause.AND.push({ storeId: store.id })
+      wherClause.AND.push({ storeId: store.id });
     }
   }
+
   // Apply category filter (using category URL)
   if (filters.category) {
     const category = await db.category.findUnique({
@@ -351,11 +378,12 @@ export const getProducts = async (
         url: filters.category,
       },
       select: { id: true },
-    })
+    });
     if (category) {
-      wherClause.AND.push({ categoryId: category.id })
+      wherClause.AND.push({ categoryId: category.id });
     }
   }
+
   // Apply subCategory filter (using subCategory URL)
   if (filters.subCategory) {
     const subCategory = await db.subCategory.findUnique({
@@ -363,9 +391,9 @@ export const getProducts = async (
         url: filters.subCategory,
       },
       select: { id: true },
-    })
+    });
     if (subCategory) {
-      wherClause.AND.push({ subCategoryId: subCategory.id })
+      wherClause.AND.push({ subCategoryId: subCategory.id });
     }
   }
 
@@ -383,11 +411,13 @@ export const getProducts = async (
         },
       },
     },
-  })
+  });
+
   // Transform the products with filtered variants into ProductCardType structure
   const productsWithFilteredVariants = products.map((product) => {
     // Filter the variants based on the filters
-    const filteredVariants = product.variants
+    const filteredVariants = product.variants;
+
     // Transform the filtered variants into the VariantSimplified structure
     const variants: VariantSimplified[] = filteredVariants.map((variant) => ({
       variantId: variant.id,
@@ -395,7 +425,8 @@ export const getProducts = async (
       variantName: variant.variantName,
       images: variant.images,
       sizes: variant.sizes,
-    }))
+    }));
+
     // Extract variant images for the product
     const variantImages: VariantImageType[] = filteredVariants.map(
       (variant) => ({
@@ -404,7 +435,8 @@ export const getProducts = async (
           ? variant.variantImage
           : variant.images[0].url,
       })
-    )
+    );
+
     // Return the product in the ProductCardType structure
     return {
       id: product.id,
@@ -414,16 +446,20 @@ export const getProducts = async (
       sales: product.sales,
       variants,
       variantImages,
-    }
-  })
+    };
+  });
+
   /*
   const totalCount = await db.product.count({
     where: wherClause,
   });
   */
-  const totalCount = products.length
+
+  const totalCount = products.length;
+
   // Calculate total pages
-  const totalPages = Math.ceil(totalCount / pageSize)
+  const totalPages = Math.ceil(totalCount / pageSize);
+
   // Return the paginated data along with metadata
   return {
     products: productsWithFilteredVariants,
@@ -431,7 +467,7 @@ export const getProducts = async (
     currentPage,
     pageSize,
     totalCount,
-  }
+  };
 };
 
 // Function: getProductPageData
@@ -929,4 +965,92 @@ export const getDeliveryDetailsForStoreByCountry = async (
     deliveryTimeMin,
     deliveryTimeMax,
   };
+};
+
+// Function: getProductShippingFee
+// Description: Retrieves and calculates shipping fee based on user country and product.
+// Access Level: Public
+// Parameters:
+//   - shippingFeeMethod: The shipping fee method of the product.
+//   - userCountry: The parsed user country object from cookies.
+//   - store :  store details.
+//   - freeShipping.
+//   - weight.
+//   - quantity.
+// Returns: Calculated total shipping fee for product.
+export const getProductShippingFee = async (
+  shippingFeeMethod: string,
+  userCountry: Country,
+  store: Store,
+  freeShipping: FreeShippingWithCountriesType | null,
+  weight: number,
+  quantity: number
+) => {
+  // Fetch country information based on userCountry.name and userCountry.code
+  const country = await db.country.findUnique({
+    where: {
+      name: userCountry.name,
+      code: userCountry.code,
+    },
+  });
+
+  if (country) {
+    // Check if the user qualifies for free shipping
+    if (freeShipping) {
+      const free_shipping_countries = freeShipping.eligibaleCountries;
+      const isEligableForFreeShipping = free_shipping_countries.some(
+        (c) => c.countryId === country.name
+      );
+      if (isEligableForFreeShipping) {
+        return 0; // Free shipping
+      }
+    }
+
+    // Fetch shipping rate from the database for the given store and country
+    const shippingRate = await db.shippingRate.findFirst({
+      where: {
+        countryId: country.id,
+        storeId: store.id,
+      },
+    });
+
+    // Destructure the shippingRate with defaults
+    const {
+      shippingFeePerItem = store.defaultShippingFeePerItem,
+      shippingFeeForAdditionalItem = store.defaultShippingFeeForAdditionalItem,
+      shippingFeePerKg = store.defaultShippingFeePerKg,
+      shippingFeeFixed = store.defaultShippingFeeFixed,
+    } = shippingRate || {};
+
+    // Calculate the additional quantity (excluding the first item)
+    const additionalItemsQty = quantity - 1;
+
+    // Log values for debugging (remove in production)
+    /*
+    console.log("Shipping fee details:");
+    console.log("Per Item Fee:", shippingFeePerItem);
+    console.log("Additional Item Fee:", shippingFeeForAdditionalItem);
+    console.log("Per Kg Fee:", shippingFeePerKg);
+    */
+
+    // Define fee calculation methods in a map (using functions)
+    const feeCalculators: Record<string, () => number> = {
+      ITEM: () =>
+        shippingFeePerItem + shippingFeeForAdditionalItem * additionalItemsQty,
+      WEIGHT: () => shippingFeePerKg * weight * quantity,
+      FIXED: () => shippingFeeFixed,
+    };
+
+    // Check if the fee calculation method exists and calculate the fee
+    const calculateFee = feeCalculators[shippingFeeMethod];
+    if (calculateFee) {
+      return calculateFee(); // Execute the corresponding calculation
+    }
+
+    // If no valid shipping method is found, return 0
+    return 0;
+  }
+
+  // Return 0 if the country is not found
+  return 0;
 };

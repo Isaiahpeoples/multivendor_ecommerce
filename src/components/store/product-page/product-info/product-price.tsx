@@ -109,7 +109,13 @@ const ProductPrice: FC<Props> = ({ sizeId, sizes, isCard, handleChange }) => {
           {selectedSize.discount}% off
         </span>
       )}
-      <p className="mt-2 text-xs">{selectedSize.quantity} pieces</p>
+      <p className="mt-2 text-xs">
+        {selectedSize.quantity > 0 ? (
+          `${selectedSize.quantity} items`
+        ) : (
+          <span className="text-red-500">Out of stock</span>
+        )}
+      </p>
     </div>
   );
 };

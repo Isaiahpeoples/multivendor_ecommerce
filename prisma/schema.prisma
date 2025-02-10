@@ -27,6 +27,9 @@ model User {
   cart              Cart?             @relation("UserCart")
   shippingAddresses ShippingAddress[] @relation("UserShippingAddresses")
   orders            Order[]           @relation("UserOrders")
+  wishlist          Wishlist[]        @relation("WishlistToUser")
+  payments          PaymentDetails[]  @relation("PaymentDetailsToUser")
+  coupons           Coupon[]          @relation("CouponToUser")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,6 +107,7 @@ model Store {
   followers     User[]         @relation("UserFollowingStore")
   cartItems     CartItem[]     @relation("CartItemToStore")
   orderGroups   OrderGroup[]   @relation("OrderGroupToStore")
+  coupons       Coupon[]       @relation("CouponToStore")
 
   @@index([userId])
 }
@@ -136,6 +140,7 @@ model Product {
   specs     Spec[]           @relation("ProductSpec")
   questions Question[]       @relation("ProductQuestion")
   reviews   Review[]         @relation("ReviewToProduct")
+  wishlist  Wishlist[]       @relation("WishlistToProduct")
 
   categoryId String
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
@@ -168,10 +173,11 @@ model ProductVariant {
   productId String
   product   Product @relation("ProductToProductVariant", fields: [productId], references: [id])
 
-  sizes  Size[]                @relation("ProductVariantSizes")
-  images ProductVariantImage[] @relation("ProductVariantToVariantImage")
-  colors Color[]               @relation("ProductVariantColors")
-  specs  Spec[]                @relation("ProductVariantSpec")
+  sizes    Size[]                @relation("ProductVariantSizes")
+  images   ProductVariantImage[] @relation("ProductVariantToVariantImage")
+  colors   Color[]               @relation("ProductVariantColors")
+  specs    Spec[]                @relation("ProductVariantSpec")
+  wishlist Wishlist[]            @relation("WishlistToProductVariant")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -185,6 +191,8 @@ model Size {
   quantity Int
   price    Float
   discount Float  @default(0)
+
+  wishlist Wishlist[] @relation("WishlistToSize")
 
   productVariantId String
   productVariant   ProductVariant @relation("ProductVariantSizes", fields: [productVariantId], references: [id])
@@ -377,6 +385,9 @@ model Cart {
   userId String @unique
   user   User   @relation("UserCart", fields: [userId], references: [id], onDelete: Cascade)
 
+  couponId String?
+  coupon   Coupon? @relation("CouponToCart", fields: [couponId], references: [id])
+
   cartItems    CartItem[] @relation("CartToCartItem")
   shippingFees Float      @default(0)
   subTotal     Float
@@ -384,6 +395,8 @@ model Cart {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([couponId])
 }
 
 model CartItem {
@@ -468,6 +481,11 @@ enum PaymentStatus {
   Chargeback
 }
 
+enum PaymentMethod {
+  Paypal
+  Stripe
+}
+
 model Order {
   id           String @id @default(uuid())
   shippingFees Float
@@ -478,6 +496,9 @@ model Order {
 
   orderStatus   OrderStatus   @default(Pending)
   paymentStatus PaymentStatus @default(Pending)
+
+  paymentMethod  PaymentMethod?
+  paymentDetails PaymentDetails? @relation("PaymentDetailsToOrder")
 
   shippingAddressId String
   shippingAddress   ShippingAddress @relation("ShippingAddressToOrder", fields: [shippingAddressId], references: [id])
@@ -512,11 +533,59 @@ model OrderGroup {
   storeId String
   store   Store  @relation("OrderGroupToStore", fields: [storeId], references: [id])
 
+  couponId String?
+  coupon   Coupon? @relation("CouponToOrderGroup", fields: [couponId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([orderId])
   @@index([storeId])
+  @@index([couponId])
+}
+
+enum ProductStatus {
+  /// Product has been added to the order but no action taken yet
+  Pending
+
+  /// Product is being prepared (picked, packed, or manufactured)
+  Processing
+
+  /// Product is packed and ready for shipment
+  ReadyForShipment
+
+  /// Product has been shipped
+  Shipped
+
+  /// Product has been delivered to the customer
+  Delivered
+
+  /// Product order has been canceled
+  Canceled
+
+  /// Product has been returned by the customer
+  Returned
+
+  /// Product cost has been refunded
+  Refunded
+
+  /// Delivery attempt failed, product may return to warehouse
+  FailedDelivery
+
+  /// Product is on hold (e.g., stock issues, verification required)
+  OnHold
+
+  /// Product is delayed due to stock unavailability
+  Backordered
+
+  /// Some units of the product were shipped, but the order is not yet complete
+  PartiallyShipped
+
+  /// Customer requested an exchange for the product
+  ExchangeRequested
+
+  /// Product is awaiting customer pickup (for pickup orders)
+  AwaitingPickup
 }
 
 model OrderItem {
@@ -540,8 +609,77 @@ model OrderItem {
   orderGroupId String
   orderGroup   OrderGroup @relation("OrderItemToGroup", fields: [orderGroupId], references: [id], onDelete: Cascade)
 
+  status ProductStatus @default(Pending)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([orderGroupId])
+}
+
+model Wishlist {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation("WishlistToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product @relation("WishlistToProduct", fields: [productId], references: [id], onDelete: Cascade)
+
+  variantId String
+  variant   ProductVariant @relation("WishlistToProductVariant", fields: [variantId], references: [id], onDelete: Cascade)
+
+  sizeId String?
+  size   Size?   @relation("WishlistToSize", fields: [sizeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([productId])
+  @@index([variantId])
+  @@index([sizeId])
+}
+
+model Coupon {
+  id        String @id @default(uuid())
+  code      String @unique
+  startDate String
+  endDate   String
+  discount  Int
+
+  storeId String
+  store   Store  @relation("CouponToStore", fields: [storeId], references: [id], onDelete: Cascade)
+
+  orders OrderGroup[] @relation("CouponToOrderGroup")
+  users  User[]       @relation("CouponToUser")
+
+  carts Cart[] @relation("CouponToCart")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+}
+
+model PaymentDetails {
+  id String @id @default(uuid())
+
+  paymentInetntId String
+  paymentMethod   String
+  status          String
+  amount          Float
+  currency        String
+
+  orderId String @unique
+  order   Order  @relation("PaymentDetailsToOrder", fields: [orderId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation("PaymentDetailsToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([userId])
 }

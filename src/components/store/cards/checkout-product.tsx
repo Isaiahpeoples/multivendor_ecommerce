@@ -1,14 +1,16 @@
-import { CartItem } from '@prisma/client'
-import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { CartItem } from "@prisma/client";
+import { ChevronRight, Truck } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function CheckoutProductCard({
   product,
+  isDiscounted,
 }: {
-  product: CartItem
+  product: CartItem;
+  isDiscounted: boolean;
 }) {
-  const { productSlug, variantSlug, sizeId } = product
+  const { productSlug, variantSlug, sizeId, shippingFee } = product;
   return (
     <div className="bg-white px-6 border-t bordet-t-[#ebebeb] select-none">
       <div className="py-4">
@@ -57,9 +59,28 @@ export default function CheckoutProductCard({
             <div className="flex flex-col justify-between mt-2 relative">
               {/* Price - Qty */}
               <div className="font-bold w-full flex items-start justify-between">
-                <div>
+                <div className="flex items-center gap-x-2">
                   <span className="inline-block break-all">
                     ${product.price.toFixed(2)} x {product.quantity}
+                  </span>
+                  {isDiscounted && (
+                    <span className="text-xs font-normal text-orange-background">
+                      (Coupon applied)
+                    </span>
+                  )}
+                </div>
+              </div>
+              {/* Shipping fee */}
+
+              <div className="mt-1 text-xs cursor-pointer">
+                <div className="flex items-center mb-1">
+                  <span>
+                    <Truck className="w-4 inline-block text-[#01a971]" />
+                    <span className="text-[#01a971] ml-1">
+                      {shippingFee
+                        ? `$${shippingFee.toFixed(2)}`
+                        : "Free Delivery"}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -68,5 +89,5 @@ export default function CheckoutProductCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

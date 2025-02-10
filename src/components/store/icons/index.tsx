@@ -5,6 +5,7 @@ import CartIcon from './cart'
 import AppIcon from './app'
 import UserIcon from './user'
 import SendIcon from './send'
+import CopyIcon from './copy'
 export {
   OrderIcon,
   MessageIcon,
@@ -13,4 +14,5 @@ export {
   AppIcon,
   UserIcon,
   SendIcon,
+  CopyIcon,
 }

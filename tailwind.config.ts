@@ -108,6 +108,12 @@ export default {
       backgroundImage: {
         home: 'url(/public/assets/images/home-wallpaper.webp)',
       },
+      transitionTimingFunction: {
+        'bezier-1': 'cubic-bezier(.645,.045,.355,1)',
+      },
+      maxWidth: {
+        conatiner: '1200px',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

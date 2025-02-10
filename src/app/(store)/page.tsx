@@ -1,4 +1,6 @@
+import { useCartStore } from '@/cart-store/useCartStore'
 import ProductList from '@/components/store/shared/product-list'
+import useFromStore from '@/hooks/useFromStore'
 import { getProducts } from '@/queries/product'
 
 export default async function HomePage() {

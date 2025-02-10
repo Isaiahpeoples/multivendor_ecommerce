@@ -3,7 +3,7 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { db } from './db'
 import ColorThief from 'colorthief'
-import { Country } from './types'
+import { CartProductType, Country } from './types'
 import countries from '@/data/countries.json'
 
 export function cn(...inputs: ClassValue[]) {
@@ -107,4 +107,104 @@ export async function getUserCountry(): Promise<Country> {
     console.error("Failed to fetch IP info", error);
   }
   return userCountry;
+}
+
+/**
+ * Function: getShippingDatesRange
+ * Description: Returns the shipping date range by adding the specified min and max days to the current date.
+ * Parameters:
+ *    - minDays: Minimum number of days to add to the current date.
+ *    - maxDays: Maximum number of days to add to the current date.
+ * Returns: Object containing minDate and maxDate.
+ */
+export const getShippingDatesRange = (
+  minDays: number,
+  maxDays: number
+): { minDate: string; maxDate: string } => {
+  // Get the current date
+  const currentDate = new Date();
+  // Calculate minDate by adding minDays to current date
+  const minDate = new Date(currentDate);
+  minDate.setDate(currentDate.getDate() + minDays);
+  // Calculate maxDate by adding maxDays to current date
+  const maxDate = new Date(currentDate);
+  maxDate.setDate(currentDate.getDate() + maxDays);
+  // Return an object containing minDate and maxDate
+  return {
+    minDate: minDate.toDateString(),
+    maxDate: maxDate.toDateString(),
+  };
+};
+// Function to validate the product data before adding it to the cart
+export const isProductValidToAdd = (product: CartProductType): boolean => {
+  // Check that all required fields are filled
+  const {
+    productId,
+    variantId,
+    productSlug,
+    variantSlug,
+    name,
+    variantName,
+    image,
+    quantity,
+    price,
+    sizeId,
+    size,
+    stock,
+    shippingFee,
+    extraShippingFee,
+    shippingMethod,
+    shippingService,
+    variantImage,
+    weight,
+    deliveryTimeMin,
+    deliveryTimeMax,
+  } = product;
+  // Ensure that all necessary fields have values
+  if (
+    !productId ||
+    !variantId ||
+    !productSlug ||
+    !variantSlug ||
+    !name ||
+    !variantName ||
+    !image ||
+    quantity <= 0 ||
+    price <= 0 ||
+    !sizeId || // Ensure sizeId is not empty
+    !size || // Ensure size is not empty
+    stock <= 0 ||
+    weight <= 0 || // Weight should be <= 0
+    !shippingMethod ||
+    !variantImage ||
+    deliveryTimeMin < 0 ||
+    deliveryTimeMax < deliveryTimeMin // Ensure delivery times are valid
+  ) {
+    return false; // Validation failed
+  }
+  return true; // Product is valid
+};
+// Function to censor names
+type CensorReturn = {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+};
+export function censorName(firstName: string, lastName: string): CensorReturn {
+  const censor = (name: string): string => {
+    if (name.length <= 2) return name; // Return short names as is
+    // Get the first and last characters
+    const firstChar = name[0];
+    const lastChar = name[name.length - 1];
+    // Calculate how many characters to censor
+    const middleLength = name.length - 2; // Length of middle characters to censor
+    // Create censored version
+    return `${firstChar}${"*".repeat(middleLength)}${lastChar}`;
+  };
+  const censoredFullName = `${firstName[0]}***${lastName[lastName.length - 1]}`;
+  return {
+    firstName: censor(firstName),
+    lastName: censor(lastName),
+    fullName: censoredFullName,
+  };
 }

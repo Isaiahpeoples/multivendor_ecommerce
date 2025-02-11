@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import {
   FacebookShareButton,
@@ -9,15 +10,21 @@ import {
   PinterestShareButton,
   PinterestIcon,
 } from "next-share";
+import { cn } from "@/lib/utils";
 
 interface Props {
   url: string;
   quote: string;
+  isCol?: boolean;
 }
 
-const SocialShare: FC<Props> = ({ url, quote }) => {
+const SocialShare: FC<Props> = ({ url, quote, isCol }) => {
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div
+      className={cn("flex flex-wrap justify-center gap-2", {
+        "flex-col": isCol,
+      })}
+    >
       <FacebookShareButton url={url} quote={quote} hashtag="#GoShop">
         <FacebookIcon size={32} round />
       </FacebookShareButton>

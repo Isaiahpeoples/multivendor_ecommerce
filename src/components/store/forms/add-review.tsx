@@ -11,8 +11,7 @@ import Select from '../ui/select'
 import { Size } from '@prisma/client'
 import { VariantInfoType } from '@/lib/types'
 import { useEffect, useState } from 'react'
-import ColorBorder from '../shared/colored-border'
-import { Textarea } from '@/components/ui/textarea'
+
 import ColorWheel from '@/components/shared/color-wheel'
 
 export default function AddReviewForm({

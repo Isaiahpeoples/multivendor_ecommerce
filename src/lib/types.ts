@@ -42,6 +42,7 @@ import {
   getUserWishlist,
 } from "@/queries/profile";
 import { string } from "zod";
+import { getHomeFeaturedCategories } from "@/queries/home";
 
 export interface DashboardSidebarMenuInterface {
   label: string;
@@ -333,3 +334,49 @@ export type CatgegoryWithSubsType = Category & {
 };
 
 export type StoreOrderType = Prisma.PromiseReturnType<typeof getStoreOrders>[0];
+
+export type ProductSize = {
+  size: string;
+  price: number;
+  discount: number;
+  quantity: number;
+};
+
+export type ProductSimpleVariantType = {
+  variantId: string;
+  variantSlug: string;
+  variantName: string;
+  variantImage: string;
+  images: ProductVariantImage[];
+  sizes: Size[];
+};
+
+export type ProductWithVariants = {
+  id: string;
+  slug: string;
+  name: string;
+  rating: number;
+  sales: number;
+  numReviews: number;
+  variants: {
+    id: string;
+    variantName: string;
+    variantImage: string;
+    slug: string;
+    sizes: Size[];
+    images: ProductVariantImage[];
+  }[];
+};
+
+export type SimpleProduct = {
+  name: string;
+  slug: string;
+  variantName: string;
+  variantSlug: string;
+  price: number;
+  image: string;
+};
+
+export type FeaturedCategoryType = Prisma.PromiseReturnType<
+  typeof getHomeFeaturedCategories
+>[0];

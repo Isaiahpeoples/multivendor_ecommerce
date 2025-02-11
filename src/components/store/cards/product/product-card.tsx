@@ -30,9 +30,9 @@ export default function ProductCard({ product }: { product: ProductType }) {
     <div>
       <div
         className={cn(
-          "group w-48 sm:w-[225px] relative transition-all duration-75 bg-white ease-in-out p-4 rounded-t-3xl border border-transparent hover:shadow-xl hover:border-border",
+          'group w-48 sm:w-[225px] relative transition-all duration-75 bg-white ease-in-out p-4 rounded-t-3xl border border-transparent hover:shadow-xl hover:border-border',
           {
-            "": true,
+            '': true,
           }
         )}
       >
@@ -76,7 +76,9 @@ export default function ProductCard({ product }: { product: ProductType }) {
           />
           {/* Action buttons */}
           <div className="flex flex-items gap-x-1">
-            <Button>Add to cart</Button>
+            <Button>
+              <Link href={`/product/${slug}/${variantSlug}`}>Add to cart</Link>
+            </Button>
             <Button
               variant="black"
               size="icon"
@@ -88,5 +90,5 @@ export default function ProductCard({ product }: { product: ProductType }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

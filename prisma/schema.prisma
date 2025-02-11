@@ -119,18 +119,18 @@ enum ShippingFeeMethod {
 }
 
 model Product {
-  id                String            @id @default(uuid())
-  name              String
-  description       String            @db.LongText
-  slug              String            @unique
-  brand             String
-  rating            Float             @default(0)
-  sales             Int               @default(0)
-  numReviews        Int               @default(0)
-  shippingFeeMethod ShippingFeeMethod @default(ITEM)
-  views  Int @default(0)
-  freeShipping FreeShipping? @relation("ProductFreeShipping")
-  freeShippingForAllCountries Boolean @default(false)
+  id                          String            @id @default(uuid())
+  name                        String
+  description                 String            @db.LongText
+  slug                        String            @unique
+  brand                       String
+  rating                      Float             @default(0)
+  sales                       Int               @default(0)
+  numReviews                  Int               @default(0)
+  shippingFeeMethod           ShippingFeeMethod @default(ITEM)
+  views                       Int               @default(0)
+  freeShipping                FreeShipping?     @relation("ProductFreeShipping")
+  freeShippingForAllCountries Boolean           @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -237,7 +237,7 @@ model Color {
 model OfferTag {
   id   String @id @default(uuid())
   name String
-  url  String  @unique
+  url  String @unique
 
   products Product[] @relation("OfferTagToProduct")
 

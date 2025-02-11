@@ -5,7 +5,9 @@ import { db } from "@/lib/db";
 import {
   CountryWithShippingRatesType,
   StoreDefaultShippingType,
-} from "@/lib/types";
+  StoreStatus,
+  StoreType,
+} from '@/lib/types'
 
 // Clerk
 import { currentUser } from "@clerk/nextjs/server";
@@ -412,3 +414,164 @@ export const getStoreOrders = async (storeUrl: string) => {
     throw error;
   }
 };
+
+export const applySeller = async (store: StoreType) => {
+  console.log('store', store)
+  try {
+    // Get current user
+    const user = await currentUser()
+    // Ensure user is authenticated
+    if (!user) throw new Error('Unauthenticated.')
+    // Ensure store data is provided
+    if (!store) throw new Error('Please provide store data.')
+    // Check if store with same name, email,url, or phone number already exists
+    const existingStore = await db.store.findFirst({
+      where: {
+        AND: [
+          {
+            OR: [
+              { name: store.name },
+              { email: store.email },
+              { phone: store.phone },
+              { url: store.url },
+            ],
+          },
+        ],
+      },
+    })
+    // If a store with same name, email, or phone number already exists, throw an error
+    if (existingStore) {
+      let errorMessage = ''
+      if (existingStore.name === store.name) {
+        errorMessage = 'A store with the same name already exists'
+      } else if (existingStore.email === store.email) {
+        errorMessage = 'A store with the same email already exists'
+      } else if (existingStore.phone === store.phone) {
+        errorMessage = 'A store with the same phone number already exists'
+      } else if (existingStore.url === store.url) {
+        errorMessage = 'A store with the same URL already exists'
+      }
+      throw new Error(errorMessage)
+    }
+    // Upsert store details into the database
+    const storeDetails = await db.store.create({
+      data: {
+        ...store,
+        defaultShippingService:
+          store.defaultShippingService || 'International Delivery',
+        returnPolicy: store.returnPolicy || 'Return in 30 days.',
+        userId: user.id,
+      },
+    })
+    return storeDetails
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+// Function: getAllStores
+// Description: Retrieves all stores from the database.
+// Permission Level: Admin only
+// Parameters: None
+// Returns: An array of store details.
+export const getAllStores = async () => {
+  try {
+    // Get current user
+    const user = await currentUser()
+    // Ensure user is authenticated
+    if (!user) throw new Error('Unauthenticated.')
+    // Verify admin permission
+    if (user.privateMetadata.role !== 'ADMIN') {
+      throw new Error(
+        'Unauthorized Access: Admin Privileges Required to View Stores.'
+      )
+    }
+    // Fetch all stores from the database
+    const stores = await db.store.findMany({
+      include: {
+        user: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+    return stores
+  } catch (error) {
+    // Log and re-throw any errors
+    console.log(error)
+    throw error
+  }
+}
+export const updateStoreStatus = async (
+  storeId: string,
+  status: StoreStatus
+) => {
+  // Retrieve current user
+  const user = await currentUser()
+  // Check if user is authenticated
+  if (!user) throw new Error('Unauthenticated.')
+  // Verify admin permission
+  if (user.privateMetadata.role !== 'ADMIN')
+    throw new Error('Unauthorized Access: Admin Privileges Required for Entry.')
+  const store = await db.store.findUnique({
+    where: {
+      id: storeId,
+    },
+  })
+  // Verify seller ownership
+  if (!store) {
+    throw new Error('Store not found !')
+  }
+  // Retrieve the order to be updated
+  const updatedStore = await db.store.update({
+    where: {
+      id: storeId,
+    },
+    data: {
+      status,
+    },
+  })
+  // Update the user role
+  if (store.status === 'PENDING' && updatedStore.status === 'ACTIVE') {
+    await db.user.update({
+      where: {
+        id: updatedStore.userId,
+      },
+      data: {
+        role: 'SELLER',
+      },
+    })
+  }
+  return updatedStore.status
+}
+// Function: deleteStore
+// Description: Deletes a store from the database.
+// Permission Level: Admin only
+// Parameters:
+//   - storeId: The ID of the store to be deleted.
+// Returns: Response indicating success or failure of the deletion operation.
+export const deleteStore = async (storeId: string) => {
+  try {
+    // Get current user
+    const user = await currentUser()
+    // Check if user is authenticated
+    if (!user) throw new Error('Unauthenticated.')
+    // Verify admin permission
+    if (user.privateMetadata.role !== 'ADMIN')
+      throw new Error(
+        'Unauthorized Access: Admin Privileges Required for Entry.'
+      )
+    // Ensure store ID is provided
+    if (!storeId) throw new Error('Please provide store ID.')
+    // Delete store from the database
+    const response = await db.store.delete({
+      where: {
+        id: storeId,
+      },
+    })
+    return response
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}

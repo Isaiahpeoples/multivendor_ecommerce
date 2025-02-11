@@ -1,14 +1,25 @@
-import { FC } from "react";
+import { ChangeEvent, FC } from "react";
 
 interface Props {
   name: string;
   value: string | number;
   type: "text" | "number";
   placeholder?: string;
-  onChange: (value: string | number) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  readonly?: boolean;
 }
 
-const Input: FC<Props> = ({ name, onChange, type, value, placeholder }) => {
+const Input: FC<Props> = ({
+  name,
+  onChange,
+  type,
+  value,
+  placeholder,
+  readonly,
+}) => {
+  // Ensure the value is a string when passed to the input
+  const inputValue = type === "number" ? String(value) : value;
+
   return (
     <div className="w-full relative">
       <input
@@ -16,8 +27,9 @@ const Input: FC<Props> = ({ name, onChange, type, value, placeholder }) => {
         className="w-full pr-6 pl-8 py-4 rounded-xl outline-none duration-200 ring-1 ring-transparent focus:ring-[#11BE86]"
         name={name}
         placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={inputValue}
+        onChange={onChange}
+        readOnly={readonly}
       />
     </div>
   );

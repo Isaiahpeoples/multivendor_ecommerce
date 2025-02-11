@@ -507,3 +507,57 @@ export const AddReviewSchema = z.object({
     .max(3, "You can upload up to 3 images for the review."),
   color: z.string({ required_error: "Color is required." }),
 });
+
+export const StoreShippingSchema = z.object({
+  returnPolicy: z
+    .string({
+      required_error: 'Return policy is required',
+      invalid_type_error: 'Return policy must be a string',
+    })
+    .default('Return in 30 days.'),
+  defaultShippingService: z
+    .string({
+      required_error: 'Default shipping service is required',
+      invalid_type_error: 'Default shipping service must be a string',
+    })
+    .default('International Delivery'),
+  defaultShippingFeePerItem: z
+    .number({
+      required_error: 'Default shipping fee per item is required',
+      invalid_type_error: 'Default shipping fee per item must be a number',
+    })
+    .default(0),
+  defaultShippingFeeForAdditionalItem: z
+    .number({
+      required_error: 'Default shipping fee for additional items is required',
+      invalid_type_error:
+        'Default shipping fee for additional items must be a number',
+    })
+    .default(0),
+  defaultShippingFeePerKg: z
+    .number({
+      required_error: 'Default shipping fee per kilogram is required',
+      invalid_type_error: 'Default shipping fee per kilogram must be a number',
+    })
+    .default(0),
+  defaultShippingFeeFixed: z
+    .number({
+      required_error: 'Default fixed shipping fee is required',
+      invalid_type_error: 'Default fixed shipping fee must be a number',
+    })
+    .default(0),
+  defaultDeliveryTimeMin: z
+    .number({
+      required_error: 'Minimum delivery time is required',
+      invalid_type_error: 'Minimum delivery time must be a number',
+    })
+    .int()
+    .default(7),
+  defaultDeliveryTimeMax: z
+    .number({
+      required_error: 'Maximum delivery time is required',
+      invalid_type_error: 'Maximum delivery time must be a number',
+    })
+    .int()
+    .default(31),
+})

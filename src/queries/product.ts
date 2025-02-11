@@ -758,6 +758,8 @@ export const retrieveProductDetails = async (
     },
   });
 
+console.log(product)
+  
   if (!product) return null;
   // Get variants info
   const variantsInfo = await db.productVariant.findMany({

@@ -16,6 +16,7 @@ const ProductShippingFee: FC<Props> = ({
   quantity,
   weight,
 }) => {
+  quantity = 1;
   switch (method) {
     case "ITEM":
       return (
@@ -66,6 +67,7 @@ const ProductShippingFee: FC<Props> = ({
                       ${fee}
                     </td>
                   </tr>
+
                   <tr
                     className="grid gap-x-1 text-xs px-4"
                     style={{ gridTemplateColumns: "4fr 1fr" }}
@@ -141,11 +143,18 @@ const ProductShippingFee: FC<Props> = ({
                 <td className="w-full bg-gray-50 px-2 py-0.5 ">Quantity</td>
                 <td className="w-full bg-gray-50 px-2 py-0.5 ">x{quantity}</td>
               </tr>
+              <tr
+                className="grid gap-x-1 text-xs px-4 mt-1"
+                style={{ gridTemplateColumns: "4fr 1fr" }}
+              >
+                <td className="w-full bg-gray-50 px-2 py-0.5 ">Weight</td>
+                <td className="w-full bg-gray-50 px-2 py-0.5 ">{weight}kg</td>
+              </tr>
               <tr className="flex gap-x-1 text-xs px-4 mt-1 text-center font-semibold">
                 <td className="w-full bg-black text-white px-1 py-1">
                   <span>
                     ${fee} (fee) x {weight}kg (weight) x {quantity} (items) = $
-                    {fee * weight * quantity}
+                    {(fee * weight * quantity).toFixed(2)}
                   </span>
                 </td>
               </tr>

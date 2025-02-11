@@ -203,16 +203,6 @@ export type ReviewsOrderType = {
   orderBy: "latest" | "oldest" | "highest";
 };
 
-export type VariantInfoType = {
-  variantName: string;
-  variantSlug: string;
-  variantImage: string;
-  variantUrl: string;
-  images: ProductVariantImage[];
-  sizes: Size[];
-  colors: Partial<Color>[];
-};
-
 export type CartWithCartItemsType = Cart & {
   cartItems: CartItem[];
   coupon: (Coupon & { store: Store }) | null;
@@ -380,3 +370,23 @@ export type SimpleProduct = {
 export type FeaturedCategoryType = Prisma.PromiseReturnType<
   typeof getHomeFeaturedCategories
 >[0];
+
+export type ReviewDetailsType = {
+  id: string
+  review: string
+  rating: number
+  images: { url: string }[]
+  size: string
+  quantity: string
+  variant: string
+  color: string
+}
+export type VariantInfoType = {
+  variantName: string
+  variantSlug: string
+  variantImage: string
+  variantUrl: string
+  images: ProductVariantImage[]
+  sizes: Size[]
+  colors: Partial<Color>[]
+}

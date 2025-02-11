@@ -1,8 +1,6 @@
-"use client";
-import Image from "next/image";
-import React, { useState } from "react";
-import ColorBorder from "../shared/colored-border";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { FC, useState } from "react";
 
 interface Props {
   name: string;
@@ -13,89 +11,87 @@ interface Props {
   options: { name: string; value: string; image?: string; colors?: string }[];
 }
 
-const Select: React.FC<Props> = ({
+const Select: FC<Props> = ({
   name,
   onChange,
-  placeholder,
   options,
   value,
+  placeholder,
   subPlaceholder,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [activeVariant, setActiveVariant] = useState(
     options.find((o) => o.value === value)
   );
 
-  // Toggle dropdown visibility
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
 
   // Handle option click
   const handleOptionClick = (option: string) => {
-    onChange(option); // Update the form value
+    onChange(option);
     setActiveVariant(options.find((o) => o.value === option));
-    setIsOpen(false); // Close the dropdown after selection
+    setIsOpen(false);
   };
   return (
-    <div>
-      <div className="relative w-full">
-        <div colors={activeVariant?.colors || ""}>
-          <div className="relative">
-            {activeVariant?.image && (
-              <Image
-                src={activeVariant.image}
-                alt=""
-                width={50}
-                height={50}
-                className="absolute h-10 w-10 rounded-full top-1/2 -translate-y-1/2 left-2 shadow-md object-top object-cover"
-              />
-            )}
-            <input
-              className={cn(
-                "w-full peer z-[21] pr-6 pl-14 py-4 rounded-xl outline-none duration-200 ",
-                {
-                  "ring-2 ring-[transparent] focus:ring-[#11BE86]":
-                    !activeVariant?.colors,
-                }
-              )}
-              color="white"
-              placeholder={placeholder}
-              value={value} // Bind the value to form value
-              onFocus={toggleDropdown} // Show dropdown on focus
-              onBlur={() => setIsOpen(false)} // Close dropdown on blur
-              onChange={(e) => onChange(e.target.value)} // Update form value on input change
+    <div className="relative w-full z-50">
+      <div>
+        <div className="relative">
+          {activeVariant?.image && (
+            <Image
+              src={activeVariant.image}
+              alt=""
+              height={50}
+              width={50}
+              className="absolute h-10 w-10 rounded-full top-1/2 -translate-y-1/2 left-2 shadow-md object-top object-cover"
             />
-          </div>
+          )}
+          <input
+            className={cn(
+              "w-full pr-6 pl-8 py-4 rounded-xl outline-none duration-200",
+              {
+                "ring-1 ring-[transparent] focus:ring-[#11BE86]":
+                  !activeVariant?.colors,
+                "pl-14": activeVariant?.image,
+              }
+            )}
+            placeholder={placeholder}
+            value={value}
+            onFocus={toggleDropdown}
+            onBlur={() => setIsOpen(false)}
+            onChange={(e) => onChange(e.target.value)}
+          />
         </div>
-        {isOpen && (
-          <div className="absolute top-16 w-full z-[500] left-0 rounded-xl border border-white-222 p-4 bg-white shadow-lg">
-            <p className="font-semibold text-xs text-[#5D5D5F]">
-              {subPlaceholder}
-            </p>
-            <ul className="flex gap-2 flex-col mt-2">
-              {options.map((option, index) => (
-                <li
-                  key={index}
-                  className="flex items-center gap-x-2 px-2 cursor-pointer text-sm hover:bg-green-100 py-2 rounded-lg"
-                  onMouseDown={() => handleOptionClick(option.value)} // Handle option click without triggering blur
-                >
-                  {option.image && (
-                    <Image
-                      src={option.image}
-                      alt=""
-                      width={100}
-                      height={100}
-                      className=" h-10 w-10 rounded-full shadow-md object-top object-cover"
-                    />
-                  )}
-                  {option.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
+      {isOpen && (
+        <div className="absolute top-16 w-full left-0 rounded-xl border  p-4 bg-white shadow-lg">
+          <p className="font-semibold text-xs text-[#5D5D5F]">
+            {subPlaceholder}
+          </p>
+          <ul className="flex gap-2 flex-col mt-2">
+            {options.map((option, index) => (
+              <li
+                key={index}
+                className="flex items-center gap-x-2 px-2 cursor-pointer text-sm hover:bg-green-100 py-2 rounded-lg"
+                onMouseDown={() => handleOptionClick(option.value)}
+              >
+                {option.image && (
+                  <Image
+                    src={option.image}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="w-10 h-10 rounded-full shadow-md object-top object-cover"
+                  />
+                )}
+                {option.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

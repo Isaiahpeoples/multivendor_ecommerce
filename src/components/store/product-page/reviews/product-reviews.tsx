@@ -4,6 +4,7 @@ import {
   ReviewsFiltersType,
   ReviewsOrderType,
   ReviewWithImageType,
+  VariantInfoType,
 } from "@/lib/types";
 import { FC, useEffect, useState } from "react";
 import RatingCard from "../../cards/product-rating";
@@ -13,14 +14,14 @@ import { getProductFilteredReviews } from "@/queries/product";
 import ReviewsFilters from "./filters";
 import ReviewsSort from "./sort";
 import Paginaion from "../../shared/pagination";
-import AddReviewForm from "../../forms/add-review";
-import { Size } from "@prisma/client";
+import ReviewDetails from "../../forms/review-details";
 
 interface Props {
   productId: string;
   rating: number;
   statistics: RatingStatisticsType;
   reviews: ReviewWithImageType[];
+  variantsInfo: VariantInfoType[];
 }
 
 const ProductReviews: FC<Props> = ({
@@ -28,6 +29,7 @@ const ProductReviews: FC<Props> = ({
   rating,
   statistics,
   reviews,
+  variantsInfo,
 }) => {
   const [data, setData] = useState<ReviewWithImageType[]>(reviews);
   const { totalReviews, ratingStatistics } = statistics;
@@ -95,7 +97,7 @@ const ProductReviews: FC<Props> = ({
             <ReviewsSort sort={sort} setSort={setSort} />
           </div>
           {/* Reviews */}
-          <div className="mt-6 min-h-72 grid grid-cols-2 gap-4">
+          <div className="mt-6  grid grid-cols-2 gap-4">
             {data.length > 0 ? (
               <>
                 <div className="flex flex-col gap-3">
@@ -126,6 +128,14 @@ const ProductReviews: FC<Props> = ({
           )}
         </>
       )}
+      <div className="mt-10">
+        <ReviewDetails
+          productId={productId}
+          variantsInfo={variantsInfo}
+          setReviews={setData}
+          reviews={data}
+        />
+      </div>
     </div>
   );
 };

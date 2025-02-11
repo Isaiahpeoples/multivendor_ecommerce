@@ -575,3 +575,27 @@ export const deleteStore = async (storeId: string) => {
     throw error
   }
 }
+
+export const getStorePageDetails = async (storeUrl: string) => {
+  // Fetch the store details from the database
+  const store = await db.store.findUnique({
+    where: {
+      url: storeUrl,
+      status: 'ACTIVE',
+    },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      logo: true,
+      cover: true,
+      averageRating: true,
+      numReviews: true,
+    },
+  })
+  // Handle case where the store is not found
+  if (!store) {
+    throw new Error(`Store with URL "${storeUrl}" not found.`)
+  }
+  return store
+}

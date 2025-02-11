@@ -8,12 +8,14 @@ import FiltersHeader from "./filters/header";
 
 export default async function ProductFilters({
   queries,
+  storeUrl,
 }: {
   queries: FiltersQueryType;
+  storeUrl?: string;
 }) {
   const { category, subCategory, offer } = queries;
-  const categories = await getAllCategories();
-  const offers = await getAllOfferTags();
+  const categories = await getAllCategories(storeUrl);
+  const offers = await getAllOfferTags(storeUrl);
   return (
     <div className="h-[840px] transition-transform overflow-auto pr-6 pb-2.5 flex-none basis-[196px] sticky top-0 overflow-x-hidden scrollbar">
       <FiltersHeader queries={queries} />
@@ -21,7 +23,7 @@ export default async function ProductFilters({
       <div className="border-t w-44">
         <CategoryFilter categories={categories} />
         <OfferFilter offers={offers} />
-        <SizeFilter queries={queries} />
+        <SizeFilter queries={queries} storeUrl={storeUrl} />
       </div>
     </div>
   );

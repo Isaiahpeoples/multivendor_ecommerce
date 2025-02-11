@@ -6,7 +6,7 @@ import ProductInfo from "./product-info/product-info";
 import ShipTo from "./shipping/ship-to";
 import ShippingDetails from "./shipping/shipping-details";
 import ReturnPrivacySecurityCard from "./returns-security-privacy-card";
-import { cn, isProductValidToAdd } from "@/lib/utils";
+import { cn, isProductValidToAdd, updateProductHistory } from "@/lib/utils";
 import QuantitySelector from "./quantity-selector";
 import SocialShare from "../shared/social-share";
 import { ProductVariantImage } from "@prisma/client";
@@ -23,7 +23,8 @@ interface Props {
 const ProductPageContainer: FC<Props> = ({ productData, sizeId, children }) => {
   // If there is no product data available, render nothing (null)
   if (!productData) return null;
-  const { productId, variantId, images, shippingDetails, sizes } = productData;
+  const { productId, variantId, variantSlug, images, shippingDetails, sizes } =
+    productData;
   if (typeof shippingDetails === "boolean") return null;
 
   // State for temporary product images
@@ -122,6 +123,9 @@ const ProductPageContainer: FC<Props> = ({ productData, sizeId, children }) => {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  // Add product to history
+  updateProductHistory(variantId);
 
   const handleAddToCart = () => {
     if (maxQty <= 0) return;

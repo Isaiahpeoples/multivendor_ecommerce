@@ -25,8 +25,16 @@ import {
   Country as CountryPrisma,
   Coupon,
   Store,
-} from '@prisma/client'
+  OrderGroup,
+  OrderItem,
+} from "@prisma/client";
 import countries from "@/data/countries.json";
+import { getOrder } from "@/queries/order";
+import {
+  getUserOrders,
+  getUserPayments,
+  getUserWishlist,
+} from "@/queries/profile";
 
 export interface DashboardSidebarMenuInterface {
   label: string;
@@ -95,6 +103,10 @@ export type SelectMenuOption = (typeof countries)[number];
 export type ProductType = Prisma.PromiseReturnType<
   typeof getProducts
 >["products"][0];
+
+export type ProductWishlistType = Prisma.PromiseReturnType<
+  typeof getUserWishlist
+>["wishlist"][0];
 
 export type VariantSimplified = {
   variantId: string;
@@ -185,10 +197,117 @@ export type VariantInfoType = {
 };
 
 export type CartWithCartItemsType = Cart & {
-  cartItems: CartItem[]
-  coupon: (Coupon & { store: Store }) | null
-}
+  cartItems: CartItem[];
+  coupon: (Coupon & { store: Store }) | null;
+};
 
 export type UserShippingAddressType = ShippingAddress & {
   country: CountryPrisma;
+  user: User;
+};
+
+export type OrderFulltType = Prisma.PromiseReturnType<typeof getOrder>;
+
+export enum OrderStatus {
+  Pending = "Pending",
+  Confirmed = "Confirmed",
+  Processing = "Processing",
+  Shipped = "Shipped",
+  OutforDelivery = "OutforDelivery",
+  Delivered = "Delivered",
+  Cancelled = "Cancelled",
+  Failed = "Failed",
+  Refunded = "Refunded",
+  Returned = "Returned",
+  PartiallyShipped = "PartiallyShipped",
+  OnHold = "OnHold",
+}
+
+export enum PaymentStatus {
+  Pending = "Pending",
+  Paid = "Paid",
+  Failed = "Failed",
+  Declined = "Declined",
+  Cancelled = "Cancelled",
+  Refunded = "Refunded",
+  PartiallyRefunded = "PartiallyRefunded",
+  Chargeback = "Chargeback",
+}
+
+export type OrderGroupWithItemsType = OrderGroup & {
+  items: OrderItem[];
+  store: Store;
+  _count: {
+    items: number;
+  };
+  coupon: Coupon | null;
+};
+
+export enum ProductStatus {
+  Pending = "Pending",
+  Processing = "Processing",
+  ReadyForShipment = "ReadyForShipment",
+  Shipped = "Shipped",
+  Delivered = "Delivered",
+  Canceled = "Canceled",
+  Returned = "Returned",
+  Refunded = "Refunded",
+  FailedDelivery = "FailedDelivery",
+  OnHold = "OnHold",
+  Backordered = "Backordered",
+  PartiallyShipped = "PartiallyShipped",
+  ExchangeRequested = "ExchangeRequested",
+  AwaitingPickup = "AwaitingPickup",
+}
+
+export interface SearchResult {
+  name: string;
+  link: string;
+  image: string;
+}
+
+export type OrderTableFilter =
+  | ""
+  | "unpaid"
+  | "toShip"
+  | "shipped"
+  | "delivered";
+
+export type OrderTableDateFilter =
+  | ""
+  | "last-6-months"
+  | "last-1-year"
+  | "last-2-years";
+
+export type UserOrderType = Prisma.PromiseReturnType<
+  typeof getUserOrders
+>["orders"][0];
+
+export type UserPaymentType = Prisma.PromiseReturnType<
+  typeof getUserPayments
+>["payments"][0];
+
+export type PaymentTableFilter = "" | "paypal" | "credit-card";
+
+export type PaymentTableDateFilter =
+  | ""
+  | "last-6-months"
+  | "last-1-year"
+  | "last-2-years";
+
+export type ReviewFilter = "5" | "4" | "3" | "2" | "1" | "";
+
+export type ReviewDateFilter =
+  | ""
+  | "last-6-months"
+  | "last-1-year"
+  | "last-2-years";
+
+export type FiltersQueryType = {
+  search: string;
+  category: string;
+  subCategory: string;
+  offer: string;
+  size: string;
+  sort: string;
 };

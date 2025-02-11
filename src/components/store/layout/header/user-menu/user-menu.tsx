@@ -1,16 +1,16 @@
-import { MessageIcon, OrderIcon, WishlistIcon } from '@/components/store/icons'
-import { Button } from '@/components/store/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import { SignOutButton, UserButton } from '@clerk/nextjs'
-import { currentUser } from '@clerk/nextjs/server'
-import { ChevronDown, UserIcon } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { MessageIcon, OrderIcon, WishlistIcon } from "@/components/store/icons";
+import { Button } from "@/components/store/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { SignOutButton, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { ChevronDown, UserIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default async function UserMenu() {
   // Get the current user
-  const user = await currentUser()
+  const user = await currentUser();
   return (
     <div className="relative group">
       {/* Trigger */}
@@ -21,7 +21,7 @@ export default async function UserMenu() {
             alt={user.fullName!}
             width={40}
             height={40}
-            className="rounded-full"
+            className="w-10 h-10 object-cover rounded-full"
           />
         ) : (
           <div className="flex h-11 items-center py-0 mx-2 cursor-pointer">
@@ -45,9 +45,9 @@ export default async function UserMenu() {
       {/* Content */}
       <div
         className={cn(
-          'hidden absolute top-0 -left-20 group-hover:block cursor-pointer',
+          "hidden absolute top-0 -left-20 group-hover:block cursor-pointer",
           {
-            '-left-[200px] lg:-left-[138px]': user,
+            "-left-[200px] lg:-left-[148px]": user,
           }
         )}
       >
@@ -114,56 +114,61 @@ export default async function UserMenu() {
         </div>
       </div>
     </div>
-  )
+  );
 }
+
 const links = [
   {
     icon: <OrderIcon />,
-    title: 'My Orders',
-    link: '/profile/orders',
+    title: "My Orders",
+    link: "/profile/orders",
   },
   {
     icon: <MessageIcon />,
-    title: 'Messages',
-    link: '/profile/messages',
+    title: "Messages",
+    link: "/profile/messages",
   },
   {
     icon: <WishlistIcon />,
-    title: 'WishList',
-    link: '/profile/wishlist',
+    title: "WishList",
+    link: "/profile/wishlist",
   },
-]
+];
 const extraLinks = [
   {
-    title: 'Settings',
-    link: '/',
+    title: "Profile",
+    link: "/profile",
   },
   {
-    title: 'Become a Seller',
-    link: '/become-seller',
+    title: "Settings",
+    link: "/",
   },
   {
-    title: 'Help Center',
-    link: '',
+    title: "Become a Seller",
+    link: "/become-seller",
   },
   {
-    title: 'Return & Refund Policy',
-    link: '/',
+    title: "Help Center",
+    link: "",
   },
   {
-    title: 'Legal & Privacy',
-    link: '',
+    title: "Return & Refund Policy",
+    link: "/",
   },
   {
-    title: 'Discounts & Offers',
-    link: '',
+    title: "Legal & Privacy",
+    link: "",
   },
   {
-    title: 'Order Dispute Resolution',
-    link: '',
+    title: "Discounts & Offers",
+    link: "",
   },
   {
-    title: 'Report a Problem',
-    link: '',
+    title: "Order Dispute Resolution",
+    link: "",
   },
-]
+  {
+    title: "Report a Problem",
+    link: "",
+  },
+];

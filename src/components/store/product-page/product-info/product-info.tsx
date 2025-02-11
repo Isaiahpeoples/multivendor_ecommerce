@@ -14,6 +14,7 @@ import ProductVariantSelector from "./variant-selector";
 import SizeSelector from "./size-selector";
 import ProductAssurancePolicy from "./assurance-policy";
 import { ProductVariantImage } from "@prisma/client";
+import ProductWatch from "./product-watch";
 
 interface Props {
   productData: ProductPageDataType;
@@ -46,6 +47,7 @@ const ProductInfo: FC<Props> = ({
     isSale,
     saleEndDate,
     variantName,
+    variantId,
     store,
     rating,
     reviewsStatistics,
@@ -134,6 +136,8 @@ const ProductInfo: FC<Props> = ({
           </div>
         )}
       </div>
+      {/* Product live watchers count */}
+      <ProductWatch productId={variantId} />
       <Separator className="mt-2" />
       {/* Color wheel - variant switcher */}
       <div className="mt-4 space-y-2">

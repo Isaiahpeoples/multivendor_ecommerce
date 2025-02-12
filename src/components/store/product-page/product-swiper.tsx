@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 
 // Image zoom
-import ImageZoom from "react-image-zooom";
+import ImageZoom from "react-image-zoom";
 
 // Utils
 import { cn } from "@/lib/utils";

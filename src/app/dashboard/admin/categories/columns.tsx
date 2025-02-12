@@ -1,11 +1,14 @@
 "use client";
+
 // React, Next.js imports
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
 // Custom components
 import CategoryDetails from "@/components/dashboard/forms/category-details";
 import CustomModal from "@/components/dashboard/shared/custom-modal";
+
 // UI components
 import {
   AlertDialog,
@@ -27,9 +30,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 // Hooks and utilities
 import { useToast } from "@/components/ui/use-toast";
 import { useModal } from "@/providers/modal-provider";
+
 // Lucide icons
 import {
   BadgeCheck,
@@ -38,12 +43,16 @@ import {
   MoreHorizontal,
   Trash,
 } from "lucide-react";
+
 // Queries
 import { deleteCategory, getCategory } from "@/queries/category";
+
 // Tanstack React Table
 import { ColumnDef } from "@tanstack/react-table";
+
 // Prisma models
 import { Category } from "@prisma/client";
+
 export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "image",
@@ -99,14 +108,17 @@ export const columns: ColumnDef<Category>[] = [
     id: "actions",
     cell: ({ row }) => {
       const rowData = row.original;
+
       return <CellActions rowData={rowData} />;
     },
   },
 ];
+
 // Define props interface for CellActions component
 interface CellActionsProps {
   rowData: Category;
 }
+
 // CellActions component definition
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   // Hooks
@@ -114,8 +126,10 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+
   // Return null if rowData or rowData.id don't exist
   if (!rowData || !rowData.id) return null;
+  
   return (
     <AlertDialog>
       <DropdownMenu>

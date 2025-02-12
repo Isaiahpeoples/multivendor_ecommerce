@@ -1,23 +1,28 @@
-"use client";
+'use client'
+
 // React
-import { FC, useEffect } from "react";
+import { FC, useEffect } from 'react'
+
 // Prisma model
-import { Category } from "@prisma/client";
+import { Category } from '@prisma/client'
+
 // Form handling utilities
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 // Schema
+import { CategoryFormSchema } from '@/lib/schemas'
 
 // UI Components
-import { AlertDialog } from "@/components/ui/alert-dialog";
+import { AlertDialog } from '@/components/ui/alert-dialog'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -26,27 +31,29 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import ImageUpload from "../shared/image-upload";
-// Queries
-import { upsertCategory } from "@/queries/category";
-// Utils
-import { v4 } from "uuid";
+} from '@/components/ui/form'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import ImageUpload from '../shared/image-upload'
 
-import { useRouter } from "next/navigation";
-import { CategoryFormSchema } from "@/lib/schemas";
-import { useToast } from "@/hooks/use-toast";
+// Queries
+import { upsertCategory } from '@/queries/category'
+
+// Utils
+import { v4 } from 'uuid'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
+
 interface CategoryDetailsProps {
-  data?: Category;
+  data?: Category
 }
 
 const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
   // Initializing necessary hooks
   const { toast } = useToast() // Hook for displaying toast messages
   const router = useRouter() // Hook for routing
+
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
     mode: 'onChange', // Form validation mode
@@ -59,8 +66,10 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
       featured: data?.featured,
     },
   })
+
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting
+
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
@@ -72,6 +81,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
       })
     }
   }, [data, form])
+
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof CategoryFormSchema>) => {
     try {
@@ -85,12 +95,14 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       })
+
       // Displaying success message
       toast({
         title: data?.id
           ? 'Category has been updated.'
           : `Congratulations! '${response?.name}' is now created.`,
       })
+
       // Redirect or Refresh data
       if (data?.id) {
         router.refresh()
@@ -99,7 +111,6 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error)
       toast({
         variant: 'destructive',
         title: 'Oops!',
@@ -107,6 +118,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
       })
     }
   }
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -211,4 +223,5 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ data }) => {
     </AlertDialog>
   )
 }
-export default CategoryDetails;
+
+export default CategoryDetails

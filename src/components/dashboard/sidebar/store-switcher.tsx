@@ -1,4 +1,5 @@
 'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -18,23 +19,29 @@ import { cn } from '@/lib/utils'
 import { Check, ChevronsUpDown, PlusCircle, StoreIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { FC, useState } from 'react'
+
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
+
 interface StoreSwitcherProps extends PopoverTriggerProps {
   stores: Record<string, any>[]
 }
+
 const StoreSwitcher: FC<StoreSwitcherProps> = ({ stores, className }) => {
   const params = useParams()
   const router = useRouter()
+
   // Format stores data
   const formattedItems = stores.map((store) => ({
     label: store.name,
     value: store.url,
   }))
   const [open, setOpen] = useState(false)
+
   // Get the active store
   const activeStore = formattedItems.find(
     (store) => store.value === params.storeUrl
   )
+
   const onStoreSelect = (store: { label: string; value: string }) => {
     setOpen(false)
     router.push(`/dashboard/seller/stores/${store.value}`)
@@ -95,4 +102,5 @@ const StoreSwitcher: FC<StoreSwitcherProps> = ({ stores, className }) => {
     </Popover>
   )
 }
+
 export default StoreSwitcher

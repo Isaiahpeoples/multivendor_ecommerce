@@ -1,5 +1,7 @@
 'use server'
+
 import { db } from '@/lib/db'
+
 export async function updateVariantImage() {
   try {
     // Fetch all product variants that have images
@@ -8,6 +10,7 @@ export async function updateVariantImage() {
         images: true,
       },
     })
+
     // Update each variant with the first image URL
     for (const variant of variants) {
       if (variant.images.length > 0) {
@@ -18,15 +21,7 @@ export async function updateVariantImage() {
             variantImage: firstImage.url,
           },
         })
-        console.log(
-          `Updated variant ${variant.id} with image ${firstImage.url}`
-        )
       }
     }
-    console.log(
-      'All product variants have been updated with their first image.'
-    )
-  } catch (error) {
-    console.error('Error updating variant images:', error)
-  }
+  } catch (error) {}
 }

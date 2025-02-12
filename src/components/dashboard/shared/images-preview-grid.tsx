@@ -1,19 +1,24 @@
 // React, Next.js
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import Image from 'next/image'
+
 // Import of the image shown when there are no images available
 import NoImageImg from '../../../../public/assets/images/no_image_2.png'
+
 // Utils
 import { cn, getDominantColors, getGridClassName } from '@/lib/utils'
+
 //Icons
 import { Trash } from 'lucide-react'
 import ColorPalette from './color-palette'
+
 interface ImagesPreviewGridProps {
   images: { url: string }[] // Array of image URLs
   onRemove: (value: string) => void // Callback function when an image is removed
   colors?: { color: string }[] // List of colors from form
   setColors: Dispatch<SetStateAction<{ color: string }[]>> // Setter function for colors
 }
+
 const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
   images,
   onRemove,
@@ -22,8 +27,10 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
 }) => {
   // Calculate the number of images
   let imagesLength = images.length
+
   // Get the grid class name based on the number of images
   const GridClassName = getGridClassName(imagesLength)
+
   // Extract images colors
   const [colorPalettes, setColorPalettes] = useState<string[][]>([])
   useEffect(() => {
@@ -40,11 +47,12 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
       )
       setColorPalettes(palettes)
     }
+
     if (imagesLength > 0) {
       fecthColors()
     }
   }, [images])
-  console.log('colorPalettes--->', colorPalettes)
+
   // If there are no images, display a placeholder image
   if (imagesLength === 0) {
     return (
@@ -121,4 +129,5 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
     )
   }
 }
+
 export default ImagesPreviewGrid

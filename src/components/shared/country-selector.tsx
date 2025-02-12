@@ -1,15 +1,15 @@
-import COUNTRIES from "@/data/countries.json";
-import { SelectMenuOption } from "@/lib/types";
-import { AnimatePresence, motion } from "framer-motion";
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import COUNTRIES from '@/data/countries.json'
+import { SelectMenuOption } from '@/lib/types'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 export interface CountrySelectorProps {
-  id: string;
-  open: boolean;
-  disabled?: boolean;
-  onToggle: () => void;
-  onChange: (value: SelectMenuOption["name"]) => void;
-  selectedValue: SelectMenuOption;
+  id: string
+  open: boolean
+  disabled?: boolean
+  onToggle: () => void
+  onChange: (value: SelectMenuOption['name']) => void
+  selectedValue: SelectMenuOption
 }
 
 export default function CountrySelector({
@@ -20,33 +20,37 @@ export default function CountrySelector({
   onChange,
   selectedValue,
 }: CountrySelectorProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const mutableRef = ref as MutableRefObject<HTMLDivElement | null>;
+    const mutableRef = ref as MutableRefObject<HTMLDivElement | null>
+
     const handleClickOutside = (event: any) => {
       if (
         mutableRef.current &&
         !mutableRef.current.contains(event.target) &&
         open
       ) {
-        onToggle();
-        setQuery("");
+        onToggle()
+        setQuery('')
       }
-      };
-      
-    document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-  const [query, setQuery] = useState("");
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [ref])
+
+  const [query, setQuery] = useState('')
+
   return (
     <div ref={ref}>
       <div className="mt-1 relative">
         <button
           type="button"
           className={`${
-            disabled ? "bg-neutral-100" : "bg-white"
+            disabled ? 'bg-neutral-100' : 'bg-white'
           } relative w-full border border-black/20 rounded-md pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1  sm:text-sm`}
           aria-haspopup="listbox"
           aria-expanded="true"
@@ -58,13 +62,13 @@ export default function CountrySelector({
             <img
               alt={`${selectedValue.name}`}
               src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedValue.code}.svg`}
-              className={"inline mr-2 h-4 rounded-sm"}
+              className={'inline mr-2 h-4 rounded-sm'}
             />
             {selectedValue.name}
           </span>
           <span
             className={`absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none ${
-              disabled ? "hidden" : ""
+              disabled ? 'hidden' : ''
             }`}
           >
             <svg
@@ -82,6 +86,7 @@ export default function CountrySelector({
             </svg>
           </span>
         </button>
+
         <AnimatePresence>
           {open && (
             <motion.ul
@@ -100,17 +105,18 @@ export default function CountrySelector({
                   <input
                     type="search"
                     name="search"
-                    autoComplete={"off"}
+                    autoComplete={'off'}
                     className=" block w-full sm:text-sm rounded-md outline-none"
-                    placeholder={"Search a country"}
+                    placeholder={'Search a country'}
                     onChange={(e) => setQuery(e.target.value)}
                   />
                 </li>
                 <hr />
               </div>
+
               <div
                 className={
-                  "max-h-64 scrollbar scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-600 scrollbar-thumb-rounded scrollbar-thin overflow-y-scroll"
+                  'max-h-64 scrollbar scrollbar-track-gray-100 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-600 scrollbar-thumb-rounded scrollbar-thin overflow-y-scroll'
                 }
               >
                 {COUNTRIES.filter((country) =>
@@ -130,16 +136,17 @@ export default function CountrySelector({
                         id="listbox-option-0"
                         role="option"
                         onClick={() => {
-                          onChange(value.name);
-                          setQuery("");
-                          onToggle();
+                          onChange(value.name)
+                          setQuery('')
+                          onToggle()
                         }}
                       >
                         <img
                           alt={`${value.name}`}
                           src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${value.code}.svg`}
-                          className={"inline mr-2 h-4 rounded-sm"}
+                          className={'inline mr-2 h-4 rounded-sm'}
                         />
+
                         <span className="font-normal truncate">
                           {value.name}
                         </span>
@@ -161,7 +168,7 @@ export default function CountrySelector({
                           </span>
                         ) : null}
                       </li>
-                    );
+                    )
                   })
                 )}
               </div>
@@ -170,5 +177,5 @@ export default function CountrySelector({
         </AnimatePresence>
       </div>
     </div>
-  );
+  )
 }

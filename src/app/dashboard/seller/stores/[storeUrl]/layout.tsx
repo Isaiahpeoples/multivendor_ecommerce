@@ -1,13 +1,17 @@
 // React,Next.js
 import { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
+
 // Custom UI Components
 import Header from '@/components/dashboard/header/header'
 import Sidebar from '@/components/dashboard/sidebar/sidebar'
+
 // Clerk
 import { currentUser } from '@clerk/nextjs/server'
+
 // DB
 import { db } from '@/lib/db'
+
 export default async function SellerStoreDashboardLayout({
   children,
 }: {
@@ -19,12 +23,14 @@ export default async function SellerStoreDashboardLayout({
     redirect('/')
     return // Ensure no further code is executed after redirect
   }
+
   // Retrieve the list of stores associated with the authenticated user.
   const stores = await db.store.findMany({
     where: {
       userId: user.id,
     },
   })
+  
   return (
     <div className="h-full w-full flex">
       <Sidebar stores={stores} />

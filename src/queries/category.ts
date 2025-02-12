@@ -1,13 +1,13 @@
-"use server";
+'use server'
 
 // Clerk
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser } from '@clerk/nextjs/server'
 
 // DB
-import { db } from "@/lib/db";
+import { db } from '@/lib/db'
 
 // Prisma model
-import { Category } from "@prisma/client";
+import { Category } from '@prisma/client'
 
 // Function: upsertCategory
 // Description: Upserts a category into the database, updating if it exists or creating a new one if not.
@@ -18,19 +18,19 @@ import { Category } from "@prisma/client";
 export const upsertCategory = async (category: Category) => {
   try {
     // Get current user
-    const user = await currentUser();
+    const user = await currentUser()
 
     // Ensure user is authenticated
-    if (!user) throw new Error("Unauthenticated.");
+    if (!user) throw new Error('Unauthenticated.')
 
     // Verify admin permission
-    if (user.privateMetadata.role !== "ADMIN")
+    if (user.privateMetadata.role !== 'ADMIN')
       throw new Error(
-        "Unauthorized Access: Admin Privileges Required for Entry."
-      );
+        'Unauthorized Access: Admin Privileges Required for Entry.'
+      )
 
     // Ensure category data is provided
-    if (!category) throw new Error("Please provide category data.");
+    if (!category) throw new Error('Please provide category data.')
 
     // Throw error if category with same name or URL already exists
     const existingCategory = await db.category.findFirst({
@@ -46,17 +46,17 @@ export const upsertCategory = async (category: Category) => {
           },
         ],
       },
-    });
+    })
 
     // Throw error if category with same name or URL already exists
     if (existingCategory) {
-      let errorMessage = "";
+      let errorMessage = ''
       if (existingCategory.name === category.name) {
-        errorMessage = "A category with the same name already exists";
+        errorMessage = 'A category with the same name already exists'
       } else if (existingCategory.url === category.url) {
-        errorMessage = "A category with the same URL already exists";
+        errorMessage = 'A category with the same URL already exists'
       }
-      throw new Error(errorMessage);
+      throw new Error(errorMessage)
     }
 
     // Upsert category into the database
@@ -66,14 +66,13 @@ export const upsertCategory = async (category: Category) => {
       },
       update: category,
       create: category,
-    });
-    return categoryDetails;
+    })
+    return categoryDetails
   } catch (error) {
     // Log and re-throw any errors
-    console.log(error);
-    throw error;
+    throw error
   }
-};
+}
 
 // Function: getAllCategories
 // Description: Retrieves all categories from the database.
@@ -81,15 +80,18 @@ export const upsertCategory = async (category: Category) => {
 // Returns: Array of categories sorted by updatedAt date in descending order.
 export const getAllCategories = async (storeUrl?: string) => {
   let storeId: string | undefined
+
   if (storeUrl) {
     // Retrieve the storeId based on the storeUrl
     const store = await db.store.findUnique({
       where: { url: storeUrl },
     })
+
     // If no store is found, return an empty array or handle as needed
     if (!store) {
       return []
     }
+
     storeId = store.id
   }
 
@@ -125,11 +127,11 @@ export const getAllCategoriesForCategory = async (categoryId: string) => {
       categoryId,
     },
     orderBy: {
-      updatedAt: "desc",
+      updatedAt: 'desc',
     },
-  });
-  return subCategories;
-};
+  })
+  return subCategories
+}
 
 // Function: getCategory
 // Description: Retrieves a specific category from the database.
@@ -139,16 +141,16 @@ export const getAllCategoriesForCategory = async (categoryId: string) => {
 // Returns: Details of the requested category.
 export const getCategory = async (categoryId: string) => {
   // Ensure category ID is provided
-  if (!categoryId) throw new Error("Please provide category ID.");
+  if (!categoryId) throw new Error('Please provide category ID.')
 
   // Retrieve category
   const category = await db.category.findUnique({
     where: {
       id: categoryId,
     },
-  });
-  return category;
-};
+  })
+  return category
+}
 
 // Function: deleteCategory
 // Description: Deletes a category from the database.
@@ -158,25 +160,23 @@ export const getCategory = async (categoryId: string) => {
 // Returns: Response indicating success or failure of the deletion operation.
 export const deleteCategory = async (categoryId: string) => {
   // Get current user
-  const user = await currentUser();
+  const user = await currentUser()
 
   // Check if user is authenticated
-  if (!user) throw new Error("Unauthenticated.");
+  if (!user) throw new Error('Unauthenticated.')
 
   // Verify admin permission
-  if (user.privateMetadata.role !== "ADMIN")
-    throw new Error(
-      "Unauthorized Access: Admin Privileges Required for Entry."
-    );
+  if (user.privateMetadata.role !== 'ADMIN')
+    throw new Error('Unauthorized Access: Admin Privileges Required for Entry.')
 
   // Ensure category ID is provided
-  if (!categoryId) throw new Error("Please provide category ID.");
+  if (!categoryId) throw new Error('Please provide category ID.')
 
   // Delete category from the database
   const response = await db.category.delete({
     where: {
       id: categoryId,
     },
-  });
-  return response;
-};
+  })
+  return response
+}

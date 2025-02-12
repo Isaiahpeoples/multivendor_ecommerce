@@ -35,12 +35,9 @@ const ProductList: FC<Props> = ({ products, title, link, arrow }) => {
       {title && <Title />}
       {products.length > 0 ? (
         <div
-          className={cn(
-            'flex flex-wrap -translate-x-5 w-[cacl(100%+3rem)] sm:w-[calc(100%+1.5rem)]',
-            {
-              'mt-2': title,
-            }
-          )}
+          className={cn('flex flex-wrap ', {
+            'mt-2': title,
+          })}
         >
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />

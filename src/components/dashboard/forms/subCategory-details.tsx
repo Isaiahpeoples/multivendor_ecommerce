@@ -1,14 +1,19 @@
 'use client'
+
 // React
 import { FC, useEffect } from 'react'
+
 // Prisma model
 import { Category, SubCategory } from '@prisma/client'
+
 // Form handling utilities
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+
 // Schema
 import { SubCategoryFormSchema } from '@/lib/schemas'
+
 // UI Components
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import {
@@ -31,8 +36,10 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import ImageUpload from '../shared/image-upload'
+
 // Queries
 import { upsertSubCategory } from '@/queries/subCategory'
+
 // Utils
 import { v4 } from 'uuid'
 import { useToast } from '@/components/ui/use-toast'
@@ -44,10 +51,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+
 interface SubCategoryDetailsProps {
   data?: SubCategory
   categories: Category[]
 }
+
 const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
   data,
   categories,
@@ -55,6 +64,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
   // Initializing necessary hooks
   const { toast } = useToast() // Hook for displaying toast messages
   const router = useRouter() // Hook for routing
+
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof SubCategoryFormSchema>>({
     mode: 'onChange', // Form validation mode
@@ -68,10 +78,12 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
       categoryId: data?.categoryId,
     },
   })
+
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting
+
   const formData = form.watch()
-  console.log('formData', formData)
+
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
@@ -84,6 +96,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
       })
     }
   }, [data, form])
+
   // Submit handler for form submission
   const handleSubmit = async (
     values: z.infer<typeof SubCategoryFormSchema>
@@ -100,12 +113,14 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
         createdAt: new Date(),
         updatedAt: new Date(),
       })
+
       // Displaying success message
       toast({
         title: data?.id
           ? 'SubCategory has been updated.'
           : `Congratulations! '${response?.name}' is now created.`,
       })
+
       // Redirect or Refresh data
       if (data?.id) {
         router.refresh()
@@ -114,7 +129,6 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error)
       toast({
         variant: 'destructive',
         title: 'Oops!',
@@ -122,6 +136,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
       })
     }
   }
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -245,6 +260,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
                   </FormItem>
                 )}
               />
+
               <Button type="submit" disabled={isLoading}>
                 {isLoading
                   ? 'loading...'
@@ -259,4 +275,5 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
     </AlertDialog>
   )
 }
+
 export default SubCategoryDetails

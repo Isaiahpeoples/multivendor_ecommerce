@@ -1,7 +1,7 @@
 'use client'
 
 // React, Next.js imports
-
+import { useParams, useRouter } from 'next/navigation'
 
 // UI components
 import { AlertDialog } from '@/components/ui/alert-dialog'
@@ -60,6 +60,7 @@ export const columns: ColumnDef<CountryWithShippingRatesType>[] = [
     header: 'Shipping Fee for additional item',
     cell: ({ row }) => {
       const value = row.original.shippingRate?.shippingFeeForAdditionalItem
+
       return (
         <span>
           <span>{value === 0 ? 'Free' : value > 0 ? value : 'Default'}</span>
@@ -72,6 +73,7 @@ export const columns: ColumnDef<CountryWithShippingRatesType>[] = [
     header: 'Shipping Fee per Kg',
     cell: ({ row }) => {
       const value = row.original.shippingRate?.shippingFeePerKg
+
       return (
         <span>
           <span>{value === 0 ? 'Free' : value > 0 ? value : 'Default'}</span>
@@ -84,6 +86,7 @@ export const columns: ColumnDef<CountryWithShippingRatesType>[] = [
     header: 'Shipping Fee fixed',
     cell: ({ row }) => {
       const value = row.original.shippingRate?.shippingFeeFixed
+
       return (
         <span>
           <span>{value === 0 ? 'Free' : value > 0 ? value : 'Default'}</span>
@@ -134,21 +137,26 @@ export const columns: ColumnDef<CountryWithShippingRatesType>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const rowData = row.original
+
       return <CellActions rowData={rowData} />
     },
   },
 ]
+
 // Define props interface for CellActions component
 interface CellActionsProps {
   rowData: CountryWithShippingRatesType
 }
+
 // CellActions component definition
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   // Hooks
   const { setOpen } = useModal()
   const params = useParams<{ storeUrl: string }>()
+
   // Return null if rowData or rowData.id don't exist
   if (!rowData) return null
+
   return (
     <AlertDialog>
       <DropdownMenu>

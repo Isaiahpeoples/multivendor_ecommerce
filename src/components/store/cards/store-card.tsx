@@ -1,12 +1,13 @@
 'use client'
 import { cn } from '@/lib/utils'
+import { getStoreFollowingInfo } from '@/queries/product-optimized'
 import { followStore } from '@/queries/user'
 import { useUser } from '@clerk/nextjs'
 import { Check, MessageSquareMore, Plus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 interface Props {
@@ -18,15 +19,27 @@ interface Props {
     followersCount: number
     isUserFollowingStore: boolean
   }
+  checkForFollowing?: boolean
 }
 
-const StoreCard: FC<Props> = ({ store }) => {
+const StoreCard: FC<Props> = ({ store, checkForFollowing }) => {
   const { id, name, logo, url, followersCount, isUserFollowingStore } = store
   const [following, setFollowing] = useState<boolean>(isUserFollowingStore)
   const [storeFollowersCount, setStoreFollowersCount] =
     useState<number>(followersCount)
   const user = useUser()
   const router = useRouter()
+
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        const res = await getStoreFollowingInfo(id)
+        setFollowing(res.isUserFollowingStore)
+        setStoreFollowersCount(res.followersCount)
+      } catch (error) {}
+    }
+    getDetails()
+  }, [])
   const handleStoreFollow = async () => {
     if (!user.isSignedIn) router.push('/sign-in')
     try {
@@ -46,7 +59,7 @@ const StoreCard: FC<Props> = ({ store }) => {
   }
   return (
     <div className="w-full">
-      <div className="bg-[#f5f5f5] flex items-center justify-between rounded-xl py-3 px-4">
+      <div className="bg-[#f5f5f5] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 rounded-xl py-3 px-4">
         <div className="flex">
           <Link href={`/store/${url}`}>
             <Image
@@ -54,7 +67,7 @@ const StoreCard: FC<Props> = ({ store }) => {
               alt={name}
               width={50}
               height={50}
-              className="w-12 h-12 object-cover rounded-full"
+              className="min-w-12 min-h-12 object-cover rounded-full"
             />
           </Link>
           <div className="mx-2">

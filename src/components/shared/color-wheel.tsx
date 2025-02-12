@@ -15,9 +15,24 @@ const ColorWheel: React.FC<ColorWheelProps> = ({ colors, size }) => {
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className="shadow-sm rounded-full"
+      className="shadow-md rounded-full"
     >
       {colors.map((color, index) => {
+        if (numColors === 1) {
+          // Special case: Only one color, render a full circle
+          return (
+            <circle
+              key={index}
+              cx={radius}
+              cy={radius}
+              r={radius}
+              fill={color.name || 'transparent'}
+              stroke="white"
+              strokeWidth="1"
+            />
+          )
+        }
+
         const startAngle = index * sliceAngle
         const endAngle = startAngle + sliceAngle
 
@@ -45,7 +60,7 @@ const ColorWheel: React.FC<ColorWheelProps> = ({ colors, size }) => {
           <path
             key={index}
             d={pathData}
-            fill={color.name}
+            fill={color.name || 'transparent'}
             stroke="white"
             strokeWidth="1"
           />

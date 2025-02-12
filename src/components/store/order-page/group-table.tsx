@@ -1,29 +1,37 @@
-import OrderStatusTag from "@/components/shared/order-status";
-import { OrderGroupWithItemsType, OrderStatus } from "@/lib/types";
-import Image from "next/image";
-import React from "react";
-import ProductRow from "./product-row";
+'use client'
+import OrderStatusTag from '@/components/shared/order-status'
+import { OrderGroupWithItemsType, OrderStatus } from '@/lib/types'
+import Image from 'next/image'
+import React from 'react'
+import ProductRow from './product-row'
+import { useMediaQuery } from 'react-responsive'
+import ProductRowGrid from './product-row-grid'
+import { cn } from '@/lib/utils'
 
 export default function OrderGroupTable({
   group,
   deliveryInfo,
+  check,
 }: {
-  group: OrderGroupWithItemsType;
+  group: OrderGroupWithItemsType
   deliveryInfo: {
-    shippingService: string;
-    deliveryMinDate: string;
-    deliveryMaxDate: string;
-  };
-}) {
-  const { shippingService, deliveryMaxDate, deliveryMinDate } = deliveryInfo;
-  const { coupon, couponId, subTotal, total, shippingFees } = group;
-  let discountedAmount = 0;
-  if (couponId && coupon) {
-    discountedAmount = ((subTotal + shippingFees) * coupon.discount) / 100;
+    shippingService: string
+    deliveryMinDate: string
+    deliveryMaxDate: string
   }
+  check: boolean
+}) {
+  const { shippingService, deliveryMaxDate, deliveryMinDate } = deliveryInfo
+  const { coupon, couponId, subTotal, total, shippingFees } = group
+  let discountedAmount = 0
+  if (couponId && coupon) {
+    discountedAmount = ((subTotal + shippingFees) * coupon.discount) / 100
+  }
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1400px)' })
+
   return (
-    <div className="border border-gray-200 rounded-xl pt-6 max-w-xl max-lg:mx-auto lg:max-w-full">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between px-6 pb-6 border-b border-gray-200">
+    <div className="border border-gray-200 rounded-xl pt-6  max-lg:mx-auto lg:max-w-full">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between px-6 pb-6 border-b border-gray-200">
         <div>
           <p className="font-semibold text-base leading-7 text-black">
             Order Id:
@@ -47,19 +55,24 @@ export default function OrderGroupTable({
             <div className="w-[1px] h-5 bg-border mx-2" />
           </div>
         </div>
-        <OrderStatusTag status={group.status as OrderStatus} />
+        <div className="mt-4 xl:mt-10">
+          <OrderStatusTag status={group.status as OrderStatus} />
+        </div>
       </div>
-      <div
-        className="w-full px-3 min-[400px]:px-6 grid"
-        style={{ gridTemplateColumns: "4fr 1fr" }}
-      >
+      <div className="w-full px-3 min-[400px]:px-6 ">
         <div>
           {group.items.map((product, index) => (
-            <ProductRow key={index} product={product} />
+            <>
+              {isBigScreen ? (
+                <ProductRowGrid key={index} product={product} />
+              ) : (
+                <ProductRow key={index} product={product} />
+              )}
+            </>
           ))}
         </div>
         <div className="flex items-center max-lg:mt-3 text-center">
-          <div className="flex gap-3 lg:block">
+          <div className="flex flex-col p-2 pb-4">
             <p className="font-medium text-sm whitespace-nowrap leading-6 text-black">
               Expected Delivery Time
             </p>
@@ -70,8 +83,22 @@ export default function OrderGroupTable({
         </div>
       </div>
       {/* Group info */}
-      <div className="w-full border-t border-gray-200 px-6 flex flex-col lg:flex-row items-center justify-between">
-        <div className="flex flex-col sm:flex-row items-center max-lg:border-b border-gray-200">
+      <div
+        className={cn(
+          'w-full border-t border-gray-200 px-6 flex flex-col 2xl:flex-row items-center justify-between',
+          {
+            'xl:flex-row': check,
+          }
+        )}
+      >
+        <div
+          className={cn(
+            'flex flex-col 2xl:flex-row items-center max-lg:border-b border-gray-200',
+            {
+              'lg:flex-row': check,
+            }
+          )}
+        >
           <button className="flex outline-0 py-6 sm:pr-6 sm:borde-r border-gray-200 whitespace-nowrap gap-2 items-center justify-center font-semibold group text-lg text-black bg-white transition-all duration-500 hover:text-blue-primary">
             <svg
               className="stroke-black transition-all duration-500 group-hover:stroke-blue-primary"
@@ -89,13 +116,13 @@ export default function OrderGroupTable({
             </svg>
             Cancel Order
           </button>
-          <p className="font-medium text-lg text-gray-900 px-6 py-3 max-lg:text-center border-r">
+          <p className="font-medium text-lg text-gray-900 px-6 py-3 max-lg:text-center">
             Subtotal:
             <span className="text-gray-500 ms-1">
               ${group.subTotal.toFixed(2)}
             </span>
           </p>
-          <p className="font-medium text-lg text-gray-900 px-6 py-3 max-lg:text-center border-r">
+          <p className="font-medium text-lg text-gray-900 px-6 py-3 max-lg:text-center">
             Shipping Fees:
             <span className="text-gray-500 ms-1">
               ${group.shippingFees.toFixed(2)}
@@ -112,12 +139,12 @@ export default function OrderGroupTable({
           )}
         </div>
         <div>
-          <p className="font-semibold text-xl text-black py-2">
+          <p className="font-semibold text-xl text-black py-4">
             Total price:
             <span className="text-blue-primary ms-1">${total.toFixed(2)}</span>
           </p>
         </div>
       </div>
     </div>
-  );
+  )
 }

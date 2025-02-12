@@ -1,20 +1,20 @@
-"use client";
+'use client'
 
 // React, Next.js
-import { FC, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { FC, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 // Form handling utilities
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 // Schema
-import { StoreShippingFormSchema } from "@/lib/schemas";
+import { StoreShippingFormSchema } from '@/lib/schemas'
 
 // UI Components
-import { AlertDialog } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertDialog } from '@/components/ui/alert-dialog'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -22,39 +22,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { NumberInput } from "@tremor/react";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { NumberInput } from '@tremor/react'
+import { Textarea } from '@/components/ui/textarea'
 
 // Queries
-import { updateStoreDefaultShippingDetails } from "@/queries/store";
+import { updateStoreDefaultShippingDetails } from '@/queries/store'
 
 // Utils
-import { v4 } from "uuid";
-import { useToast } from "@/components/ui/use-toast";
+import { v4 } from 'uuid'
+import { useToast } from '@/components/ui/use-toast'
 
 // Types
-import { StoreDefaultShippingType } from "@/lib/types";
+import { StoreDefaultShippingType } from '@/lib/types'
+
 interface StoreDefaultShippingDetailsProps {
-  data?: StoreDefaultShippingType;
-  storeUrl: string;
+  data?: StoreDefaultShippingType
+  storeUrl: string
 }
+
 const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
   data,
   storeUrl,
 }) => {
   // Initializing necessary hooks
-  const { toast } = useToast(); // Hook for displaying toast messages
-  const router = useRouter(); // Hook for routing
+  const { toast } = useToast() // Hook for displaying toast messages
+  const router = useRouter() // Hook for routing
+
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof StoreShippingFormSchema>>({
-    mode: "onChange", // Form validation mode
+    mode: 'onChange', // Form validation mode
     resolver: zodResolver(StoreShippingFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
-      defaultShippingService: data?.defaultShippingService || "",
+      defaultShippingService: data?.defaultShippingService || '',
       defaultShippingFeePerItem: data?.defaultShippingFeePerItem,
       defaultShippingFeeForAdditionalItem:
         data?.defaultShippingFeeForAdditionalItem,
@@ -64,15 +67,18 @@ const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
       defaultDeliveryTimeMax: data?.defaultDeliveryTimeMax,
       returnPolicy: data?.returnPolicy,
     },
-  });
+  })
+
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
+
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
-      form.reset(data);
+      form.reset(data)
     }
-  }, [data, form]);
+  }, [data, form])
+
   // Submit handler for form submission
   const handleSubmit = async (
     values: z.infer<typeof StoreShippingFormSchema>
@@ -89,25 +95,27 @@ const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
         defaultDeliveryTimeMin: values.defaultDeliveryTimeMin,
         defaultDeliveryTimeMax: values.defaultDeliveryTimeMax,
         returnPolicy: values.returnPolicy,
-      });
+      })
+
       if (response.id) {
         // Displaying success message
         toast({
-          title: "Store Default shipping details has been updated.",
-        });
+          title: 'Store Default shipping details has been updated.',
+        })
+
         //Refresh data
-        router.refresh();
+        router.refresh()
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error);
       toast({
-        variant: "destructive",
-        title: "Oops!",
+        variant: 'destructive',
+        title: 'Oops!',
         description: error.toString(),
-      });
+      })
     }
-  };
+  }
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -134,6 +142,7 @@ const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
                   </FormItem>
                 )}
               />
+
               <div className="flex flex-wrap gap-4">
                 <FormField
                   disabled={isLoading}
@@ -245,6 +254,7 @@ const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Maximum Delivery time (days)</FormLabel>
+
                       <FormControl>
                         <NumberInput
                           defaultValue={field.value}
@@ -277,13 +287,14 @@ const StoreDefaultShippingDetails: FC<StoreDefaultShippingDetailsProps> = ({
                 )}
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "loading..." : "Save changes"}
+                {isLoading ? 'loading...' : 'Save changes'}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
     </AlertDialog>
-  );
-};
-export default StoreDefaultShippingDetails;
+  )
+}
+
+export default StoreDefaultShippingDetails

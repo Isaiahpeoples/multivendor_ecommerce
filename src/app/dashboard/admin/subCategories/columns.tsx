@@ -1,11 +1,14 @@
 'use client'
+
 // React, Next.js imports
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+
 // Custom components
 import CustomModal from '@/components/dashboard/shared/custom-modal'
 import SubCategoryDetails from '@/components/dashboard/forms/subCategory-details'
+
 // UI components
 import {
   AlertDialog,
@@ -27,9 +30,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 // Hooks and utilities
 import { useToast } from '@/components/ui/use-toast'
 import { useModal } from '@/providers/modal-provider'
+
 // Lucide icons
 import {
   BadgeCheck,
@@ -38,15 +43,20 @@ import {
   MoreHorizontal,
   Trash,
 } from 'lucide-react'
+
 // Queries
 import { getAllCategories } from '@/queries/category'
 import { deleteSubCategory, getSubCategory } from '@/queries/subCategory'
+
 // Tanstack React Table
 import { ColumnDef } from '@tanstack/react-table'
+
 // Prisma models
 import { Category } from '@prisma/client'
+
 // Types
 import { SubCategoryWithCategoryType } from '@/lib/types'
+
 export const columns: ColumnDef<SubCategoryWithCategoryType>[] = [
   {
     accessorKey: 'image',

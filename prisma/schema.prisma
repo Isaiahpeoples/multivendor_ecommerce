@@ -345,14 +345,15 @@ model FreeShippingCountry {
 }
 
 model Review {
-  id       String @id @default(uuid())
-  variant  String
-  review   String
-  rating   Float
-  color    String
-  size     String
-  quantity String
-  likes    Int    @default(0)
+  id           String @id @default(uuid())
+  variant      String
+  variantImage String
+  review       String
+  rating       Float
+  color        String
+  size         String
+  quantity     String
+  likes        Int    @default(0)
 
   images ReviewImage[] @relation("ReviewToReviewImage")
 

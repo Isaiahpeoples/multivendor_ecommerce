@@ -1,10 +1,14 @@
 'use server'
+
 // Clerk
 import { currentUser } from '@clerk/nextjs/server'
+
 // DB
 import { db } from '@/lib/db'
+
 // Prisma model
 import { Category, SubCategory } from '@prisma/client'
+
 // Function: upsertSubCategory
 // Description: Upserts a subCategory into the database, updating if it exists or creating a new one if not.
 // Permission Level: Admin only
@@ -15,15 +19,19 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
   try {
     // Get current user
     const user = await currentUser()
+
     // Ensure user is authenticated
     if (!user) throw new Error('Unauthenticated.')
+
     // Verify admin permission
     if (user.privateMetadata.role !== 'ADMIN')
       throw new Error(
         'Unauthorized Access: Admin Privileges Required for Entry.'
       )
+
     // Ensure SubCategory data is provided
     if (!subCategory) throw new Error('Please provide subCategory data.')
+
     // Throw error if category with same name or URL already exists
     const existingSubCategory = await db.subCategory.findFirst({
       where: {
@@ -39,6 +47,7 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
         ],
       },
     })
+
     // Throw error if category with same name or URL already exists
     if (existingSubCategory) {
       let errorMessage = ''
@@ -49,6 +58,7 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
       }
       throw new Error(errorMessage)
     }
+
     // Upsert SubCategory into the database
     const subCategoryDetails = await db.subCategory.upsert({
       where: {
@@ -60,10 +70,10 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
     return subCategoryDetails
   } catch (error) {
     // Log and re-throw any errors
-    console.log(error)
     throw error
   }
 }
+
 // Function: getAllSubCategories
 // Description: Retrieves all subCategories from the database.
 // Permission Level: Public
@@ -80,6 +90,7 @@ export const getAllSubCategories = async () => {
   })
   return subCategories
 }
+
 // Function: getSubCategory
 // Description: Retrieves a specific SubCategory from the database.
 // Access Level: Public
@@ -89,6 +100,7 @@ export const getAllSubCategories = async () => {
 export const getSubCategory = async (subCategoryId: string) => {
   // Ensure subCategory ID is provided
   if (!subCategoryId) throw new Error('Please provide suCategory ID.')
+
   // Retrieve subCategory
   const subCategory = await db.subCategory.findUnique({
     where: {
@@ -97,6 +109,7 @@ export const getSubCategory = async (subCategoryId: string) => {
   })
   return subCategory
 }
+
 // Function: deleteSubCategory
 // Description: Deletes a SubCategory from the database.
 // Permission Level: Admin only
@@ -106,13 +119,17 @@ export const getSubCategory = async (subCategoryId: string) => {
 export const deleteSubCategory = async (subCategoryId: string) => {
   // Get current user
   const user = await currentUser()
+
   // Check if user is authenticated
   if (!user) throw new Error('Unauthenticated.')
+
   // Verify admin permission
   if (user.privateMetadata.role !== 'ADMIN')
     throw new Error('Unauthorized Access: Admin Privileges Required for Entry.')
+
   // Ensure subCategory ID is provided
   if (!subCategoryId) throw new Error('Please provide category ID.')
+
   // Delete subCategory from the database
   const response = await db.subCategory.delete({
     where: {
@@ -134,31 +151,31 @@ export const getSubcategories = async (
 ): Promise<SubCategory[]> => {
   // Define SortOrder enum
   enum SortOrder {
-    asc = "asc",
-    desc = "desc",
+    asc = 'asc',
+    desc = 'desc',
   }
   try {
     // Define the query options
     const queryOptions = {
       take: limit || undefined, // Use the provided limit or undefined for no limit
       orderBy: random ? { createdAt: SortOrder.desc } : undefined, // Use SortOrder for ordering
-    };
+    }
+
     // If random selection is required, use a raw query to randomize
     if (random) {
       const subcategories = await db.$queryRaw<SubCategory[]>`
     SELECT * FROM SubCategory
     ORDER BY RAND()
     LIMIT ${limit || 10} 
-    `;
-      return subcategories;
+    `
+      return subcategories
     } else {
       // Otherwise, fetch subcategories based on the defined query options
-      const subcategories = await db.subCategory.findMany(queryOptions);
-      return subcategories;
+      const subcategories = await db.subCategory.findMany(queryOptions)
+      return subcategories
     }
   } catch (error) {
     // Log and re-throw any errors
-    console.error("Error fetching subcategories:", error);
-    throw error;
+    throw error
   }
-};
+}

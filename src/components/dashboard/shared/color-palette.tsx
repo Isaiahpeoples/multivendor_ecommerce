@@ -1,11 +1,13 @@
 // React
 import { Dispatch, FC, SetStateAction, useState } from 'react'
+
 // Pros definition
 interface ColorPaletteProps {
   extractedColors?: string[] // Extracted Colors (Array of strings)
   colors?: { color: string }[] // List of selected colors from form
   setColors: Dispatch<SetStateAction<{ color: string }[]>> // Setter function for colors
 }
+
 // ColorPalette component for displaying a color palette
 const ColorPalette: FC<ColorPaletteProps> = ({
   colors,
@@ -14,19 +16,24 @@ const ColorPalette: FC<ColorPaletteProps> = ({
 }) => {
   // State to track the active color
   const [activeColor, setActiveColor] = useState<string>('')
+
   // Handle Selecting/ Adding color to product colors
   const handleAddProductColor = (color: string) => {
     if (!color || !setColors) return
+
     // Ensure colorsData is not undefined, defaulting to an empty array if it is
     const currentColorsData = colors ?? []
+
     // Check if the color already exists in colorsData
     const existingColor = currentColorsData.find((c) => color === c.color)
     if (existingColor) return
+
     // Check for empty inputs and remove them
     const newColors = currentColorsData.filter((c) => c.color !== '')
     // Add the new color to colorsData
     setColors([...newColors, { color: color }])
   }
+
   // Color component for individual color block
   const Color = ({ color }: { color: string }) => {
     return (
@@ -79,4 +86,5 @@ const ColorPalette: FC<ColorPaletteProps> = ({
     </div>
   )
 }
+
 export default ColorPalette

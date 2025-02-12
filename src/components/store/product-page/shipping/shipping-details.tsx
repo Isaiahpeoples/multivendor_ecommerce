@@ -1,91 +1,124 @@
-"use client";
-import { ProductShippingDetailsType } from "@/lib/types";
-import { ChevronDown, ChevronRight, ChevronUp, Truck } from "lucide-react";
-import { FC, useEffect, useState } from "react";
-import ProductShippingFee from "./shipping-fee";
-import { getShippingDatesRange } from "@/lib/utils";
+'use client'
+import { ShippingDetailsType } from '@/lib/types'
+import { ChevronDown, ChevronRight, ChevronUp, Truck } from 'lucide-react'
+import { FC, useEffect, useState } from 'react'
+import ProductShippingFee from './shipping-fee'
+import { getShippingDatesRange } from '@/lib/utils'
+import { BarLoader, BounceLoader, MoonLoader } from 'react-spinners'
 
 interface Props {
-  shippingDetails: ProductShippingDetailsType;
-  quantity: number;
-  weight: number;
+  shippingDetails: ShippingDetailsType | null
+  quantity: number
+  weight: number
+  loading: boolean // Added loading prop
+  countryName: string
 }
 
-const ShippingDetails: FC<Props> = ({ shippingDetails, quantity, weight }) => {
-  if (typeof shippingDetails === "boolean") return null;
-  const [toggle, setToggle] = useState<boolean>(false);
-  const {
-    countryName,
-    deliveryTimeMax,
-    deliveryTimeMin,
-    shippingFee,
-    extraShippingFee,
-    returnPolicy,
-    shippingFeeMethod,
-    shippingService,
-  } = shippingDetails;
-  const [shippingTotal, setShippingTotal] = useState<number>();
+const ShippingDetails: FC<Props> = ({
+  shippingDetails,
+  quantity,
+  weight,
+  loading,
+  countryName,
+}) => {
+  const [toggle, setToggle] = useState<boolean>(true)
+  const [shippingTotal, setShippingTotal] = useState<number>(0)
 
   useEffect(() => {
-    switch (shippingFeeMethod) {
-      case "ITEM":
-        let qty = quantity - 1;
-        setShippingTotal(shippingFee + qty * extraShippingFee);
-        break;
-      case "WEIGHT":
-        setShippingTotal(shippingFee * quantity);
-        break;
-      case "FIXED":
-        setShippingTotal(shippingFee);
-        break;
-      default:
-        break;
-    }
-  }, [quantity, countryName]);
+    if (!shippingDetails) return // Skip calculation if shippingDetails is null
 
-  const { minDate, maxDate } = getShippingDatesRange(
-    deliveryTimeMin,
-    deliveryTimeMax
-  );
+    const { shippingFee, extraShippingFee, shippingFeeMethod } = shippingDetails
+
+    switch (shippingFeeMethod) {
+      case 'ITEM':
+        let qty = quantity - 1 // Adjust quantity as needed
+        setShippingTotal(shippingFee + qty * extraShippingFee)
+        break
+      case 'WEIGHT':
+        setShippingTotal(shippingFee * quantity)
+        break
+      case 'FIXED':
+        setShippingTotal(shippingFee)
+        break
+      default:
+        setShippingTotal(0) // Fallback for unexpected method
+        break
+    }
+  }, [quantity, shippingDetails])
+  console.log('qty', quantity)
+
+  const {
+    deliveryTimeMax = 0,
+    deliveryTimeMin = 0,
+    shippingFee = 0,
+    extraShippingFee = 0,
+    shippingFeeMethod = 'Loading...',
+    shippingService = 'Loading...',
+    isFreeShipping = false,
+  } = shippingDetails || {} // Default to placeholders if shippingDetails is null
+
+  // Calculate delivery dates only if shippingDetails is available
+  const { minDate, maxDate } = shippingDetails
+    ? getShippingDatesRange(deliveryTimeMin, deliveryTimeMax)
+    : { minDate: 'Loading...', maxDate: 'Loading...' }
+
   return (
     <div>
       <div className="space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-1">
             <Truck className="w-4" />
-            {shippingDetails.isFreeShipping ? (
+            {isFreeShipping ? (
               <span className="text-sm font-bold flex items-center">
                 <span>
-                  Free Shipping to <span>{countryName}</span>
+                  Free Shipping to&nbsp;
+                  <span>
+                    {loading ? <BarLoader width={100} /> : countryName}
+                  </span>
                 </span>
               </span>
             ) : (
               <span className="text-sm font-bold flex items-center">
-                <span>
-                  Shipping to <span>{countryName}</span>
+                <span>Shipping to {countryName}</span>
+                <span className="flex items-center">
+                  &nbsp;for $&nbsp;
+                  {loading ? (
+                    <MoonLoader size={12} color="#e5e5e5" />
+                  ) : (
+                    shippingTotal
+                  )}
                 </span>
-                <span>&nbsp;for ${shippingTotal}</span>
               </span>
             )}
           </div>
           <ChevronRight className="w-3" />
         </div>
         <span className="flex items-center text-sm ml-5">
-          Service:&nbsp;<strong className="text-sm">{shippingService}</strong>
+          Service:&nbsp;
+          <strong className="text-sm">
+            {loading ? (
+              <BarLoader width={100} color="#e5e5e5" className="rounded-full" />
+            ) : (
+              shippingService
+            )}
+          </strong>
         </span>
         <span className="flex items-center text-sm ml-5">
           Delivery:&nbsp;
           <strong className="text-sm">
-            {minDate.slice(4)} - {maxDate.slice(4)}
+            {loading ? (
+              <BarLoader width={180} color="#e5e5e5" className="rounded-full" />
+            ) : (
+              `${minDate.slice(4)} - ${maxDate.slice(4)}`
+            )}
           </strong>
         </span>
-        {/* Product shipping fee */}
-        {!shippingDetails.isFreeShipping && toggle && (
+        {!isFreeShipping && toggle && shippingDetails && (
           <ProductShippingFee
             fee={shippingFee}
             extraFee={extraShippingFee}
             method={shippingFeeMethod}
-            quantity={5}
+            quantity={quantity}
             weight={weight}
           />
         )}
@@ -95,7 +128,7 @@ const ShippingDetails: FC<Props> = ({ shippingDetails, quantity, weight }) => {
         >
           <div className="w-full flex items-center justify-between gap-x-1 px-2">
             <span className="text-xs">
-              {toggle ? "Hide" : "Shipping Fee Breakdown"}
+              {toggle ? 'Hide' : 'Shipping Fee Breakdown'}
             </span>
             {toggle ? (
               <ChevronUp className="w-4" />
@@ -106,7 +139,7 @@ const ShippingDetails: FC<Props> = ({ shippingDetails, quantity, weight }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ShippingDetails;
+export default ShippingDetails

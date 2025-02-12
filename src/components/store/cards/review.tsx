@@ -10,6 +10,7 @@ export default function ReviewCard({
 }: {
   review: ReviewWithImageType
 }) {
+  console.log(review)
   const { images, user } = review
   const colors = review.color
     .split(',')
@@ -44,7 +45,13 @@ export default function ReviewCard({
             edit={false}
           />
           <div className="flex items-center gap-x-2">
-            <ColorWheel colors={colors} size={24} />
+            <Image
+              src={review.variantImage}
+              alt=""
+              width={40}
+              height={40}
+              className="object-cover w-9 h-9 rounded-full"
+            />
             <div className="text-main-secondary text-sm">{review.variant}</div>
             <span>.</span>
             <div className="text-main-secondary text-sm">{review.size}</div>

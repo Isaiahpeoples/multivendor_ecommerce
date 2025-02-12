@@ -1,6 +1,6 @@
-"use server";
+'use server'
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db'
 
 // Function: getFilteredSizes
 // Description: Retrieves all sizes that exist in a product based on the filters (category, subCategory, offer).
@@ -16,19 +16,23 @@ export const getFilteredSizes = async (
   },
   take = 10
 ) => {
-    const { category, subCategory, offer, storeUrl } = filters
-    let storeId: string | undefined
-    if (storeUrl) {
-      // Retrieve the storeId based on the storeUrl
-      const store = await db.store.findUnique({
-        where: { url: storeUrl },
-      })
-      // If no store is found, return an empty array or handle as needed
-      if (!store) {
-        return { sizes: [], count: 0 }
-      }
-      storeId = store.id
+  const { category, subCategory, offer, storeUrl } = filters
+
+  let storeId: string | undefined
+
+  if (storeUrl) {
+    // Retrieve the storeId based on the storeUrl
+    const store = await db.store.findUnique({
+      where: { url: storeUrl },
+    })
+
+    // If no store is found, return an empty array or handle as needed
+    if (!store) {
+      return { sizes: [], count: 0 }
     }
+
+    storeId = store.id
+  }
 
   // Construct the query dynamically based on the available filters
   const sizes = await db.size.findMany({

@@ -1,9 +1,9 @@
-"use server";
+'use server'
 
-import { db } from "@/lib/db";
-import { CartWithCartItemsType } from "@/lib/types";
-import { currentUser } from "@clerk/nextjs/server";
-import { Coupon } from "@prisma/client";
+import { db } from '@/lib/db'
+import { CartWithCartItemsType } from '@/lib/types'
+import { currentUser } from '@clerk/nextjs/server'
+import { Coupon } from '@prisma/client'
 
 // Function: upsertCoupon
 // Description: Upserts a coupon into the database, updating it if it exists or creating a new one if not.
@@ -15,27 +15,27 @@ import { Coupon } from "@prisma/client";
 export const upsertCoupon = async (coupon: Coupon, storeUrl: string) => {
   try {
     // Get current user
-    const user = await currentUser();
+    const user = await currentUser()
 
     // Ensure user is authenticated
-    if (!user) throw new Error("Unauthenticated.");
+    if (!user) throw new Error('Unauthenticated.')
 
     // Verify seller permission
-    if (user.privateMetadata.role !== "SELLER")
+    if (user.privateMetadata.role !== 'SELLER')
       throw new Error(
-        "Unauthorized Access: Seller Privileges Required for Entry."
-      );
+        'Unauthorized Access: Seller Privileges Required for Entry.'
+      )
 
     // Ensure coupon data and storeUrl are provided
-    if (!coupon) throw new Error("Please provide coupon data.");
-    if (!storeUrl) throw new Error("Store URL is required.");
+    if (!coupon) throw new Error('Please provide coupon data.')
+    if (!storeUrl) throw new Error('Store URL is required.')
 
     // Retrieve store ID using storeUrl
     const store = await db.store.findUnique({
       where: { url: storeUrl },
-    });
+    })
 
-    if (!store) throw new Error("Store not found.");
+    if (!store) throw new Error('Store not found.')
 
     // Throw error if a coupon with the same code and storeId already exists
     const existingCoupon = await db.coupon.findFirst({
@@ -50,12 +50,12 @@ export const upsertCoupon = async (coupon: Coupon, storeUrl: string) => {
           },
         ],
       },
-    });
+    })
 
     if (existingCoupon) {
       throw new Error(
-        "A coupon with the same code already exists for this store."
-      );
+        'A coupon with the same code already exists for this store.'
+      )
     }
 
     // Upsert coupon into the database
@@ -65,14 +65,13 @@ export const upsertCoupon = async (coupon: Coupon, storeUrl: string) => {
       },
       update: { ...coupon, storeId: store.id },
       create: { ...coupon, storeId: store.id },
-    });
+    })
 
-    return couponDetails;
+    return couponDetails
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw error
   }
-};
+}
 
 // Function: getStoreCoupons
 // Description: Retrieves all coupons for a specific store based on the provided store URL.
@@ -83,46 +82,45 @@ export const upsertCoupon = async (coupon: Coupon, storeUrl: string) => {
 export const getStoreCoupons = async (storeUrl: string) => {
   try {
     // Get current user
-    const user = await currentUser();
+    const user = await currentUser()
 
     // Ensure user is authenticated
-    if (!user) throw new Error("Unauthenticated.");
+    if (!user) throw new Error('Unauthenticated.')
 
     // Verify seller permission
-    if (user.privateMetadata.role !== "SELLER")
+    if (user.privateMetadata.role !== 'SELLER')
       throw new Error(
-        "Unauthorized Access: Seller Privileges Required for Entry."
-      );
+        'Unauthorized Access: Seller Privileges Required for Entry.'
+      )
 
     // Ensure storeUrl is provided
-    if (!storeUrl) throw new Error("Store URL is required.");
+    if (!storeUrl) throw new Error('Store URL is required.')
 
     // Retrieve store ID using storeUrl and ensure it belongs to the current user
     const store = await db.store.findUnique({
       where: {
         url: storeUrl,
       },
-    });
+    })
 
-    if (!store) throw new Error("Store not found.");
+    if (!store) throw new Error('Store not found.')
 
     if (store.userId !== user.id)
-      throw new Error("Unauthorized Access: You do not own this store.");
+      throw new Error('Unauthorized Access: You do not own this store.')
 
     // Retrieve and return all coupons for the specified store
     const coupons = await db.coupon.findMany({
       where: {
         storeId: store.id,
       },
-    });
+    })
 
-    return coupons;
+    return coupons
   } catch (error) {
     // Log and re-throw any errors
-    console.log(error);
-    throw error;
+    throw error
   }
-};
+}
 
 // Function: getCoupon
 // Description: Retrieves a specific coupon from the database.
@@ -133,21 +131,20 @@ export const getStoreCoupons = async (storeUrl: string) => {
 export const getCoupon = async (couponId: string) => {
   try {
     // Ensure coupon ID is provided
-    if (!couponId) throw new Error("Please provide coupon ID.");
+    if (!couponId) throw new Error('Please provide coupon ID.')
 
     // Retrieve coupon
     const coupon = await db.coupon.findUnique({
       where: {
         id: couponId,
       },
-    });
+    })
 
-    return coupon;
+    return coupon
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw error
   }
-};
+}
 
 // Function: deleteCoupon
 // Description: Deletes a coupon from the database.
@@ -160,34 +157,34 @@ export const getCoupon = async (couponId: string) => {
 export const deleteCoupon = async (couponId: string, storeUrl: string) => {
   try {
     // Get current user
-    const user = await currentUser();
+    const user = await currentUser()
 
     // Check if user is authenticated
-    if (!user) throw new Error("Unauthenticated.");
+    if (!user) throw new Error('Unauthenticated.')
 
     // Verify seller permission
-    if (user.privateMetadata.role !== "SELLER")
-      throw new Error("Unauthorized Access: Seller Privileges Required.");
+    if (user.privateMetadata.role !== 'SELLER')
+      throw new Error('Unauthorized Access: Seller Privileges Required.')
 
     // Ensure coupon ID and store URL are provided
     if (!couponId || !storeUrl)
-      throw new Error("Please provide coupon ID and store URL.");
+      throw new Error('Please provide coupon ID and store URL.')
 
     // Get the store associated with the provided store URL
     const store = await db.store.findUnique({
       where: {
         url: storeUrl,
       },
-    });
+    })
 
     // Verify store exists
-    if (!store) throw new Error("Store not found.");
+    if (!store) throw new Error('Store not found.')
 
     // Verify that the logged-in user is the owner of the store
     if (store.userId !== user.id) {
       throw new Error(
-        "You are not the owner of this store. Only the store owner can delete coupons."
-      );
+        'You are not the owner of this store. Only the store owner can delete coupons.'
+      )
     }
 
     // Delete the coupon from the database
@@ -196,14 +193,13 @@ export const deleteCoupon = async (couponId: string, storeUrl: string) => {
         id: couponId,
         storeId: store.id,
       },
-    });
+    })
 
-    return response;
+    return response
   } catch (error) {
-    console.log(error);
-    throw error;
+    throw error
   }
-};
+}
 
 /**
  * Applies a coupon to a cart for items belonging to the coupon's store.
@@ -226,19 +222,19 @@ export const applyCoupon = async (
       include: {
         store: true,
       },
-    });
+    })
 
     if (!coupon) {
-      throw new Error("Invalid coupon code.");
+      throw new Error('Invalid coupon code.')
     }
 
     // Step 2: Validate the coupon's date range
-    const currentDate = new Date();
-    const startDate = new Date(coupon.startDate);
-    const endDate = new Date(coupon.endDate);
+    const currentDate = new Date()
+    const startDate = new Date(coupon.startDate)
+    const endDate = new Date(coupon.endDate)
 
     if (currentDate < startDate || currentDate > endDate) {
-      throw new Error("Coupon is expired or not yet active.");
+      throw new Error('Coupon is expired or not yet active.')
     }
 
     // Step 3: Fetch the cart and validate its existence
@@ -250,46 +246,44 @@ export const applyCoupon = async (
         cartItems: true,
         coupon: true,
       },
-    });
+    })
 
     if (!cart) {
-      throw new Error("Cart not found.");
+      throw new Error('Cart not found.')
     }
 
     // Step 4: Ensure no coupon is already applied to the cart
     if (cart.couponId) {
-      throw new Error("A coupon is already applied to this cart.");
+      throw new Error('A coupon is already applied to this cart.')
     }
 
     // Step 5: Filter items from the store associated with the coupon
-    const storeId = coupon.storeId;
+    const storeId = coupon.storeId
 
-    const storeItems = cart.cartItems.filter(
-      (item) => item.storeId === storeId
-    );
+    const storeItems = cart.cartItems.filter((item) => item.storeId === storeId)
 
     if (storeItems.length === 0) {
       throw new Error(
-        "No items in the cart belong to the store associated with this coupon."
-      );
+        'No items in the cart belong to the store associated with this coupon.'
+      )
     }
 
     // Step 6: Calculate the discount on the store's items
     const storeSubTotal = storeItems.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
-    );
+    )
 
     const storeShippingTotal = storeItems.reduce(
       (acc, item) => acc + item.shippingFee,
       0
-    );
+    )
 
-    const storeTotal = storeSubTotal + storeShippingTotal;
+    const storeTotal = storeSubTotal + storeShippingTotal
 
-    const discountedAmount = (storeTotal * coupon.discount) / 100;
+    const discountedAmount = (storeTotal * coupon.discount) / 100
 
-    const newTotal = cart.total - discountedAmount;
+    const newTotal = cart.total - discountedAmount
 
     // Step 7: Update the cart with the applied coupon and new total
     const updatedCart = await db.cart.update({
@@ -308,16 +302,15 @@ export const applyCoupon = async (
           },
         },
       },
-    });
+    })
 
     return {
       message: `Coupon applied successfully. Discount: -$${discountedAmount.toFixed(
         2
       )} applied to items from ${coupon.store.name}.`,
       cart: updatedCart,
-    };
+    }
   } catch (error: any) {
-    console.error("Error applying coupon:", error);
-    throw error;
+    throw error
   }
-};
+}

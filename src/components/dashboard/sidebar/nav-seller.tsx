@@ -1,7 +1,9 @@
 'use client'
+
 // React, Next.js
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
 // UI Components
 import {
   Command,
@@ -11,12 +13,16 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
+
 // Icons
 import { icons } from '@/constants/icons'
+
 // types
 import { DashboardSidebarMenuInterface } from '@/lib/types'
+
 // Utils
 import { cn } from '@/lib/utils'
+
 export default function SidebarNavSeller({
   menuLinks,
 }: {
@@ -25,6 +31,7 @@ export default function SidebarNavSeller({
   const pathname = usePathname()
   const storeUrlStart = pathname.split('/stores/')[1]
   const activeStore = storeUrlStart ? storeUrlStart.split('/')[0] : ''
+
   return (
     <nav className="relative grow">
       <Command className="rounded-lg overflow-visible bg-transparent">

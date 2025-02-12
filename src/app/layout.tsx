@@ -40,16 +40,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${interFont.className} ${barlowFont.variable}`}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
             <ModalProvider>{children}</ModalProvider>
             <Toaster />
             <SonnerToaster position="bottom-left" />
-          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

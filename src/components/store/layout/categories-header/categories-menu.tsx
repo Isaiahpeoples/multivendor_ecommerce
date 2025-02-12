@@ -15,6 +15,7 @@ export default function CategoriesMenu({
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false)
+
   const toggleMenu = (state: boolean) => {
     setOpen(state)
     // Delay showing the dropdown until the trigger has finished expanding
@@ -26,6 +27,7 @@ export default function CategoriesMenu({
       setDropdownVisible(false)
     }
   }
+
   return (
     <div
       className="relative w-10 h-10 xl:w-[256px] z-50"
@@ -52,6 +54,7 @@ export default function CategoriesMenu({
               'left-3': !open,
             })}
           />
+
           <span
             className={cn('hidden xl:inline-flex xl:ml-11', {
               'inline-flex !ml-14': open,
@@ -59,6 +62,7 @@ export default function CategoriesMenu({
           >
             All Categories
           </span>
+
           <ChevronDown
             className={cn('hidden xl:inline-flex scale-75 absolute right-3', {
               'inline-flex': open,

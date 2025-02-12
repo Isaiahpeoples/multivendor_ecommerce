@@ -14,47 +14,45 @@ export default async function OrderPage({
 }: {
   params: { orderId: string };
 }) {
-  const order = await getOrder(params.orderId);
-  if (!order) return redirect("/");
+  const order = await getOrder(params.orderId)
+  if (!order) return redirect('/')
 
   // Get the total count of items across all groups
   const totalItemsCount = order?.groups.reduce(
     (total, group) => total + group._count.items,
     0
-  );
+  )
 
   // Calculate the total number of delivered items
   const deliveredItemsCount = order?.groups.reduce((total, group) => {
-    if (group.status === "Delivered") {
-      return total + group.items.length;
+    if (group.status === 'Delivered') {
+      return total + group.items.length
     }
-    return total;
-  }, 0);
+    return total
+  }, 0)
+
   return (
     <div>
       <Header />
       <div className="p-2">
         <OrderHeader order={order} />
         <div
-          className="w-full grid"
-          style={{
-            gridTemplateColumns:
-              order.paymentStatus === "Pending" ||
-              order.paymentStatus === "Failed"
-                ? "400px 3fr 1fr"
-                : "1fr 4fr",
-          }}
+          className={cn('order-area-3', {
+            'order-area-3':
+              order.paymentStatus !== 'Pending' &&
+              order.paymentStatus !== 'Failed',
+          })}
         >
           {/* Col 1 -> User, Oder details */}
-          <div className="h-[calc(100vh-137px)] overflow-auto flex flex-col gap-y-5 scrollbar ">
+          <div className="order-area-cards min-[1024px]:h-[calc(100vh-137px)] min-[1024px]:border-r overflow-y-auto flex flex-col gap-y-5 scrollbar ">
             <OrderUserDetailsCard details={order.shippingAddress} />
             <OrderInfoCard
               totalItemsCount={totalItemsCount}
               deliveredItemsCount={deliveredItemsCount}
               paymentDetails={order.paymentDetails}
             />
-            {order.paymentStatus !== "Pending" &&
-              order.paymentStatus !== "Failed" && (
+            {order.paymentStatus !== 'Pending' &&
+              order.paymentStatus !== 'Failed' && (
                 <OrderTotalDetailsCard
                   details={{
                     subTotal: order.subTotal,
@@ -65,13 +63,19 @@ export default async function OrderPage({
               )}
           </div>
           {/* Col 2 -> Order Groups */}
-          <div className="h-[calc(100vh-137px)] overflow-auto scrollbar ">
-            <OrderGroupsContainer groups={order.groups} />
+          <div className="order-area-products min-[768px]:h-[calc(100vh-137px)] overflow-y-auto scrollbar ">
+            <OrderGroupsContainer
+              groups={order.groups}
+              check={
+                order.paymentStatus !== 'Pending' &&
+                order.paymentStatus !== 'Failed'
+              }
+            />
           </div>
           {/* Col 3 -> Payment Gateways*/}
-          {(order.paymentStatus === "Pending" ||
-            order.paymentStatus === "Failed") && (
-            <div className="h-[calc(100vh-137px)] overflow-auto scrollbar border-l px-2 py-4 space-y-5 ">
+          {(order.paymentStatus === 'Pending' ||
+            order.paymentStatus === 'Failed') && (
+            <div className="order-area-payment min-[1024px]:h-[calc(100vh-137px)] min-[1024px]:border-l overflow-y-auto scrollbar px-2 py-4 space-y-5 flex flex-col justify-center">
               <OrderTotalDetailsCard
                 details={{
                   subTotal: order.subTotal,
@@ -86,5 +90,5 @@ export default async function OrderPage({
         </div>
       </div>
     </div>
-  );
+  )
 }

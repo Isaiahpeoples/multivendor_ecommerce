@@ -3,6 +3,23 @@ import { OfferTag } from '@prisma/client'
 import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 
+// Custom hook to calculate split point
+function useBreakpoints() {
+  const mobile = useMediaQuery({ query: '(max-width: 640px)' })
+  const sm = useMediaQuery({ query: '(min-width: 640px)' })
+  const md = useMediaQuery({ query: '(min-width: 768px)' })
+  const lg = useMediaQuery({ query: '(min-width: 1024px)' })
+  const xl = useMediaQuery({ query: '(min-width: 1536px)' })
+
+  if (xl) return 7
+  if (lg) return 6
+  if (md) return 4
+  if (sm) return 3
+  if (mobile) return 2
+
+  return 1 // Default split point
+}
+
 export default function OfferTagsLinks({
   offerTags,
   open,
@@ -10,14 +27,8 @@ export default function OfferTagsLinks({
   offerTags: OfferTag[]
   open: boolean
 }) {
-  const useBreakpoints = () => {
-    const splitPoint = breakpoints.reduce((acc, bp) => {
-      const matches = useMediaQuery({ query: bp.query })
-      return matches ? bp.value : acc
-    }, 1)
-    return splitPoint
-  }
-  const splitPoint = useBreakpoints()
+  const splitPoint = useBreakpoints() // Use the custom hook here
+
   return (
     <div className="relative w-fit">
       <div
@@ -46,11 +57,3 @@ export default function OfferTagsLinks({
     </div>
   )
 }
-const breakpoints = [
-  { name: 'isPhoneScreen', query: '(max-width: 640px)', value: 2 }, // mobile devices
-  { name: 'isSmallScreen', query: '(min-width: 640px)', value: 3 }, // sm
-  { name: 'isMediumScreen', query: '(min-width: 768px)', value: 4 }, // md
-  { name: 'isLargeScreen', query: '(min-width: 1024px)', value: 6 }, // lg
-  // { name: "isXLargeScreen", query: "(min-width: 1280px)", value: 6 }, // xl
-  { name: 'is2XLargeScreen', query: '(min-width: 1536px)', value: 7 }, // 2xl
-]

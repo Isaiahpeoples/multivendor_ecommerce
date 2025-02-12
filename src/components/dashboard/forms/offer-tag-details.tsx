@@ -1,14 +1,19 @@
 'use client'
+
 // React
 import { FC, useEffect } from 'react'
+
 // Prisma model
 import { OfferTag } from '@prisma/client'
+
 // Form handling utilities
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+
 // Schema
 import { OfferTagFormSchema } from '@/lib/schemas'
+
 // UI Components
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import {
@@ -28,19 +33,24 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+
 // Queries
 import { upsertOfferTag } from '@/queries/offer-tag'
+
 // Utils
 import { v4 } from 'uuid'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
+
 interface OfferTagDetailsProps {
   data?: OfferTag
 }
+
 const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
   // Initializing necessary hooks
   const { toast } = useToast() // Hook for displaying toast messages
   const router = useRouter() // Hook for routing
+
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof OfferTagFormSchema>>({
     mode: 'onChange', // Form validation mode
@@ -51,8 +61,10 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
       url: data?.url,
     },
   })
+
   // Loading status based on form submission
   const isLoading = form.formState.isSubmitting
+
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
@@ -62,6 +74,7 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
       })
     }
   }, [data, form])
+
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof OfferTagFormSchema>) => {
     try {
@@ -73,12 +86,14 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
         createdAt: new Date(),
         updatedAt: new Date(),
       })
+
       // Displaying success message
       toast({
         title: data?.id
           ? 'Offer tag has been updated.'
           : `Congratulations! '${response?.name}' is now created.`,
       })
+
       // Redirect or Refresh data
       if (data?.id) {
         router.refresh()
@@ -87,7 +102,6 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error)
       toast({
         variant: 'destructive',
         title: 'Oops!',
@@ -95,6 +109,7 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
       })
     }
   }
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -140,6 +155,7 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
                   </FormItem>
                 )}
               />
+
               <Button type="submit" disabled={isLoading}>
                 {isLoading
                   ? 'loading...'
@@ -154,4 +170,5 @@ const OfferTagDetails: FC<OfferTagDetailsProps> = ({ data }) => {
     </AlertDialog>
   )
 }
+
 export default OfferTagDetails

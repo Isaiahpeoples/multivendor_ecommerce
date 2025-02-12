@@ -1,9 +1,11 @@
 // Product details form
 import ProductDetails from '@/components/dashboard/forms/product-details'
+import { db } from '@/lib/db'
+
 // Queries
 import { getAllCategories } from '@/queries/category'
-import { getProductVariant } from '@/queries/product'
 import { getAllOfferTags } from '@/queries/offer-tag'
+import { getProductVariant } from '@/queries/product'
 
 export default async function ProductVariantPage({
   params,
@@ -15,13 +17,23 @@ export default async function ProductVariantPage({
   const { productId, variantId, storeUrl } = params
   const productDetails = await getProductVariant(productId, variantId)
   if (!productDetails) return
+  const newDetails = {
+    ...ProductDetails,
+    variantDescription: productDetails.variantDescription ?? undefined,
+  }
+  const countries = await db.country.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
   return (
     <div>
       <ProductDetails
         categories={categories}
         offerTags={offerTags}
         storeUrl={storeUrl}
-        data={productDetails}
+        data={newDetails}
+        countries={countries}
       />
     </div>
   )

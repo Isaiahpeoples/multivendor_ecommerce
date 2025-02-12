@@ -11,6 +11,7 @@ export default function Header() {
   // Get cookies from the store
   const cookieStore = cookies();
   const userCountryCookie = cookieStore.get("userCountry");
+
   // Set default country if cookie is missing
   let userCountry: Country = {
     name: "United States",
@@ -18,10 +19,12 @@ export default function Header() {
     code: "US",
     region: "",
   };
+
   // If cookie exists, update the user country
   if (userCountryCookie) {
     userCountry = JSON.parse(userCountryCookie.value) as Country;
   }
+  
   return (
     <div className="bg-gradient-to-r from-slate-500 to-slate-800">
       <div className="h-full w-full lg:flex text-white px-4 lg:px-12">

@@ -1,9 +1,12 @@
 'use client'
+
 // React, Next.js imports
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+
 // Custom components
 import CustomModal from '@/components/dashboard/shared/custom-modal'
+
 // UI components
 import {
   AlertDialog,
@@ -25,15 +28,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 // Hooks and utilities
 import { useToast } from '@/components/ui/use-toast'
 import { useModal } from '@/providers/modal-provider'
+
 // Lucide icons
 import { Edit, MoreHorizontal, Trash } from 'lucide-react'
+
 // Queries
 import { deleteOfferTag, getOfferTag } from '@/queries/offer-tag'
+
 // Tanstack React Table
 import { ColumnDef } from '@tanstack/react-table'
+
 // Prisma models
 import { OfferTag } from '@prisma/client'
 import OfferTagDetails from '@/components/dashboard/forms/offer-tag-details'
@@ -49,6 +57,7 @@ export const columns: ColumnDef<OfferTag>[] = [
       )
     },
   },
+
   {
     accessorKey: 'url',
     header: 'URL',
@@ -64,10 +73,12 @@ export const columns: ColumnDef<OfferTag>[] = [
     },
   },
 ]
+
 // Define props interface for CellActions component
 interface CellActionsProps {
   rowData: OfferTag
 }
+
 // CellActions component definition
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   // Hooks
@@ -75,8 +86,10 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+
   // Return null if rowData or rowData.id don't exist
   if (!rowData || !rowData.id) return null
+  
   return (
     <AlertDialog>
       <DropdownMenu>

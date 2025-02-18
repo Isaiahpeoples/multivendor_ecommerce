@@ -10,7 +10,7 @@ export const CategoryFormSchema = z.object({
     })
     .min(2, { message: "Category name must be at least 2 characters long." })
     .max(50, { message: "Category name cannot exceed 50 characters." })
-    .regex(/^[a-zA-Z0-9\s]+$/, {
+    .regex(/^[a-zA-Z0-9\s'&-]+$/, {
       message:
         "Only letters, numbers, and spaces are allowed in the category name.",
     }),
@@ -43,7 +43,7 @@ export const SubCategoryFormSchema = z.object({
     })
     .min(2, { message: "SubCategory name must be at least 2 characters long." })
     .max(50, { message: "SubCategory name cannot exceed 50 characters." })
-    .regex(/^[a-zA-Z0-9\s]+$/, {
+    .regex(/^[a-zA-Z0-9\s'&-]+$/, {
       message:
         "Only letters, numbers, and spaces are allowed in the subCategory name.",
     }),
@@ -75,7 +75,7 @@ export const StoreFormSchema = z.object({
     })
     .min(2, { message: "Store name must be at least 2 characters long." })
     .max(50, { message: "Store name cannot exceed 50 characters." })
-    .regex(/^(?!.*(?:[-_ ]){2,})[a-zA-Z0-9_ -]+$/, {
+    .regex(/^(?!.*(?:[-_& ]){2,})[a-zA-Z0-9_ &-]+$/, {
       message:
         "Only letters, numbers, space, hyphen, and underscore are allowed in the store name, and consecutive occurrences of hyphens, underscores, or spaces are not permitted.",
     }),
@@ -128,12 +128,13 @@ export const ProductFormSchema = z.object({
       invalid_type_error: "Product name must be a valid string.",
     })
     .min(2, { message: "Product name should be at least 2 characters long." })
-    .max(200, { message: "Product name cannot exceed 200 characters." })
-    .regex(/^(?!.*(?:[-_ ]){2,})[a-zA-Z0-9_ -]+$/, {
+    .max(200, { message: "Product name cannot exceed 200 characters." }),
+  /*
+    .regex(/^(?!.*(?:[-_ &' ]){2,})[a-zA-Z0-9_ '&-]+$/, {
       message:
-        "Product name may only contain letters, numbers, spaces, hyphens, and underscores, without consecutive special characters.",
-    }),
-  description: z
+        "Product name may only contain letters, numbers, spaces, hyphens, underscores, ampersands, and apostrophes, without consecutive special characters.",
+    })
+   */ description: z
     .string({
       required_error: "Product description is mandatory.",
       invalid_type_error: "Product description must be a valid string.",
@@ -149,12 +150,16 @@ export const ProductFormSchema = z.object({
     .min(2, {
       message: "Product variant name should be at least 2 characters long.",
     })
-    .max(100, { message: "Product variant name cannot exceed 100 characters." })
+    .max(100, {
+      message: "Product variant name cannot exceed 100 characters.",
+    }),
+  /*
     .regex(/^(?!.*(?:[-_ ]){2,})[a-zA-Z0-9_ -]+$/, {
       message:
         "Product variant name may only contain letters, numbers, spaces, hyphens, and underscores, without consecutive special characters.",
-    }),
-  variantDescription: z
+    })
+     
+       */ variantDescription: z
     .string({
       required_error: "Product variant description is mandatory.",
       invalid_type_error: "Product variant description must be a valid string.",
@@ -492,6 +497,7 @@ export const ApplyCouponFormSchema = z.object({
 // Add review schema
 export const AddReviewSchema = z.object({
   variantName: z.string().min(1, "Variant is required."),
+  variantImage: z.string().min(1, "Variant image is required."),
   rating: z.number().min(1, "Please rate this product."),
   size: z.string().min(1, "Please select a size."), // Ensures size cannot be empty
   review: z
@@ -511,53 +517,53 @@ export const AddReviewSchema = z.object({
 export const StoreShippingSchema = z.object({
   returnPolicy: z
     .string({
-      required_error: 'Return policy is required',
-      invalid_type_error: 'Return policy must be a string',
+      required_error: "Return policy is required",
+      invalid_type_error: "Return policy must be a string",
     })
-    .default('Return in 30 days.'),
+    .default("Return in 30 days."),
   defaultShippingService: z
     .string({
-      required_error: 'Default shipping service is required',
-      invalid_type_error: 'Default shipping service must be a string',
+      required_error: "Default shipping service is required",
+      invalid_type_error: "Default shipping service must be a string",
     })
-    .default('International Delivery'),
+    .default("International Delivery"),
   defaultShippingFeePerItem: z
     .number({
-      required_error: 'Default shipping fee per item is required',
-      invalid_type_error: 'Default shipping fee per item must be a number',
+      required_error: "Default shipping fee per item is required",
+      invalid_type_error: "Default shipping fee per item must be a number",
     })
     .default(0),
   defaultShippingFeeForAdditionalItem: z
     .number({
-      required_error: 'Default shipping fee for additional items is required',
+      required_error: "Default shipping fee for additional items is required",
       invalid_type_error:
-        'Default shipping fee for additional items must be a number',
+        "Default shipping fee for additional items must be a number",
     })
     .default(0),
   defaultShippingFeePerKg: z
     .number({
-      required_error: 'Default shipping fee per kilogram is required',
-      invalid_type_error: 'Default shipping fee per kilogram must be a number',
+      required_error: "Default shipping fee per kilogram is required",
+      invalid_type_error: "Default shipping fee per kilogram must be a number",
     })
     .default(0),
   defaultShippingFeeFixed: z
     .number({
-      required_error: 'Default fixed shipping fee is required',
-      invalid_type_error: 'Default fixed shipping fee must be a number',
+      required_error: "Default fixed shipping fee is required",
+      invalid_type_error: "Default fixed shipping fee must be a number",
     })
     .default(0),
   defaultDeliveryTimeMin: z
     .number({
-      required_error: 'Minimum delivery time is required',
-      invalid_type_error: 'Minimum delivery time must be a number',
+      required_error: "Minimum delivery time is required",
+      invalid_type_error: "Minimum delivery time must be a number",
     })
     .int()
     .default(7),
   defaultDeliveryTimeMax: z
     .number({
-      required_error: 'Maximum delivery time is required',
-      invalid_type_error: 'Maximum delivery time must be a number',
+      required_error: "Maximum delivery time is required",
+      invalid_type_error: "Maximum delivery time must be a number",
     })
     .int()
     .default(31),
-})
+});

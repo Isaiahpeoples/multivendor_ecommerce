@@ -1,48 +1,48 @@
 // DB
-import StoreCard from '@/components/store/cards/store-card'
-import CategoriesHeader from '@/components/store/layout/categories-header/categories-header'
-import Header from '@/components/store/layout/header/header'
-import ProductPageContainer from '@/components/store/product-page/container'
-import ProductDescription from '@/components/store/product-page/product-description'
-import ProductQuestions from '@/components/store/product-page/product-questions'
-import ProductSpecs from '@/components/store/product-page/product-specs'
-import RelatedProducts from '@/components/store/product-page/related-product'
-import ProductReviews from '@/components/store/product-page/reviews/product-reviews'
-import StoreProducts from '@/components/store/product-page/store-products'
-import { Separator } from '@/components/ui/separator'
-import { Country } from '@/lib/types'
-import { retrieveProductDetailsOptimized } from '@/queries/product-optimized'
-import { cookies } from 'next/headers'
+import StoreCard from "@/components/store/cards/store-card";
+import CategoriesHeader from "@/components/store/layout/categories-header/categories-header";
+import Header from "@/components/store/layout/header/header";
+import ProductPageContainer from "@/components/store/product-page/container";
+import ProductDescription from "@/components/store/product-page/product-description";
+import ProductQuestions from "@/components/store/product-page/product-questions";
+import ProductSpecs from "@/components/store/product-page/product-specs";
+import RelatedProducts from "@/components/store/product-page/related-product";
+import ProductReviews from "@/components/store/product-page/reviews/product-reviews";
+import StoreProducts from "@/components/store/product-page/store-products";
+import { Separator } from "@/components/ui/separator";
+import { Country } from "@/lib/types";
+import { retrieveProductDetailsOptimized } from "@/queries/product-optimized";
+import { cookies } from "next/headers";
 
 export default async function ProductPage({
   params,
   searchParams,
 }: {
-  params: { productSlug: string }
-  searchParams: { variant: string }
+  params: { productSlug: string };
+  searchParams: { variant: string };
 }) {
-  const data = await retrieveProductDetailsOptimized(params.productSlug)
-  const variant = data.variants.find((v) => v.slug === searchParams.variant)
+  const data = await retrieveProductDetailsOptimized(params.productSlug);
+  const variant = data.variants.find((v) => v.slug === searchParams.variant);
   const specs = {
     product: data.specs,
     variant: variant?.specs,
-  }
+  };
 
   // Get cookies from the store
-  const cookieStore = cookies()
-  const userCountryCookie = cookieStore.get('userCountry')
+  const cookieStore = cookies();
+  const userCountryCookie = cookieStore.get("userCountry");
 
   // Set default country if cookie is missing
   let userCountry: Country = {
-    name: 'United States',
-    city: '',
-    code: 'US',
-    region: '',
-  }
+    name: "United States",
+    city: "",
+    code: "US",
+    region: "",
+  };
 
   // If cookie exists, update the user country
   if (userCountryCookie) {
-    userCountry = JSON.parse(userCountryCookie.value) as Country
+    userCountry = JSON.parse(userCountryCookie.value) as Country;
   }
 
   const storeData = {
@@ -52,7 +52,7 @@ export default async function ProductPage({
     logo: data.store.logo,
     followersCount: 0,
     isUserFollowingStore: false,
-  }
+  };
 
   return (
     <div>
@@ -85,7 +85,7 @@ export default async function ProductPage({
             <Separator className="mt-6" />
             {/* Product description */}
             <ProductDescription
-              text={[data.description, variant?.variantDescription || '']}
+              text={[data.description, variant?.variantDescription || ""]}
             />
           </>
           <Separator className="mt-6" />
@@ -103,5 +103,5 @@ export default async function ProductPage({
         </ProductPageContainer>
       </div>
     </div>
-  )
+  );
 }

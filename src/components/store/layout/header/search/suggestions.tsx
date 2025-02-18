@@ -48,7 +48,7 @@ const SearchSuggestions: FC<Props> = ({ suggestions, query }) => {
                 className="w-16 h-16 rounded-md object-cover"
               />
               <div>
-                <span className="text-sm leading-6 my-1.5">
+                <span className="text-sm leading-6 my-1.5 line-clamp-2 sm:line-clamp-none">
                   {highlightText(sugg.name, query)}
                 </span>
               </div>

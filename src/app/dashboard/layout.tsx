@@ -1,5 +1,5 @@
-import { ThemeProvider } from 'next-themes'
-import { ReactNode } from 'react'
+import { ThemeProvider } from "next-themes";
+import { ReactNode } from "react";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -13,5 +13,5 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {children}
       </ThemeProvider>
     </div>
-  )
+  );
 }

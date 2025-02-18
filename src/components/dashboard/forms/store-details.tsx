@@ -1,29 +1,29 @@
-'use client'
+"use client";
 
 // React, Next.js
-import { FC, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { FC, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // Prisma model
-import { Store } from '@prisma/client'
+import { Store } from "@prisma/client";
 
 // Form handling utilities
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema
-import { StoreFormSchema } from '@/lib/schemas'
+import { StoreFormSchema } from "@/lib/schemas";
 
 // UI Components
-import { AlertDialog } from '@/components/ui/alert-dialog'
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -32,32 +32,32 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from '@/components/ui/form'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import ImageUpload from '../shared/image-upload'
-import { useToast } from '@/components/ui/use-toast'
+} from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import ImageUpload from "../shared/image-upload";
+import { useToast } from "@/components/ui/use-toast";
 
 // Queries
-import { upsertStore } from '@/queries/store'
+import { upsertStore } from "@/queries/store";
 
 // Utils
-import { v4 } from 'uuid'
+import { v4 } from "uuid";
 
 interface StoreDetailsProps {
-  data?: Store
+  data?: Store;
 }
 
 const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
   // Initializing necessary hooks
-  const { toast } = useToast() // Hook for displaying toast messages
-  const router = useRouter() // Hook for routing
+  const { toast } = useToast(); // Hook for displaying toast messages
+  const router = useRouter(); // Hook for routing
 
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof StoreFormSchema>>({
-    mode: 'onChange', // Form validation mode
+    mode: "onChange", // Form validation mode
     resolver: zodResolver(StoreFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
@@ -71,10 +71,10 @@ const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
       featured: data?.featured,
       status: data?.status.toString(),
     },
-  })
+  });
 
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting
+  const isLoading = form.formState.isSubmitting;
 
   // Reset form values when data changes
   useEffect(() => {
@@ -89,9 +89,9 @@ const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
         url: data?.url,
         featured: data?.featured,
         status: data?.status,
-      })
+      });
     }
-  }, [data, form])
+  }, [data, form]);
 
   // Submit handler for form submission
   const handleSubmit = async (values: z.infer<typeof StoreFormSchema>) => {
@@ -109,30 +109,30 @@ const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
         featured: values.featured,
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
+      });
 
       // Displaying success message
       toast({
         title: data?.id
-          ? 'Store has been updated.'
+          ? "Store has been updated."
           : `Congratulations! Store is now created.`,
-      })
+      });
 
       // Redirect or Refresh data
       if (data?.id) {
-        router.refresh()
+        router.refresh();
       } else {
-        router.push(`/dashboard/seller/stores/`)
+        router.push(`/dashboard/seller/stores/`);
       }
     } catch (error: any) {
       // Handling form submission errors
       toast({
-        variant: 'destructive',
-        title: 'Oops!',
+        variant: "destructive",
+        title: "Oops!",
         description: error.toString(),
-      })
+      });
     }
-  }
+  };
 
   return (
     <AlertDialog>
@@ -142,7 +142,7 @@ const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
           <CardDescription>
             {data?.id
               ? `Update ${data?.name} store information.`
-              : ' Lets create a store. You can edit store later from the store settings page.'}
+              : " Lets create a store. You can edit store later from the store settings page."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -300,17 +300,17 @@ const StoreDetails: FC<StoreDetailsProps> = ({ data }) => {
               />
               <Button type="submit" disabled={isLoading}>
                 {isLoading
-                  ? 'loading...'
+                  ? "loading..."
                   : data?.id
-                  ? 'Save store information'
-                  : 'Create store'}
+                  ? "Save store information"
+                  : "Create store"}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
     </AlertDialog>
-  )
-}
+  );
+};
 
-export default StoreDetails
+export default StoreDetails;

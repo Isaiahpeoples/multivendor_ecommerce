@@ -21,7 +21,7 @@ const Input: FC<Props> = ({
   const inputValue = type === "number" ? String(value) : value;
 
   return (
-    <div className="w-full relative">
+    <div className="min-w-48 w-full relative">
       <input
         type={type}
         className="w-full pr-6 pl-8 py-4 rounded-xl outline-none duration-200 ring-1 ring-transparent focus:ring-[#11BE86]"

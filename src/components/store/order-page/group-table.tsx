@@ -1,33 +1,33 @@
-'use client'
-import OrderStatusTag from '@/components/shared/order-status'
-import { OrderGroupWithItemsType, OrderStatus } from '@/lib/types'
-import Image from 'next/image'
-import React from 'react'
-import ProductRow from './product-row'
-import { useMediaQuery } from 'react-responsive'
-import ProductRowGrid from './product-row-grid'
-import { cn } from '@/lib/utils'
+"use client";
+import OrderStatusTag from "@/components/shared/order-status";
+import { OrderGroupWithItemsType, OrderStatus } from "@/lib/types";
+import Image from "next/image";
+import React from "react";
+import ProductRow from "./product-row";
+import { useMediaQuery } from "react-responsive";
+import ProductRowGrid from "./product-row-grid";
+import { cn } from "@/lib/utils";
 
 export default function OrderGroupTable({
   group,
   deliveryInfo,
   check,
 }: {
-  group: OrderGroupWithItemsType
+  group: OrderGroupWithItemsType;
   deliveryInfo: {
-    shippingService: string
-    deliveryMinDate: string
-    deliveryMaxDate: string
-  }
-  check: boolean
+    shippingService: string;
+    deliveryMinDate: string;
+    deliveryMaxDate: string;
+  };
+  check: boolean;
 }) {
-  const { shippingService, deliveryMaxDate, deliveryMinDate } = deliveryInfo
-  const { coupon, couponId, subTotal, total, shippingFees } = group
-  let discountedAmount = 0
+  const { shippingService, deliveryMaxDate, deliveryMinDate } = deliveryInfo;
+  const { coupon, couponId, subTotal, total, shippingFees } = group;
+  let discountedAmount = 0;
   if (couponId && coupon) {
-    discountedAmount = ((subTotal + shippingFees) * coupon.discount) / 100
+    discountedAmount = ((subTotal + shippingFees) * coupon.discount) / 100;
   }
-  const isBigScreen = useMediaQuery({ query: '(min-width: 1400px)' })
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1400px)" });
 
   return (
     <div className="border border-gray-200 rounded-xl pt-6  max-lg:mx-auto lg:max-w-full">
@@ -85,17 +85,17 @@ export default function OrderGroupTable({
       {/* Group info */}
       <div
         className={cn(
-          'w-full border-t border-gray-200 px-6 flex flex-col 2xl:flex-row items-center justify-between',
+          "w-full border-t border-gray-200 px-6 flex flex-col 2xl:flex-row items-center justify-between",
           {
-            'xl:flex-row': check,
+            "xl:flex-row": check,
           }
         )}
       >
         <div
           className={cn(
-            'flex flex-col 2xl:flex-row items-center max-lg:border-b border-gray-200',
+            "flex flex-col 2xl:flex-row items-center max-lg:border-b border-gray-200",
             {
-              'lg:flex-row': check,
+              "lg:flex-row": check,
             }
           )}
         >
@@ -146,5 +146,5 @@ export default function OrderGroupTable({
         </div>
       </div>
     </div>
-  )
+  );
 }

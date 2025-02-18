@@ -44,9 +44,7 @@ export default function Search() {
         const res = await fetch(`/api/search-products?search=${value}`);
         const data = await res.json();
         setSuggestions(data);
-      } catch (error) {
-        console.error("Error fetching autocomplete suggestions:", error);
-      }
+      } catch (error) {}
     } else {
       setSuggestions([]);
     }

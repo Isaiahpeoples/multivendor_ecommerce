@@ -7,7 +7,7 @@ export default function ProductWatch({ productId }: { productId: string }) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws:nervous-season-splash.glitch.me/${productId}`)
+    const ws = new WebSocket(`wss:nervous-season-splash.glitch.me/${productId}`);
     setSocket(ws);
 
     ws.onmessage = (event) => {
@@ -17,17 +17,13 @@ export default function ProductWatch({ productId }: { productId: string }) {
       }
     };
 
-    ws.onopen = () => {
-      console.log("Connected to WebSocket server");
-    };
+    ws.onopen = () => {};
 
     ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
       setSocket(null);
     };
 
     ws.onclose = () => {
-      console.log("Disconnected from WebSocket server");
       setSocket(null);
     };
 

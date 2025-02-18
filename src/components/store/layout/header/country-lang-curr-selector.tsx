@@ -1,61 +1,60 @@
-'use client'
+"use client";
 
 // React, Next.js
-import { useState } from 'react'
+import { useState } from "react";
 
 // Icons
-import '/node_modules/flag-icons/css/flag-icons.min.css'
-import { ChevronDown } from 'lucide-react'
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+import { ChevronDown } from "lucide-react";
 
 // Types
-import { Country, SelectMenuOption } from '@/lib/types'
+import { Country, SelectMenuOption } from "@/lib/types";
 
 // Country selector
-import CountrySelector from '@/components/shared/country-selector'
+import CountrySelector from "@/components/shared/country-selector";
 
 // countries data
-import countries from '@/data/countries.json'
-import { useRouter } from 'next/navigation'
+import countries from "@/data/countries.json";
+import { useRouter } from "next/navigation";
 
 export default function CountryLanguageCurrencySelector({
   userCountry,
 }: {
-  userCountry: Country
+  userCountry: Country;
 }) {
   // Router hook for navigation
-    const router = useRouter()
-    
+  const router = useRouter();
+
   // State to manage countries dropdown visibility
-    const [show, setshow] = useState(false)
-    
+  const [show, setshow] = useState(false);
+
   const handleCountryClick = async (country: string) => {
     // Find the country data based on the selected country name
-      const countryData = countries.find((c) => c.name === country)
-      
+    const countryData = countries.find((c) => c.name === country);
+
     if (countryData) {
       const data: Country = {
         name: countryData.name,
         code: countryData.code,
-        city: '',
-        region: '',
-      }
+        city: "",
+        region: "",
+      };
       try {
         // Send a POST request to your API endpoint to set the cookie
-        const response = await fetch('/api/setUserCountryInCookies', {
-          method: 'POST',
+        const response = await fetch("/api/setUserCountryInCookies", {
+          method: "POST",
           headers: {
-            'content-type': 'application/json',
+            "content-type": "application/json",
           },
           body: JSON.stringify({ userCountry: data }),
-        })
+        });
         if (response.ok) {
-          router.refresh()
+          router.refresh();
         }
-      } catch (error) {
-        console.error('Error in handleCountryClick:', error)
-      }
+      } catch (error) {}
     }
-  }
+  };
+
   return (
     <div className="relative inline-block group">
       {/* Trigger */}
@@ -86,7 +85,7 @@ export default function CountryLanguageCurrencySelector({
           <div className="mt-2">
             <div className="relative text-main-primary bg-white rounded-lg">
               <CountrySelector
-                id={'countries'}
+                id={"countries"}
                 open={show}
                 onToggle={() => setshow(!show)}
                 onChange={(val) => handleCountryClick(val)}
@@ -123,5 +122,5 @@ export default function CountryLanguageCurrencySelector({
         </div>
       </div>
     </div>
-  )
+  );
 }

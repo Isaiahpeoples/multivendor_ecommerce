@@ -1,40 +1,40 @@
-'use client'
-import { ProductType } from '@/lib/types'
-import React, { useEffect, useState } from 'react'
-import ProductList from '../shared/product-list'
-import { getRelatedProducts } from '@/queries/product-optimized'
-import { DotLoader } from 'react-spinners'
-import ProductPageRelatedSkeletonLoader from '../skeletons/product-page/related'
+"use client";
+import { ProductType } from "@/lib/types";
+import React, { useEffect, useState } from "react";
+import ProductList from "../shared/product-list";
+import { getRelatedProducts } from "@/queries/product-optimized";
+import { DotLoader } from "react-spinners";
+import ProductPageRelatedSkeletonLoader from "../skeletons/product-page/related";
 
 export default function RelatedProducts({
   productId,
   categoryId,
   subCategoryId,
 }: {
-  productId: string
-  categoryId: string
-  subCategoryId: string
+  productId: string;
+  categoryId: string;
+  subCategoryId: string;
 }) {
-  const [products, setProducts] = useState<ProductType[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const getRelatedProductsHandler = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const res = await getRelatedProducts(
           productId,
           categoryId,
           subCategoryId
-        )
-        setProducts(res)
-        setLoading(false)
+        );
+        setProducts(res);
+        setLoading(false);
       } catch (error) {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    getRelatedProductsHandler()
-  }, [])
+    };
+    getRelatedProductsHandler();
+  }, []);
   return (
     <div className="pt-6" id="reviews">
       {/* Title */}
@@ -52,5 +52,5 @@ export default function RelatedProducts({
         <ProductList products={products} />
       )}
     </div>
-  )
+  );
 }

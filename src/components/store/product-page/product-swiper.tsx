@@ -1,34 +1,33 @@
 "use client";
 // React, Next.js
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 
 // Image zoom
-import ImageZoom from "react-image-zoom";
+import ImageZoom from "react-image-zooom";
 
 // Utils
 import { cn } from "@/lib/utils";
-
-// Types
-import { ProductVariantImage } from "@prisma/client";
 
 export default function ProductSwiper({
   images,
   activeImage,
   setActiveImage,
 }: {
-  images: ProductVariantImage[];
-  activeImage: ProductVariantImage | null;
-  setActiveImage: Dispatch<SetStateAction<ProductVariantImage | null>>;
+  images: { url: string }[];
+  activeImage: { url: string } | null;
+  setActiveImage: Dispatch<SetStateAction<{ url: string } | null>>;
 }) {
   // If no images are provided, exit early and don't render anything
   if (!images) return;
 
+  // Queries
+
   return (
-    <div className="relative">
-      <div className="relative w-full flex flex-col-reverse xl:flex-row gap-2">
+    <div className="relative xl:w-[25vw] swiper1700width">
+      <div className="relative w-full flex flex-col-reverse 2xl:flex-row gap-2">
         {/* Thumbnails */}
-        <div className="flex flex-wrap xl:flex-col gap-3">
+        <div className="flex flex-wrap 2xl:flex-col gap-3">
           {images.map((img) => (
             <div
               key={img.url}
@@ -36,7 +35,7 @@ export default function ProductSwiper({
                 "w-16 h-16 rounded-md grid place-items-center overflow-hidden border border-gray-100 cursor-pointer transition-all duration-75 ease-in",
                 {
                   "border-main-primary": activeImage
-                    ? activeImage.id === img.id
+                    ? activeImage.url === img.url
                     : false,
                 }
               )}
@@ -44,7 +43,7 @@ export default function ProductSwiper({
             >
               <Image
                 src={img.url}
-                alt={img.alt}
+                alt={""}
                 width={80}
                 height={80}
                 className="object-cover rounded-md"
@@ -53,11 +52,11 @@ export default function ProductSwiper({
           ))}
         </div>
         {/* Image view */}
-        <div className="relative rounded-lg overflow-hidden w-full 2xl:h-[600px] 2xl:w-[600px]">
+        <div className="relative rounded-lg overflow-hidden flex flex-grow ">
           <ImageZoom
             src={activeImage ? activeImage.url : ""}
             zoom={200}
-            className="!w-full rounded-lg"
+            className="!w-full rounded-lg flex flex-grow h-fit"
           />
         </div>
       </div>

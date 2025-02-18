@@ -40,38 +40,38 @@ export const adminDashboardSidebarOptions: DashboardSidebarMenuInterface[] = [
 
 export const SellerDashboardSidebarOptions: DashboardSidebarMenuInterface[] = [
   {
-    label: 'Dashboard',
-    icon: 'dashboard',
-    link: '',
+    label: "Dashboard",
+    icon: "dashboard",
+    link: "",
   },
   {
-    label: 'Products',
-    icon: 'products',
-    link: 'products',
+    label: "Products",
+    icon: "products",
+    link: "products",
   },
   {
-    label: 'Orders',
-    icon: 'box-list',
-    link: 'orders',
+    label: "Orders",
+    icon: "box-list",
+    link: "orders",
   },
   {
-    label: 'Inventory',
-    icon: 'inventory',
-    link: 'inventory',
+    label: "Inventory",
+    icon: "inventory",
+    link: "inventory",
   },
   {
-    label: 'Coupons',
-    icon: 'coupon',
-    link: 'coupons',
+    label: "Coupons",
+    icon: "coupon",
+    link: "coupons",
   },
   {
-    label: 'Shipping',
-    icon: 'shipping',
-    link: 'shipping',
+    label: "Shipping",
+    icon: "shipping",
+    link: "shipping",
   },
   {
-    label: 'Settings',
-    icon: 'settings',
-    link: 'settings',
+    label: "Settings",
+    icon: "settings",
+    link: "settings",
   },
-]
+];

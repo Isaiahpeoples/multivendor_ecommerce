@@ -1,17 +1,17 @@
-'use client'
-import { useState } from 'react'
-import { Category, OfferTag } from '@prisma/client'
-import CategoriesMenu from './categories-menu'
-import OfferTagsLinks from './offerTags-links'
+"use client";
+import { useState } from "react";
+import { Category, OfferTag } from "@prisma/client";
+import CategoriesMenu from "./categories-menu";
+import OfferTagsLinks from "./offerTags-links";
 
 export default function CategoriesHeaderContainer({
   categories,
   offerTags,
 }: {
-  categories: Category[]
-  offerTags: OfferTag[]
+  categories: Category[];
+  offerTags: OfferTag[];
 }) {
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <div className="w-full px-4 flex items-center gap-x-1">
       {/* Category menu */}
@@ -19,5 +19,5 @@ export default function CategoriesHeaderContainer({
       {/* Offer tags links */}
       <OfferTagsLinks offerTags={offerTags} open={open} />
     </div>
-  )
+  );
 }

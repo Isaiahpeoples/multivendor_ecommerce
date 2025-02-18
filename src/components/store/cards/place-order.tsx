@@ -57,7 +57,7 @@ const PlaceOrderCard: FC<Props> = ({
   }
 
   return (
-    <div className="sticky top-4 mt-3 ml-5 w-[380px] max-h-max">
+    <div className="sticky top-4 lg:ml-5 lg:w-[380px] max-h-max">
       <div className="relative py-4 px-6 bg-white">
         <h1 className="text-gray-900 text-2xl font-bold mb-4">Summary</h1>
         <Info title="Subtotal" text={`${subTotal.toFixed(2)}`} />

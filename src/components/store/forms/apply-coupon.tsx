@@ -45,7 +45,6 @@ export default function ApplyCouponForm({
       toast.success(res.message);
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error);
       toast.error(error.toString());
     }
   };

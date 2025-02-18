@@ -1,5 +1,3 @@
-import React from "react"
-
 export default function AdminDashboardPage() {
-  return <div>Admin dashboard</div>
+  return <div>Admin dashboard</div>;
 }

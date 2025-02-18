@@ -22,6 +22,7 @@ export default function CategoryCard({
       <div className="flex gap-x-2 p-4">
         {category.subCategories.map((sub) => (
           <Link
+            key={sub.id}
             href={`/browse?subCategory=${sub.url}`}
             className="cursor-pointer rounded-[10px] overflow-hidden"
           >

@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
 // React, Next.js
-import { FC, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { FC, useEffect, useState } from "react";
+import Image from "next/image";
 
 // Cloudinary
-import { CldUploadWidget } from 'next-cloudinary'
-import { Button } from '@/components/ui/button'
-import { Trash } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { CldUploadWidget } from "next-cloudinary";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
-  disabled?: boolean
-  onChange: (value: string) => void
-  onRemove: (value: string) => void
-  value: string[]
-  type: 'standard' | 'profile' | 'cover'
-  dontShowPreview?: boolean
-  error?: boolean
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onRemove: (value: string) => void;
+  value: string[];
+  type: "standard" | "profile" | "cover";
+  dontShowPreview?: boolean;
+  error?: boolean;
 }
 
 const ImageUpload: FC<ImageUploadProps> = ({
@@ -29,38 +29,39 @@ const ImageUpload: FC<ImageUploadProps> = ({
   dontShowPreview,
   error,
 }) => {
-  const [isMounted, setIsMounted] = useState(false)
-  const [isBouncing, setIsBouncing] = useState(false) // Add state for bounce
+  const [isMounted, setIsMounted] = useState(false);
+  const [isBouncing, setIsBouncing] = useState(false); // Add state for bounce
+
   useEffect(() => {
     if (error) {
-      setIsBouncing(true)
+      setIsBouncing(true);
       const timer = setTimeout(() => {
-        setIsBouncing(false) // Stop the bounce after 1 and half second
-      }, 1500)
-      return () => clearTimeout(timer) // Clean up timer if the component unmounts or error changes
+        setIsBouncing(false); // Stop the bounce after 1 and half second
+      }, 1500);
+      return () => clearTimeout(timer); // Clean up timer if the component unmounts or error changes
     }
-  }, [error])
+  }, [error]);
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   if (!isMounted) {
-    return null
+    return null;
   }
 
   const onUpload = (result: any) => {
-    onChange(result.info.secure_url)
-  }
+    onChange(result.info.secure_url);
+  };
 
-  if (type === 'profile') {
+  if (type === "profile") {
     return (
       <div
         className={cn(
-          'relative  rounded-full w-52 h-52  bg-gray-200 border-2 border-white shadow-2xl overflow-visible',
+          "relative  rounded-full w-52 h-52  bg-gray-200 border-2 border-white shadow-2xl overflow-visible",
           {
-            'bg-red-100': error,
-            'animate-pulse': isBouncing,
+            "bg-red-100": error,
+            "animate-pulse": isBouncing,
           }
         )}
       >
@@ -76,8 +77,9 @@ const ImageUpload: FC<ImageUploadProps> = ({
         <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m">
           {({ open }) => {
             const onClick = () => {
-              open()
-            }
+              open();
+            };
+
             return (
               <>
                 <button
@@ -96,22 +98,22 @@ const ImageUpload: FC<ImageUploadProps> = ({
                   </svg>
                 </button>
               </>
-            )
+            );
           }}
         </CldUploadWidget>
       </div>
-    )
-  } else if (type === 'cover') {
+    );
+  } else if (type === "cover") {
     return (
       <div
         className={cn(
-          'relative w-full bg-gray-100 rounded-lg bg-gradient-to-b from-gray-100 via-gray-100 to-gray-400 overflow-hidden',
+          "relative w-full bg-gray-100 rounded-lg bg-gradient-to-b from-gray-100 via-gray-100 to-gray-400 overflow-hidden",
           {
-            'from-red-100 to-red-200 ': error,
-            'animate-bounce': isBouncing,
+            "from-red-100 to-red-200 ": error,
+            "animate-bounce": isBouncing,
           }
         )}
-        style={{ height: '348px' }}
+        style={{ height: "348px" }}
       >
         {value.length > 0 && (
           <Image
@@ -125,8 +127,9 @@ const ImageUpload: FC<ImageUploadProps> = ({
         <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m">
           {({ open }) => {
             const onClick = () => {
-              open()
-            }
+              open();
+            };
+
             return (
               <button
                 type="button"
@@ -144,14 +147,14 @@ const ImageUpload: FC<ImageUploadProps> = ({
                   <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z" />
                 </svg>
                 <span>
-                  {value.length > 0 ? 'Change cover' : 'Upload a cover'}
+                  {value.length > 0 ? "Change cover" : "Upload a cover"}
                 </span>
               </button>
-            )
+            );
           }}
         </CldUploadWidget>
       </div>
-    )
+    );
   } else {
     return (
       <div>
@@ -188,8 +191,9 @@ const ImageUpload: FC<ImageUploadProps> = ({
         <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m">
           {({ open }) => {
             const onClick = () => {
-              open()
-            }
+              open();
+            };
+
             return (
               <>
                 <button
@@ -210,11 +214,12 @@ const ImageUpload: FC<ImageUploadProps> = ({
                   <span>Upload images</span>
                 </button>
               </>
-            )
+            );
           }}
         </CldUploadWidget>
       </div>
-    )
+    );
   }
-}
-export default ImageUpload
+};
+
+export default ImageUpload;

@@ -6,7 +6,7 @@ import { OfferTag } from "@prisma/client";
 import OfferLink from "./offer-link";
 
 export default function OfferFilter({ offers }: { offers: OfferTag[] }) {
-    const [show, setShow] = useState<boolean>(true)
+  const [show, setShow] = useState<boolean>(true);
   return (
     <div className="pt-5 pb-4">
       {/* Header */}

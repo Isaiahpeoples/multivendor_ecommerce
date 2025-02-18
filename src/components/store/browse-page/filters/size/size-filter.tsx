@@ -10,27 +10,27 @@ export default function SizeFilter({
   queries,
   storeUrl,
 }: {
-  queries: FiltersQueryType
-  storeUrl?: string
+  queries: FiltersQueryType;
+  storeUrl?: string;
 }) {
-  const { category, subCategory, offer, search } = queries
-  const [show, setShow] = useState<boolean>(true)
-  const [sizes, setSizes] = useState<{ size: string }[]>([])
-  const [total, setTotal] = useState<number>(10)
-  const [take, setTake] = useState<number>(10)
+  const { category, subCategory, offer, search } = queries;
+  const [show, setShow] = useState<boolean>(true);
+  const [sizes, setSizes] = useState<{ size: string }[]>([]);
+  const [total, setTotal] = useState<number>(10);
+  const [take, setTake] = useState<number>(10);
 
   useEffect(() => {
-    handleGetSizes()
-  }, [category, subCategory, offer, take])
+    handleGetSizes();
+  }, [category, subCategory, offer, take]);
 
   const handleGetSizes = async () => {
     const sizes = await getFilteredSizes(
       { category, offer, subCategory, storeUrl },
       take
-    )
-    setSizes(sizes.sizes)
-    setTotal(sizes.count)
-  }
+    );
+    setSizes(sizes.sizes);
+    setTotal(sizes.count);
+  };
   return (
     <div className="pt-5 pb-4">
       {/* Header */}
@@ -47,7 +47,7 @@ export default function SizeFilter({
       </div>
       {/* Filter */}
       <div
-        className={cn('mt-2.5 space-y-2', {
+        className={cn("mt-2.5 space-y-2", {
           hidden: !show,
         })}
       >
@@ -56,5 +56,5 @@ export default function SizeFilter({
         ))}
       </div>
     </div>
-  )
+  );
 }

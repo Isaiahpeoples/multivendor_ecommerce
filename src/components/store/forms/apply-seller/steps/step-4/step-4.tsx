@@ -22,8 +22,8 @@ export default function Step4() {
               Your store has been created!
             </h2>
             <div className="text-gray-600 mb-8">
-              Thank you for creating your store. It's currently under review and
-              will be approved shortly. Stay tuned!
+              Thank you for creating your store. It&#39;s currently under review
+              and will be approved shortly. Stay tuned!
             </div>
 
             <Link href="/">

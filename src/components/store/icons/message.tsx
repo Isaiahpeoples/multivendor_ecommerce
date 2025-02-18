@@ -2,7 +2,7 @@ export default function MessageIcon() {
   return (
     <svg
       viewBox="0 0 512 512"
-      style={{ color: 'currentColor' }}
+      style={{ color: "currentColor" }}
       xmlns="http://www.w3.org/2000/svg"
       className="h-7 w-7 mt-2"
     >
@@ -22,5 +22,5 @@ export default function MessageIcon() {
         </g>
       </svg>
     </svg>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-'use client'
-import { ShippingDetailsType } from '@/lib/types'
-import { ChevronDown, ChevronRight, ChevronUp, Truck } from 'lucide-react'
-import { FC, useEffect, useState } from 'react'
-import ProductShippingFee from './shipping-fee'
-import { getShippingDatesRange } from '@/lib/utils'
-import { BarLoader, BounceLoader, MoonLoader } from 'react-spinners'
+"use client";
+import { ShippingDetailsType } from "@/lib/types";
+import { ChevronDown, ChevronRight, ChevronUp, Truck } from "lucide-react";
+import { FC, useEffect, useState } from "react";
+import ProductShippingFee from "./shipping-fee";
+import { getShippingDatesRange } from "@/lib/utils";
+import { BarLoader, BounceLoader, MoonLoader } from "react-spinners";
 
 interface Props {
-  shippingDetails: ShippingDetailsType | null
-  quantity: number
-  weight: number
-  loading: boolean // Added loading prop
-  countryName: string
+  shippingDetails: ShippingDetailsType | null;
+  quantity: number;
+  weight: number;
+  loading: boolean; // Added loading prop
+  countryName: string;
 }
 
 const ShippingDetails: FC<Props> = ({
@@ -21,46 +21,47 @@ const ShippingDetails: FC<Props> = ({
   loading,
   countryName,
 }) => {
-  const [toggle, setToggle] = useState<boolean>(true)
-  const [shippingTotal, setShippingTotal] = useState<number>(0)
+  const [toggle, setToggle] = useState<boolean>(true);
+  const [shippingTotal, setShippingTotal] = useState<number>(0);
 
   useEffect(() => {
-    if (!shippingDetails) return // Skip calculation if shippingDetails is null
+    if (!shippingDetails) return; // Skip calculation if shippingDetails is null
 
-    const { shippingFee, extraShippingFee, shippingFeeMethod } = shippingDetails
+    const { shippingFee, extraShippingFee, shippingFeeMethod } =
+      shippingDetails;
 
     switch (shippingFeeMethod) {
-      case 'ITEM':
-        let qty = quantity - 1 // Adjust quantity as needed
-        setShippingTotal(shippingFee + qty * extraShippingFee)
-        break
-      case 'WEIGHT':
-        setShippingTotal(shippingFee * quantity)
-        break
-      case 'FIXED':
-        setShippingTotal(shippingFee)
-        break
+      case "ITEM":
+        let qty = quantity - 1; // Adjust quantity as needed
+        setShippingTotal(shippingFee + qty * extraShippingFee);
+        break;
+      case "WEIGHT":
+        setShippingTotal(shippingFee * quantity);
+        break;
+      case "FIXED":
+        setShippingTotal(shippingFee);
+        break;
       default:
-        setShippingTotal(0) // Fallback for unexpected method
-        break
+        setShippingTotal(0); // Fallback for unexpected method
+        break;
     }
-  }, [quantity, shippingDetails])
-  console.log('qty', quantity)
+  }, [quantity, shippingDetails]);
+  console.log("qty", quantity);
 
   const {
     deliveryTimeMax = 0,
     deliveryTimeMin = 0,
     shippingFee = 0,
     extraShippingFee = 0,
-    shippingFeeMethod = 'Loading...',
-    shippingService = 'Loading...',
+    shippingFeeMethod = "Loading...",
+    shippingService = "Loading...",
     isFreeShipping = false,
-  } = shippingDetails || {} // Default to placeholders if shippingDetails is null
+  } = shippingDetails || {}; // Default to placeholders if shippingDetails is null
 
   // Calculate delivery dates only if shippingDetails is available
   const { minDate, maxDate } = shippingDetails
     ? getShippingDatesRange(deliveryTimeMin, deliveryTimeMax)
-    : { minDate: 'Loading...', maxDate: 'Loading...' }
+    : { minDate: "Loading...", maxDate: "Loading..." };
 
   return (
     <div>
@@ -128,7 +129,7 @@ const ShippingDetails: FC<Props> = ({
         >
           <div className="w-full flex items-center justify-between gap-x-1 px-2">
             <span className="text-xs">
-              {toggle ? 'Hide' : 'Shipping Fee Breakdown'}
+              {toggle ? "Hide" : "Shipping Fee Breakdown"}
             </span>
             {toggle ? (
               <ChevronUp className="w-4" />
@@ -139,7 +140,7 @@ const ShippingDetails: FC<Props> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ShippingDetails
+export default ShippingDetails;

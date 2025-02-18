@@ -1,22 +1,22 @@
 // React, Next.js
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
-import Image from 'next/image'
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import Image from "next/image";
 
 // Import of the image shown when there are no images available
-import NoImageImg from '../../../../public/assets/images/no_image_2.png'
+import NoImageImg from "../../../../public/assets/images/no_image_2.png";
 
 // Utils
-import { cn, getDominantColors, getGridClassName } from '@/lib/utils'
+import { cn, getDominantColors, getGridClassName } from "@/lib/utils";
 
 //Icons
-import { Trash } from 'lucide-react'
-import ColorPalette from './color-palette'
+import { Trash } from "lucide-react";
+import ColorPalette from "./color-palette";
 
 interface ImagesPreviewGridProps {
-  images: { url: string }[] // Array of image URLs
-  onRemove: (value: string) => void // Callback function when an image is removed
-  colors?: { color: string }[] // List of colors from form
-  setColors: Dispatch<SetStateAction<{ color: string }[]>> // Setter function for colors
+  images: { url: string }[]; // Array of image URLs
+  onRemove: (value: string) => void; // Callback function when an image is removed
+  colors?: { color: string }[]; // List of colors from form
+  setColors: Dispatch<SetStateAction<{ color: string }[]>>; // Setter function for colors
 }
 
 const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
@@ -26,32 +26,32 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
   setColors,
 }) => {
   // Calculate the number of images
-  let imagesLength = images.length
+  let imagesLength = images.length;
 
   // Get the grid class name based on the number of images
-  const GridClassName = getGridClassName(imagesLength)
+  const GridClassName = getGridClassName(imagesLength);
 
   // Extract images colors
-  const [colorPalettes, setColorPalettes] = useState<string[][]>([])
+  const [colorPalettes, setColorPalettes] = useState<string[][]>([]);
   useEffect(() => {
     const fecthColors = async () => {
       const palettes = await Promise.all(
         images.map(async (img) => {
           try {
-            const colors = await getDominantColors(img.url)
-            return colors
+            const colors = await getDominantColors(img.url);
+            return colors;
           } catch (error) {
-            return []
+            return [];
           }
         })
-      )
-      setColorPalettes(palettes)
-    }
+      );
+      setColorPalettes(palettes);
+    };
 
     if (imagesLength > 0) {
-      fecthColors()
+      fecthColors();
     }
-  }, [images])
+  }, [images]);
 
   // If there are no images, display a placeholder image
   if (imagesLength === 0) {
@@ -65,14 +65,14 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
           className="rounded-md"
         />
       </div>
-    )
+    );
   } else {
     // If there are images, display the images in a grid
     return (
       <div className="max-w-4xl">
         <div
           className={cn(
-            'grid h-[800px] overflow-hidden bg-white rounded-md',
+            "grid h-[800px] overflow-hidden bg-white rounded-md",
             GridClassName
           )}
         >
@@ -80,10 +80,10 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
             <div
               key={i}
               className={cn(
-                'relative group h-full w-full border border-gray-300',
+                "relative group h-full w-full border border-gray-300",
                 `grid_${imagesLength}_image_${i + 1}`,
                 {
-                  'h-[266.66px]': images.length === 6,
+                  "h-[266.66px]": images.length === 6,
                 }
               )}
             >
@@ -98,9 +98,9 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
               {/* Actions */}
               <div
                 className={cn(
-                  'absolute top-0 left-0 right-0 bottom-0 hidden group-hover:flex bg-white/55 cursor-pointer  items-center justify-center flex-col gap-y-3 transition-all duration-500',
+                  "absolute top-0 left-0 right-0 bottom-0 hidden group-hover:flex bg-white/55 cursor-pointer  items-center justify-center flex-col gap-y-3 transition-all duration-500",
                   {
-                    '!pb-[40%]': imagesLength === 1,
+                    "!pb-[40%]": imagesLength === 1,
                   }
                 )}
               >
@@ -126,8 +126,8 @@ const ImagesPreviewGrid: FC<ImagesPreviewGridProps> = ({
           ))}
         </div>
       </div>
-    )
+    );
   }
-}
+};
 
-export default ImagesPreviewGrid
+export default ImagesPreviewGrid;

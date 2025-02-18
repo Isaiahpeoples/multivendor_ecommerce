@@ -1,6 +1,6 @@
-'use client'
-import { Headset } from 'lucide-react'
-import SocialLogo from 'social-logos'
+"use client";
+import { Headset } from "lucide-react";
+import SocialLogo from "social-logos";
 
 export default function Contact() {
   return (
@@ -67,5 +67,5 @@ export default function Contact() {
         </div>
       </div>
     </div>
-  )
+  );
 }

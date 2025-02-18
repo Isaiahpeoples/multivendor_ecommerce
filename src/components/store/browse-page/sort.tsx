@@ -47,20 +47,20 @@ export default function ProductSort() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <div className="relative w-full transition-all duration-[30ms]">
+    <div className="relative transition-all duration-[30ms]">
       <div className="pr-[50px] inline-block relative">
         <div className="flex">
-          <div className="h-9 w-[227px] !float-right">
-            <div className="h-9 w-[227px] !float-left">
+          <div className="h-9 w-[190px] md:w-[227px] !float-right">
+            <div className="h-9 w-[190px] md:w-[227px] !float-left">
               <div
-                className="h-9 w-[227px] z-20 relative inline-block outline-0 group"
+                className="h-9 w-[190px] md:w-[227px] z-20 relative inline-block outline-0 group"
                 onMouseEnter={() => setIsMenuOpen(true)}
                 onMouseLeave={() => setIsMenuOpen(false)}
               >
                 {/* Trigger */}
-                <div className="h-9 w-[227px]">
+                <div className="h-9 w-[190px] md:w-[227px]">
                   <div className="inline-flex relative w-full">
-                    <div className="relative">
+                    <div className="hidden relative md:block">
                       <span className="w-[70px] h-full flex items-center justify-center absolute top-0 transition-all duration-[20ms]">
                         <label htmlFor="">Sort by</label>
                       </span>
@@ -69,7 +69,7 @@ export default function ProductSort() {
                       type="text"
                       disabled
                       value={sort}
-                      className="pl-[70px] text-sm font-bold h-9 pr-10 bg-none border cursor-pointer px-3 bg-transparent text-main-primary w-full outline-0 align-bottom"
+                      className="md:pl-[70px] text-sm font-bold h-9 pr-10 bg-none border cursor-pointer px-3 bg-transparent text-main-primary w-full outline-0 align-bottom"
                     />
                     <div className="relative">
                       <span

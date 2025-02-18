@@ -6,6 +6,7 @@ import OrderGroupsContainer from "@/components/store/order-page/groups-container
 import OrderHeader from "@/components/store/order-page/header";
 import OrderPayment from "@/components/store/order-page/payment";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { getOrder } from "@/queries/order";
 import { redirect } from "next/navigation";
 
@@ -14,22 +15,22 @@ export default async function OrderPage({
 }: {
   params: { orderId: string };
 }) {
-  const order = await getOrder(params.orderId)
-  if (!order) return redirect('/')
+  const order = await getOrder(params.orderId);
+  if (!order) return redirect("/");
 
   // Get the total count of items across all groups
   const totalItemsCount = order?.groups.reduce(
     (total, group) => total + group._count.items,
     0
-  )
+  );
 
   // Calculate the total number of delivered items
   const deliveredItemsCount = order?.groups.reduce((total, group) => {
-    if (group.status === 'Delivered') {
-      return total + group.items.length
+    if (group.status === "Delivered") {
+      return total + group.items.length;
     }
-    return total
-  }, 0)
+    return total;
+  }, 0);
 
   return (
     <div>
@@ -37,10 +38,10 @@ export default async function OrderPage({
       <div className="p-2">
         <OrderHeader order={order} />
         <div
-          className={cn('order-area-3', {
-            'order-area-3':
-              order.paymentStatus !== 'Pending' &&
-              order.paymentStatus !== 'Failed',
+          className={cn("order-area-3", {
+            "order-area-3":
+              order.paymentStatus !== "Pending" &&
+              order.paymentStatus !== "Failed",
           })}
         >
           {/* Col 1 -> User, Oder details */}
@@ -51,8 +52,8 @@ export default async function OrderPage({
               deliveredItemsCount={deliveredItemsCount}
               paymentDetails={order.paymentDetails}
             />
-            {order.paymentStatus !== 'Pending' &&
-              order.paymentStatus !== 'Failed' && (
+            {order.paymentStatus !== "Pending" &&
+              order.paymentStatus !== "Failed" && (
                 <OrderTotalDetailsCard
                   details={{
                     subTotal: order.subTotal,
@@ -67,14 +68,14 @@ export default async function OrderPage({
             <OrderGroupsContainer
               groups={order.groups}
               check={
-                order.paymentStatus !== 'Pending' &&
-                order.paymentStatus !== 'Failed'
+                order.paymentStatus !== "Pending" &&
+                order.paymentStatus !== "Failed"
               }
             />
           </div>
           {/* Col 3 -> Payment Gateways*/}
-          {(order.paymentStatus === 'Pending' ||
-            order.paymentStatus === 'Failed') && (
+          {(order.paymentStatus === "Pending" ||
+            order.paymentStatus === "Failed") && (
             <div className="order-area-payment min-[1024px]:h-[calc(100vh-137px)] min-[1024px]:border-l overflow-y-auto scrollbar px-2 py-4 space-y-5 flex flex-col justify-center">
               <OrderTotalDetailsCard
                 details={{
@@ -90,5 +91,5 @@ export default async function OrderPage({
         </div>
       </div>
     </div>
-  )
+  );
 }

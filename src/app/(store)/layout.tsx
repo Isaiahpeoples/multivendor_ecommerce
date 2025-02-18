@@ -1,9 +1,9 @@
 // React
-import { ThemeProvider } from 'next-themes'
-import { ReactNode } from 'react'
+import { ThemeProvider } from "next-themes";
+import { ReactNode } from "react";
 
 // Toaster
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from "react-hot-toast";
 
 export default function StoreLayout({ children }: { children: ReactNode }) {
   return (
@@ -11,5 +11,5 @@ export default function StoreLayout({ children }: { children: ReactNode }) {
       <div>{children}</div>
       <Toaster position="top-center" />
     </div>
-  )
+  );
 }

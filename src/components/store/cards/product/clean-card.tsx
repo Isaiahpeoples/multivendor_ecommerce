@@ -24,7 +24,7 @@ export default function ProductCardClean({
   });
   const numReviews = new Intl.NumberFormat().format(product.numReviews);
   return (
-    <Link href={`/product/${product.slug}/${variant.variantSlug}`}>
+    <Link href={`/product/${product.slug}?variant=${variant.variantSlug}`}>
       <div className="card">
         <div className="image-container">
           <Image src={variant.images[0].url} alt="" width={300} height={300} />
@@ -38,6 +38,7 @@ export default function ProductCardClean({
               <ul className="flex items-center gap-x-0.5">
                 {product.variantImages.map((img, i) => (
                   <li
+                    key={i}
                     className=""
                     onMouseEnter={() => setVariant(product.variants[i])}
                   >

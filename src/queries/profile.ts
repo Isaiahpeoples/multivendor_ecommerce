@@ -380,6 +380,7 @@ export const getUserWishlist = async (
           name: true,
           rating: true,
           sales: true,
+          numReviews: true,
           variants: {
             select: {
               id: true,
@@ -404,6 +405,7 @@ export const getUserWishlist = async (
     name: item.product.name,
     rating: item.product.rating,
     sales: item.product.sales,
+    numReviews: item.product.numReviews,
     variants: [
       {
         variantId: item.product.variants[0].id,

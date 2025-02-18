@@ -1,13 +1,13 @@
-import { useCartStore } from '@/cart-store/useCartStore'
-import { CartProductType } from '@/lib/types'
-import { cn } from '@/lib/utils'
-import { Check } from 'lucide-react'
-import { Dispatch, FC, SetStateAction } from 'react'
+import { useCartStore } from "@/cart-store/useCartStore";
+import { CartProductType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
+import { Dispatch, FC, SetStateAction } from "react";
 
 interface Props {
-  cartItems: CartProductType[]
-  selectedItems: CartProductType[]
-  setSelectedItems: Dispatch<SetStateAction<CartProductType[]>>
+  cartItems: CartProductType[];
+  selectedItems: CartProductType[];
+  setSelectedItems: Dispatch<SetStateAction<CartProductType[]>>;
 }
 
 const CartHeader: FC<Props> = ({
@@ -17,10 +17,10 @@ const CartHeader: FC<Props> = ({
 }) => {
   const removeMultipleFromCart = useCartStore(
     (state) => state.removeMultipleFromCart
-  )
+  );
 
-  const cartLength = cartItems.length
-  const selectedLength = selectedItems.length
+  const cartLength = cartItems.length;
+  const selectedLength = selectedItems.length;
 
   const handleSelectAll = () => {
     const areAllSelected = cartItems.every((item) =>
@@ -30,12 +30,12 @@ const CartHeader: FC<Props> = ({
           selected.variantId === item.variantId &&
           selected.sizeId === item.sizeId
       )
-    )
-    setSelectedItems(areAllSelected ? [] : cartItems)
-  }
+    );
+    setSelectedItems(areAllSelected ? [] : cartItems);
+  };
 
   const removeSelectedFromCart = () => {
-    removeMultipleFromCart(selectedItems)
+    removeMultipleFromCart(selectedItems);
 
     // Remove the selected items from both cart and selectedItems
     setSelectedItems((prevSelectedItems) =>
@@ -48,8 +48,8 @@ const CartHeader: FC<Props> = ({
               item.sizeId === selected.sizeId
           )
       )
-    )
-  }
+    );
+  };
 
   return (
     <div className="bg-white py-4">
@@ -68,9 +68,9 @@ const CartHeader: FC<Props> = ({
               <span className="leading-8 inline-flex p-0.5 cursor-pointer">
                 <span
                   className={cn(
-                    'leading-8 w-5 h-5 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:border-orange-background',
+                    "leading-8 w-5 h-5 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:border-orange-background",
                     {
-                      'border-orange-background':
+                      "border-orange-background":
                         cartLength > 0 && selectedLength === cartLength,
                     }
                   )}
@@ -100,7 +100,7 @@ const CartHeader: FC<Props> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CartHeader
+export default CartHeader;

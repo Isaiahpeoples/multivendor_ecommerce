@@ -90,7 +90,6 @@ export const followStore = async (storeId: string): Promise<boolean> => {
       return true;
     }
   } catch (error) {
-    console.error("Error in toggling store follow status:", error);
     throw error;
   }
 };
@@ -307,7 +306,6 @@ export const getUserShippingAddresses = async () => {
     return shippingAddresses;
   } catch (error) {
     // Log and re-throw any errors
-    console.log(error);
     throw error;
   }
 };
@@ -340,7 +338,6 @@ export const upsertShippingAddress = async (address: ShippingAddress) => {
             },
           });
         } catch (error) {
-          console.error("Error resetting default shipping addresses:", error);
           throw new Error("Could not reset default shipping addresses");
         }
       }
@@ -364,7 +361,6 @@ export const upsertShippingAddress = async (address: ShippingAddress) => {
     return upsertedAddress;
   } catch (error) {
     // Log and re-throw any errors
-    console.error("Error upserting shipping address:", error);
     throw error;
   }
 };

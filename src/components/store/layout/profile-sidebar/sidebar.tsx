@@ -27,7 +27,7 @@ export default function ProfileSidebar() {
         )}
       </div>
       <div className="bg-white">
-        <div className="py-3 inline-block w-[296px] min-h-72 mr-6">
+        <div className="py-3 inline-block w-full lg:w-[296px] min-h-72">
           <div className="font-bold text-main-primary flex h-9 items-center px-4">
             <div className="whitespace-nowrap overflow-ellipsis overflow-hidden">
               Account

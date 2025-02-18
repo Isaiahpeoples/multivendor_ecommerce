@@ -82,6 +82,7 @@ export const columns: ColumnDef<Category>[] = [
       );
     },
   },
+
   {
     accessorKey: "url",
     header: "URL",
@@ -129,7 +130,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
 
   // Return null if rowData or rowData.id don't exist
   if (!rowData || !rowData.id) return null;
-  
+
   return (
     <AlertDialog>
       <DropdownMenu>

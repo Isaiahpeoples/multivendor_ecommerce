@@ -1,15 +1,15 @@
-import ProductFilters from '@/components/store/browse-page/filters'
-import ProductSort from '@/components/store/browse-page/sort'
-import ProductCard from '@/components/store/cards/product/product-card'
-import Header from '@/components/store/layout/header/header'
-import { FiltersQueryType } from '@/lib/types'
-import { getProducts } from '@/queries/product'
-import { getFilteredSizes } from '@/queries/size'
+import ProductFilters from "@/components/store/browse-page/filters";
+import ProductSort from "@/components/store/browse-page/sort";
+import ProductCard from "@/components/store/cards/product/product-card";
+import Header from "@/components/store/layout/header/header";
+import { FiltersQueryType } from "@/lib/types";
+import { getProducts } from "@/queries/product";
+import { getFilteredSizes } from "@/queries/size";
 
 export default async function BrowsePage({
   searchParams,
 }: {
-  searchParams: FiltersQueryType
+  searchParams: FiltersQueryType;
 }) {
   const {
     category,
@@ -21,7 +21,7 @@ export default async function BrowsePage({
     maxPrice,
     minPrice,
     color,
-  } = searchParams
+  } = searchParams;
   const products_data = await getProducts(
     {
       search,
@@ -42,8 +42,8 @@ export default async function BrowsePage({
         : undefined, // If no color, keep it undefined
     },
     sort
-  )
-  const { products } = products_data
+  );
+  const { products } = products_data;
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -71,5 +71,5 @@ export default async function BrowsePage({
         </div>
       </div>
     </div>
-  )
+  );
 }

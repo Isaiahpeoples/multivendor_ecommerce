@@ -6,6 +6,7 @@ import ShareImg from "@/public/assets/images/sideline/share.png";
 import FeedbackImg from "@/public/assets/images/sideline/feedback.png";
 import SidelineItem from "./item";
 import SocialShare from "../../shared/social-share";
+
 export default function Sideline() {
   return (
     <div>
@@ -13,7 +14,7 @@ export default function Sideline() {
         <div className="fixed top-[35%] -translate-y-1/2 text-center">
           <Link
             href="/profile"
-            className="group relative block w-[35px]  h-[35px] transition-all duration-100 ease-linear 
+            className="group relative block w-[35px] h-[35px] transition-all duration-100 ease-linear 
             bg-[url('/assets/images/sideline/gift.avif')] hover:bg-[url('/assets/images/sideline/gift-opened.avif')] bg-cover"
           >
             <span
@@ -22,19 +23,17 @@ export default function Sideline() {
             >
               Check your profile
             </span>
-            <div className="hidden group-hover:block w-0 h-0 border-[12px] border-transparent border-l-[#373737] border-r-0 absolute left-[-15px] top-[38%]  transition-all duration-500 ease-in-out" />
+            <div className="hidden group-hover:block w-0 h-0 border-[12px] border-transparent border-l-[#373737] border-r-0 absolute left-[-15px] top-[38%] transition-all duration-500 ease-in-out" />
           </Link>
-          <SidelineItem link="/prfoile" image={CouponImg} children="Coupons" />
-          <SidelineItem
-            link="/profile/wishlist"
-            image={WishlistImg}
-            children="Wishlist"
-          />
-          <SidelineItem
-            link="/profile/history"
-            image={HistoryImg}
-            children="History"
-          />
+          <SidelineItem link="/profile" image={CouponImg}>
+            Coupons
+          </SidelineItem>
+          <SidelineItem link="/profile/wishlist" image={WishlistImg}>
+            Wishlist
+          </SidelineItem>
+          <SidelineItem link="/profile/history" image={HistoryImg}>
+            History
+          </SidelineItem>
         </div>
         <div className="fixed top-[60%] -translate-y-1/2 text-left">
           <SidelineItem
@@ -46,11 +45,9 @@ export default function Sideline() {
           >
             <SocialShare url="http://localhost:3000" quote="" isCol />
           </SidelineItem>
-          <SidelineItem
-            link="/feedback"
-            image={FeedbackImg}
-            children="Feedback"
-          />
+          <SidelineItem link="/feedback" image={FeedbackImg}>
+            Feedback
+          </SidelineItem>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ export default async function ProfileOverview() {
   const user = await currentUser();
   if (!user) return;
   return (
-    <div className="w-full bg-red-500">
+    <div className="w-full">
       <div className="bg-white p-4 border shadow-sm">
         <div className="flex items-center">
           <Image
@@ -21,7 +21,7 @@ export default async function ProfileOverview() {
             {user.fullName?.toLowerCase()}
           </div>
         </div>
-        <div className="mt-4 flex flex-wrap py-4">
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 p-4">
           {menu.map((item) => (
             <Link
               key={item.link}

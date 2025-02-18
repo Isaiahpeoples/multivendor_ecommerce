@@ -1,58 +1,58 @@
-'use client'
-import { useCartStore } from '@/cart-store/useCartStore'
-import useFromStore from '@/hooks/useFromStore'
-import { CartProductType, Country } from '@/lib/types'
-import React, { useEffect, useState, useRef } from 'react'
-import CartHeader from './car-header'
-import CartProduct from '../cards/cart-product'
-import CartSummary from './summary'
-import FastDelivery from '../cards/fast-delivery'
-import { SecurityPrivacyCard } from '../product-page/returns-security-privacy-card'
-import EmptyCart from './empty-cat'
-import { updateCartWithLatest } from '@/queries/user'
-import CountryNote from '../shared/country-note'
+"use client";
+import { useCartStore } from "@/cart-store/useCartStore";
+import useFromStore from "@/hooks/useFromStore";
+import { CartProductType, Country } from "@/lib/types";
+import React, { useEffect, useState, useRef } from "react";
+import CartHeader from "./car-header";
+import CartProduct from "../cards/cart-product";
+import CartSummary from "./summary";
+import FastDelivery from "../cards/fast-delivery";
+import { SecurityPrivacyCard } from "../product-page/returns-security-privacy-card";
+import EmptyCart from "./empty-cat";
+import { updateCartWithLatest } from "@/queries/user";
+import CountryNote from "../shared/country-note";
 
 export default function CartContainer({
   userCountry,
 }: {
-  userCountry: Country
+  userCountry: Country;
 }) {
-  const cartItems = useFromStore(useCartStore, (state) => state.cart) || []
-  const setCart = useCartStore((state) => state.setCart)
+  const cartItems = useFromStore(useCartStore, (state) => state.cart) || [];
+  const setCart = useCartStore((state) => state.setCart);
 
-  const [loading, setLoading] = useState<boolean>(false)
-  const [isCartLoaded, setIsCartLoaded] = useState<boolean>(false)
-  const [selectedItems, setSelectedItems] = useState<CartProductType[]>([])
-  const [totalShipping, setTotalShipping] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isCartLoaded, setIsCartLoaded] = useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = useState<CartProductType[]>([]);
+  const [totalShipping, setTotalShipping] = useState<number>(0);
 
   // Ref to track if the component has mounted
-  const hasMounted = useRef(false)
+  const hasMounted = useRef(false);
 
   useEffect(() => {
     if (cartItems !== undefined) {
-      setIsCartLoaded(true) // Flag indicating cartItems has finished loading
+      setIsCartLoaded(true); // Flag indicating cartItems has finished loading
     }
-  }, [cartItems])
+  }, [cartItems]);
 
   useEffect(() => {
     const loadAndSyncCart = async () => {
       try {
-        setLoading(true)
-        const updatedCart = await updateCartWithLatest(cartItems)
-        setCart(updatedCart)
-        setLoading(false)
+        setLoading(true);
+        const updatedCart = await updateCartWithLatest(cartItems);
+        setCart(updatedCart);
+        setLoading(false);
       } catch (error) {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     // Run only when userCountry changes and after the initial mount
     if (hasMounted.current && cartItems?.length) {
-      loadAndSyncCart()
+      loadAndSyncCart();
     } else {
-      hasMounted.current = true // Set the ref to true after the first render
+      hasMounted.current = true; // Set the ref to true after the first render
     }
-  }, [userCountry])
+  }, [userCountry]);
 
   return (
     <div>
@@ -105,5 +105,5 @@ export default function CartContainer({
         <EmptyCart />
       )}
     </div>
-  )
+  );
 }

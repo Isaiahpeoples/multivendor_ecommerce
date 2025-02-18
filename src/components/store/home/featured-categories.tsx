@@ -1,19 +1,19 @@
-'use client'
-import { FeaturedCategoryType } from '@/lib/types'
-import CategoryCard from './category-card'
-import { useEffect, useState } from 'react'
-import { getHomeFeaturedCategories } from '@/queries/home'
+"use client";
+import { FeaturedCategoryType } from "@/lib/types";
+import CategoryCard from "./category-card";
+import { useEffect, useState } from "react";
+import { getHomeFeaturedCategories } from "@/queries/home";
 
 export default function FeaturedCategories() {
-  const [categories, setCategories] = useState<FeaturedCategoryType[]>()
+  const [categories, setCategories] = useState<FeaturedCategoryType[]>();
 
   useEffect(() => {
     const getCategories = async () => {
-      const featuredCategories = await getHomeFeaturedCategories()
-      setCategories(featuredCategories)
-    }
-    getCategories()
-  }, [])
+      const featuredCategories = await getHomeFeaturedCategories();
+      setCategories(featuredCategories);
+    };
+    getCategories();
+  }, []);
   return (
     <div className="w-full mx-auto">
       {/* Header */}
@@ -29,5 +29,5 @@ export default function FeaturedCategories() {
         ))}
       </div>
     </div>
-  )
+  );
 }

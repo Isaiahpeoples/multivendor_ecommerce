@@ -102,20 +102,22 @@ export default function Step3({
       <AnimatedContainer>
         <div className="pl-1 text-gray-600 mt-2 mb-4">
           <p className="font-medium">
-            Fill out your store's default shipping details (this is optional).
+            Fill out your store&apos;s default shipping details (this is
+            optional).
           </p>
           <ul className="list-disc text-sm ml-4 mt-2">
             <li>Any fields left empty will default to our pre-set formData.</li>
             <li>
-              Don't worry, you can update your details anytime from your seller
-              dashboard.
+              Don&apos;t worry, you can update your details anytime from your
+              seller dashboard.
             </li>
             <li>
-              You'll also be able to customize shipping details for each country
-              later on.
+              You&apos;ll also be able to customize shipping details for each
+              country later on.
             </li>
           </ul>
         </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             {/* Form items */}

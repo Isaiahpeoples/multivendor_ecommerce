@@ -9,7 +9,7 @@ import Step3 from "./steps/setp-3/step-3";
 import Step4 from "./steps/step-4/step-4";
 
 export default function ApplySellerMultiForm() {
-  const [step, setStep] = useState<number>(4);
+  const [step, setStep] = useState<number>(1);
 
   const [formData, setFormData] = useState<StoreType>({
     name: "",
@@ -29,7 +29,7 @@ export default function ApplySellerMultiForm() {
     returnPolicy: "",
   });
   return (
-    <div className="grid grid-cols-[400px_1fr]">
+    <div className="grid lg:grid-cols-[400px_1fr]">
       <Instructions />
       <div className="relative p-5 w-full">
         <ProgressBar step={step} />

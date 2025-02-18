@@ -1,19 +1,19 @@
-import { UserShippingAddressType } from '@/lib/types'
-import { cn } from '@/lib/utils'
-import { Country } from '@prisma/client'
-import { Check } from 'lucide-react'
-import { FC, useState } from 'react'
-import Modal from '../shared/modal'
-import AddressDetails from '../shared/shipping-addresses/address-details'
-import toast from 'react-hot-toast'
-import { upsertShippingAddress } from '@/queries/user'
-import { useRouter } from 'next/navigation'
+import { UserShippingAddressType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { Country } from "@prisma/client";
+import { Check } from "lucide-react";
+import { FC, useState } from "react";
+import Modal from "../shared/modal";
+import AddressDetails from "../shared/shipping-addresses/address-details";
+import toast from "react-hot-toast";
+import { upsertShippingAddress } from "@/queries/user";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  address: UserShippingAddressType
-  isSelected: boolean
-  onSelect: () => void
-  countries: Country[]
+  address: UserShippingAddressType;
+  isSelected: boolean;
+  onSelect: () => void;
+  countries: Country[];
 }
 
 const ShippingAddressCard: FC<Props> = ({
@@ -22,23 +22,23 @@ const ShippingAddressCard: FC<Props> = ({
   isSelected,
   onSelect,
 }) => {
-  const router = useRouter()
-  const [show, setShow] = useState(false)
+  const router = useRouter();
+  const [show, setShow] = useState(false);
   const handleMakeDefault = async () => {
     try {
-      const { country, ...newAddress } = address
+      const { country, ...newAddress } = address;
       const response = await upsertShippingAddress({
         ...newAddress,
         default: true,
-      })
+      });
       if (response) {
-        toast.success('New Default Address saved.')
-        router.refresh()
+        toast.success("New Default Address saved.");
+        router.refresh();
       }
     } catch (error) {
-      toast.error('Something went wrong ! ')
+      toast.error("Something went wrong ! ");
     }
-  }
+  };
 
   return (
     <div className="w-full relative flex self-start group">
@@ -51,9 +51,9 @@ const ShippingAddressCard: FC<Props> = ({
         <span className="leading-8 inline-flex p-0.5 cursor-pointer">
           <span
             className={cn(
-              'leading-8 inline-block w-5 h-5 rounded-full bg-white border border-gray-300',
+              "leading-8 inline-block w-5 h-5 rounded-full bg-white border border-gray-300",
               {
-                'bg-orange-background border-none flex items-center justify-center':
+                "bg-orange-background border-none flex items-center justify-center":
                   isSelected,
               }
             )}
@@ -107,7 +107,7 @@ const ShippingAddressCard: FC<Props> = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ShippingAddressCard
+export default ShippingAddressCard;

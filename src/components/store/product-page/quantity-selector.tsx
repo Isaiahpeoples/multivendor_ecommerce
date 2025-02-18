@@ -24,28 +24,29 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({
   variantId,
   stock,
 }) => {
-  // If no sizeId is provided, return null to prevent rendering the component
-  if (!sizeId) return null;
-
-  // Get cart product if it exist in cart, the get added quantity
+  // Ensure hooks are called at the top level, even before conditions or early returns
   const cart = useFromStore(useCartStore, (state) => state.cart);
+
+  // Avoid conditional hook calls
+  const maxQty =
+    cart && sizeId
+      ? (() => {
+          const search_product = cart?.find(
+            (p) =>
+              p.productId === productId &&
+              p.variantId === variantId &&
+              p.sizeId === sizeId
+          );
+          return search_product
+            ? search_product.stock - search_product.quantity
+            : stock;
+        })()
+      : stock; // Default to stock if no cart or sizeId
 
   // useEffect hook to handle changes when sizeId updates
   useEffect(() => {
     handleChange("quantity", 1);
   }, [sizeId]);
-
-  const maxQty = useMemo(() => {
-    const search_product = cart?.find(
-      (p) =>
-        p.productId === productId &&
-        p.variantId === variantId &&
-        p.sizeId === sizeId
-    );
-    return search_product
-      ? search_product.stock - search_product.quantity
-      : stock;
-  }, [cart, productId, variantId, sizeId, stock]);
 
   // Function to handle increasing the quantity of the product
   const handleIncrease = () => {

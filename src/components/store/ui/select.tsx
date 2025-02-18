@@ -36,7 +36,7 @@ const Select: FC<Props> = ({
     setIsOpen(false);
   };
   return (
-    <div className="relative w-full z-50">
+    <div className="relative min-w-48 w-full z-50">
       <div>
         <div className="relative">
           {activeVariant?.image && (

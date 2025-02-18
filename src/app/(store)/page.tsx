@@ -30,7 +30,7 @@ export default async function HomePage() {
     { property: "offer", value: "user-card", type: "simple" },
     { property: "offer", value: "featured", type: "simple" },
   ]);
-  const featuredCategories = await getHomeFeaturedCategories();
+
   return (
     <>
       <Header />
@@ -93,7 +93,9 @@ export default async function HomePage() {
                   </div>
                 </MainSwiper>
               </div>
-              <FeaturedCategories categories={featuredCategories} />
+
+              <FeaturedCategories />
+
               <div>
                 {/* Header */}
                 <div className="text-center h-[32px] leading-[32px] text-[24px] font-extrabold text-[#222] flex justify-center">

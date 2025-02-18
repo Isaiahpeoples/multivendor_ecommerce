@@ -1,34 +1,34 @@
-'use client'
+"use client";
 import {
   CartProductType,
   ProductDataType,
   ProductVariantDataType,
-} from '@/lib/types'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Dispatch, FC, SetStateAction } from 'react'
-import { CopyIcon } from '@/components/store/icons'
-import toast from 'react-hot-toast'
-import ReactStars from 'react-rating-stars-component'
-import ProductPrice from './product-price'
-import Countdown from '../../shared/countdown'
-import { Separator } from '@/components/ui/separator'
-import ColorWheel from '@/components/shared/color-wheel'
-import ProductVariantSelector from './variant-selector'
-import SizeSelector from './size-selector'
-import ProductAssurancePolicy from './assurance-policy'
-import ProductWatch from './product-watch'
+} from "@/lib/types";
+import Image from "next/image";
+import Link from "next/link";
+import { Dispatch, FC, SetStateAction } from "react";
+import { CopyIcon } from "@/components/store/icons";
+import toast from "react-hot-toast";
+import ReactStars from "react-rating-stars-component";
+import ProductPrice from "./product-price";
+import Countdown from "../../shared/countdown";
+import { Separator } from "@/components/ui/separator";
+import ColorWheel from "@/components/shared/color-wheel";
+import ProductVariantSelector from "./variant-selector";
+import SizeSelector from "./size-selector";
+import ProductAssurancePolicy from "./assurance-policy";
+import ProductWatch from "./product-watch";
 
 interface Props {
-  productData: ProductDataType
-  variant: ProductVariantDataType
-  setVariant: Dispatch<SetStateAction<ProductVariantDataType>>
-  quantity: number
-  sizeId: string | undefined
-  setSizeId: Dispatch<SetStateAction<string>>
-  handleChange: (property: keyof CartProductType, value: any) => void
-  setActiveImage: Dispatch<SetStateAction<{ url: string } | null>>
-  variantSlug: string
+  productData: ProductDataType;
+  variant: ProductVariantDataType;
+  setVariant: Dispatch<SetStateAction<ProductVariantDataType>>;
+  quantity: number;
+  sizeId: string | undefined;
+  setSizeId: Dispatch<SetStateAction<string>>;
+  handleChange: (property: keyof CartProductType, value: any) => void;
+  setActiveImage: Dispatch<SetStateAction<{ url: string } | null>>;
+  variantSlug: string;
 }
 
 const ProductInfo: FC<Props> = ({
@@ -43,21 +43,21 @@ const ProductInfo: FC<Props> = ({
   setVariant,
 }) => {
   // Check if productData exists, return null if it's missing (prevents rendering when there's no data)
-  if (!productData) return null
+  if (!productData) return null;
 
   // Destructure necessary properties from the productData object
-  const { name, store, rating, numReviews, variants } = productData
-  const { isSale, saleEndDate, colors } = variant
+  const { name, store, rating, numReviews, variants } = productData;
+  const { isSale, saleEndDate, colors } = variant;
 
   // Function to copy the SKU to the clipboard
   const copySkuToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(variant.sku)
-      toast.success('Copied successfully')
+      await navigator.clipboard.writeText(variant.sku);
+      toast.success("Copied successfully");
     } catch (error) {
-      toast.error('Failed to copy')
+      toast.error("Failed to copy");
     }
-  }
+  };
 
   return (
     <div className="relative w-full xl:w-[540px]">
@@ -106,9 +106,9 @@ const ProductInfo: FC<Props> = ({
           <Link href="#reviews" className="text-[#ffd804] hover:underline">
             (
             {numReviews === 0
-              ? 'No review yet'
+              ? "No review yet"
               : numReviews === 1
-              ? '1 review'
+              ? "1 review"
               : `${numReviews} reviews`}
             )
           </Link>
@@ -137,7 +137,7 @@ const ProductInfo: FC<Props> = ({
       <div className="mt-4 space-y-2">
         <div className="relative flex items-center justify-between text-main-primary font-bold">
           <span className="flex items-center gap-x-2">
-            {colors.length > 1 ? 'Colors' : 'Color'}
+            {colors.length > 1 ? "Colors" : "Color"}
             <ColorWheel colors={colors} size={25} />
           </span>
         </div>
@@ -171,7 +171,7 @@ const ProductInfo: FC<Props> = ({
       <ProductAssurancePolicy />
       <Separator className="mt-2" />
       <div className="mt-2 flex flex-wrap gap-2">
-        {variant.keywords.split(',').map((k) => (
+        {variant.keywords.split(",").map((k) => (
           <span
             key={k}
             className="bg-gray-50 rounded-full px-3 py-1 text-sm text-main-secondary"
@@ -181,7 +181,7 @@ const ProductInfo: FC<Props> = ({
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductInfo
+export default ProductInfo;

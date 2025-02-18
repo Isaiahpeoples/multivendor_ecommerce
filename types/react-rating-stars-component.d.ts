@@ -1,6 +1,6 @@
 declare module "react-rating-stars-component" {
-    import { ComponentType, ReactNode } from "react";
-    
+  import { ComponentType, ReactNode } from "react";
+
   interface ReactStarsProps {
     count?: number; // The number of stars to display
     value?: number; // The current rating value
@@ -13,8 +13,8 @@ declare module "react-rating-stars-component" {
     emptyIcon?: ReactNode; // Custom icon for the empty star
     halfIcon?: ReactNode; // Custom icon for the half-filled star
     filledIcon?: ReactNode; // Custom icon for the filled star
-    }
-    
+  }
+
   const ReactStars: ComponentType<ReactStarsProps>;
   export default ReactStars;
 }

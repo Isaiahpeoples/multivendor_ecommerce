@@ -35,7 +35,6 @@ export default function ProfileHistoryPage({
         setTotalPages(res.totalPages);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching product history:", error);
         setProducts([]);
         setLoading(false);
       }

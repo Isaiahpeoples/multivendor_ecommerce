@@ -1,5 +1,6 @@
 import { CartProductType } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
 interface SimplifiedSize {
@@ -15,26 +16,22 @@ interface Props {
   sizes: SimplifiedSize[];
   isCard?: boolean;
   handleChange: (property: keyof CartProductType, value: any) => void;
-  weight?: number;
 }
 
-const ProductPrice: FC<Props> = ({
-  sizeId,
-  sizes,
-  isCard,
-  handleChange,
-  weight,
-}) => {
+const ProductPrice: FC<Props> = ({ sizeId, sizes, isCard, handleChange }) => {
   const [selectedSize, setSelectedSize] = useState<SimplifiedSize | undefined>(
     undefined
   );
 
+  // Ensure that useEffect is always executed by not using early returns.
+  /*
   useEffect(() => {
     if (sizes && sizes.length > 0) {
       if (sizeId) {
         const foundSize = sizes.find((size) => size.id === sizeId);
         if (foundSize) {
           setSelectedSize(foundSize);
+
           const discountedPrice =
             foundSize.price * (1 - foundSize.discount / 100);
           handleChange("price", discountedPrice);
@@ -42,9 +39,14 @@ const ProductPrice: FC<Props> = ({
         }
       }
     }
-  }, [sizeId, sizes]);
+  }, [sizeId, sizes, handleChange]);
+*/
+  if (!sizes || sizes.length === 0) {
+    // If no sizes are available, simply return from the function, performing no further actions
+    return;
+  }
 
-  // If no sizeId passed, calculate range of prices and total quantity
+  // Scenario 1: No sizeId passed, calculate range of prices and total quantity
   if (!sizeId && sizes && sizes.length > 0) {
     const discountedPrices = sizes.map(
       (size) => size.price * (1 - size.discount / 100)
@@ -84,7 +86,7 @@ const ProductPrice: FC<Props> = ({
     );
   }
 
-  // If sizeId passed, show specific size price and quantity
+  // Scenario 2: SizeId passed, find the specific size
   if (selectedSize) {
     const discountedPrice =
       selectedSize.price * (1 - selectedSize.discount / 100);
@@ -107,7 +109,6 @@ const ProductPrice: FC<Props> = ({
           </span>
         )}
         <p className="mt-2 text-xs">
-          {weight && <span>{weight}kg - </span>}
           {selectedSize.quantity > 0 ? (
             `${selectedSize.quantity} items`
           ) : (
@@ -118,7 +119,7 @@ const ProductPrice: FC<Props> = ({
     );
   }
 
-  return null; // Return nothing if no valid sizeId
+  return null; // If no sizeId or no valid selected size, render nothing
 };
 
 export default ProductPrice;

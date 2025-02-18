@@ -1,3 +1,3 @@
 export default function SellerStoresPage() {
-  return <div></div>
+  return <div></div>;
 }

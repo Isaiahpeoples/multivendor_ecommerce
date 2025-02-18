@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 // React, Next.js imports
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Custom components
-import CustomModal from '@/components/dashboard/shared/custom-modal'
+import CustomModal from "@/components/dashboard/shared/custom-modal";
 
 // UI components
 import {
@@ -18,8 +18,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,69 +27,71 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 
 // Hooks and utilities
-import { useToast } from '@/components/ui/use-toast'
-import { useModal } from '@/providers/modal-provider'
+import { useToast } from "@/components/ui/use-toast";
+import { useModal } from "@/providers/modal-provider";
 
 // Lucide icons
-import { Edit, MoreHorizontal, Trash } from 'lucide-react'
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
 // Queries
-import { deleteOfferTag, getOfferTag } from '@/queries/offer-tag'
+import { deleteOfferTag, getOfferTag } from "@/queries/offer-tag";
 
 // Tanstack React Table
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef } from "@tanstack/react-table";
 
 // Prisma models
-import { OfferTag } from '@prisma/client'
-import OfferTagDetails from '@/components/dashboard/forms/offer-tag-details'
+import { OfferTag } from "@prisma/client";
+import OfferTagDetails from "@/components/dashboard/forms/offer-tag-details";
+
 export const columns: ColumnDef<OfferTag>[] = [
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: "name",
+    header: "Name",
     cell: ({ row }) => {
       return (
         <span className="font-extrabold text-lg capitalize">
           {row.original.name}
         </span>
-      )
+      );
     },
   },
 
   {
-    accessorKey: 'url',
-    header: 'URL',
+    accessorKey: "url",
+    header: "URL",
     cell: ({ row }) => {
-      return <span>/{row.original.url}</span>
+      return <span>/{row.original.url}</span>;
     },
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => {
-      const rowData = row.original
-      return <CellActions rowData={rowData} />
+      const rowData = row.original;
+
+      return <CellActions rowData={rowData} />;
     },
   },
-]
+];
 
 // Define props interface for CellActions component
 interface CellActionsProps {
-  rowData: OfferTag
+  rowData: OfferTag;
 }
 
 // CellActions component definition
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
   // Hooks
-  const { setOpen, setClose } = useModal()
-  const [loading, setLoading] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
+  const { setOpen, setClose } = useModal();
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   // Return null if rowData or rowData.id don't exist
-  if (!rowData || !rowData.id) return null
-  
+  if (!rowData || !rowData.id) return null;
+
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -113,9 +115,9 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                 async () => {
                   return {
                     rowData: await getOfferTag(rowData?.id),
-                  }
+                  };
                 }
-              )
+              );
             }}
           >
             <Edit size={15} />
@@ -145,15 +147,15 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
             disabled={loading}
             className="bg-destructive hover:bg-destructive mb-2 text-white"
             onClick={async () => {
-              setLoading(true)
-              await deleteOfferTag(rowData.id)
+              setLoading(true);
+              await deleteOfferTag(rowData.id);
               toast({
-                title: 'Deleted category',
-                description: 'The category has been deleted.',
-              })
-              setLoading(false)
-              router.refresh()
-              setClose()
+                title: "Deleted category",
+                description: "The category has been deleted.",
+              });
+              setLoading(false);
+              router.refresh();
+              setClose();
             }}
           >
             Delete
@@ -161,5 +163,5 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};

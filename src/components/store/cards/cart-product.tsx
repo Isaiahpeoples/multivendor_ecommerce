@@ -76,17 +76,19 @@ const CartProduct: FC<Props> = ({
   });
 
   // Function to calculate shipping fee
-  const calculateShipping = () => {
+  const calculateShipping = (newQty?: number) => {
     let initialFee = 0;
     let extraFee = 0;
     let totalFee = 0;
 
+    const quantityToUse = newQty !== undefined ? newQty : quantity; // Use newQty if passed, else fallback to current quantity
+
     if (shippingMethod === "ITEM") {
       initialFee = shippingFee;
-      extraFee = quantity > 1 ? extraShippingFee * (quantity - 1) : 0;
+      extraFee = quantityToUse > 1 ? extraShippingFee * (quantityToUse - 1) : 0;
       totalFee = initialFee + extraFee;
     } else if (shippingMethod === "WEIGHT") {
-      totalFee = shippingFee * weight * quantity;
+      totalFee = shippingFee * weight * quantityToUse;
     } else if (shippingMethod === "FIXED") {
       totalFee = shippingFee;
     }
@@ -154,9 +156,11 @@ const CartProduct: FC<Props> = ({
     if (type === "add" && quantity < stock) {
       // Increase quantity by 1 but ensure it doesn't exceed stock
       updateProductQuantity(product, quantity + 1);
+      calculateShipping(quantity + 1);
     } else if (type === "remove" && quantity > 1) {
       // Decrease quantity by 1 but ensure it doesn't go below 1
       updateProductQuantity(product, quantity - 1);
+      calculateShipping(quantity - 1);
     }
   };
 
@@ -209,9 +213,7 @@ const CartProduct: FC<Props> = ({
                 />
               </label>
             )}
-            <Link
-              href={`/product/${productSlug}/${variantSlug}?size=${sizeId}`}
-            >
+            <Link href={`/product/${productSlug}?variant=${variantSlug}`}>
               <div className="m-0 mr-4 ml-2 w-28 h-28 bg-gray-200 relative rounded-lg">
                 <Image
                   src={image}
@@ -228,7 +230,7 @@ const CartProduct: FC<Props> = ({
             {/* Title - Actions */}
             <div className="w-[calc(100%-48px)] flex items-start overflow-hidden whitespace-nowrap">
               <Link
-                href={`/product/${productSlug}/${variantSlug}?size=${sizeId}`}
+                href={`/product/${productSlug}?variant=${variantSlug}`}
                 className="inline-block overflow-hidden text-sm whitespace-nowrap overflow-ellipsis"
               >
                 {name} · {variantName}
@@ -262,7 +264,7 @@ const CartProduct: FC<Props> = ({
               </button>
             </div>
             {/* Price - Delivery */}
-            <div className="flex items-center justify-between mt-2 relative">
+            <div className="flex flex-col gap-y-2 sm:flex-row sm:items-center sm:justify-between mt-2 relative">
               {stock > 0 ? (
                 <div>
                   <span className="inline-block break-all">

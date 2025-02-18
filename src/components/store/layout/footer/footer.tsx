@@ -1,10 +1,10 @@
-import { getSubcategories } from '@/queries/subCategory'
-import Contact from './contact'
-import Links from './links'
-import Newsletter from './newsletter'
+import { getSubcategories } from "@/queries/subCategory";
+import Contact from "./contact";
+import Links from "./links";
+import Newsletter from "./newsletter";
 
 export default async function Footer() {
-  const subs = await getSubcategories(7, true)
+  const subs = await getSubcategories(7, true);
   return (
     <div className="w-full bg-white">
       <Newsletter />
@@ -24,5 +24,5 @@ export default async function Footer() {
         </div>
       </div>
     </div>
-  )
+  );
 }

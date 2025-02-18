@@ -1,17 +1,17 @@
-'use client'
-import { CartProductType, ProductVariantDataType } from '@/lib/types'
-import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Dispatch, FC, SetStateAction } from 'react'
+"use client";
+import { CartProductType, ProductVariantDataType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Dispatch, FC, SetStateAction } from "react";
 
 interface Props {
-  variants: ProductVariantDataType[]
-  slug: string
-  setActiveImage: Dispatch<SetStateAction<{ url: string } | null>>
-  handleChange: (property: keyof CartProductType, value: any) => void
-  setSizeId: Dispatch<SetStateAction<string>>
-  setVariant: Dispatch<SetStateAction<ProductVariantDataType>>
+  variants: ProductVariantDataType[];
+  slug: string;
+  setActiveImage: Dispatch<SetStateAction<{ url: string } | null>>;
+  handleChange: (property: keyof CartProductType, value: any) => void;
+  setSizeId: Dispatch<SetStateAction<string>>;
+  setVariant: Dispatch<SetStateAction<ProductVariantDataType>>;
 }
 
 const ProductVariantSelector: FC<Props> = ({
@@ -22,25 +22,25 @@ const ProductVariantSelector: FC<Props> = ({
   setSizeId,
   setVariant,
 }) => {
-  const pathname = usePathname()
-  const { replace } = useRouter()
-  const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
 
   const handleSelectVariant = (variant: ProductVariantDataType) => {
-    if (variants.length === 1) return
-    setVariant(variant)
-    setActiveImage(variant.images[0])
+    if (variants.length === 1) return;
+    setVariant(variant);
+    setActiveImage(variant.images[0]);
     if (variant.sizes.length === 1) {
-      setSizeId(variant.sizes[0].id)
+      setSizeId(variant.sizes[0].id);
     } else {
-      setSizeId('')
+      setSizeId("");
     }
-    params.set('variant', variant.slug)
+    params.set("variant", variant.slug);
     replace(`${pathname}?${params.toString()}`, {
       scroll: false,
-    })
-  }
+    });
+  };
   return (
     <div className="flex items-center flex-wrap gap-2">
       {variants.map((variant, i) => (
@@ -58,9 +58,9 @@ const ProductVariantSelector: FC<Props> = ({
         >
           <div
             className={cn(
-              'w-12 h-12 max-h-12 rounded-full grid place-items-center overflow-hidden outline-[1px] outline-transparent outline-dashed outline-offset-2 cursor-pointer transition-all duration-75 ease-in',
+              "w-12 h-12 max-h-12 rounded-full grid place-items-center overflow-hidden outline-[1px] outline-transparent outline-dashed outline-offset-2 cursor-pointer transition-all duration-75 ease-in",
               {
-                'outline-main-primary': slug ? slug === variant.slug : i == 0,
+                "outline-main-primary": slug ? slug === variant.slug : i == 0,
               }
             )}
           >
@@ -75,7 +75,7 @@ const ProductVariantSelector: FC<Props> = ({
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default ProductVariantSelector
+export default ProductVariantSelector;

@@ -1,32 +1,32 @@
-import { cn } from '@/lib/utils'
-import { Category } from '@prisma/client'
-import { ChevronDown, Menu } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { cn } from "@/lib/utils";
+import { Category } from "@prisma/client";
+import { ChevronDown, Menu } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function CategoriesMenu({
   categories,
   open,
   setOpen,
 }: {
-  categories: Category[]
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  categories: Category[];
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false)
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
 
   const toggleMenu = (state: boolean) => {
-    setOpen(state)
+    setOpen(state);
     // Delay showing the dropdown until the trigger has finished expanding
     if (state) {
       setTimeout(() => {
-        setDropdownVisible(true)
-      }, 100)
+        setDropdownVisible(true);
+      }, 100);
     } else {
-      setDropdownVisible(false)
+      setDropdownVisible(false);
     }
-  }
+  };
 
   return (
     <div
@@ -39,43 +39,43 @@ export default function CategoriesMenu({
         {/* Trigger */}
         <div
           className={cn(
-            'w-12 xl:w-[256px] h-12 rounded-full -translate-y-1 xl:translate-y-0 xl:h-11 bg-[#535353] text-white text-[20px] relative flex items-center cursor-pointer transition-all duration-100 ease-in-out',
+            "w-12 xl:w-[256px] h-12 rounded-full -translate-y-1 xl:translate-y-0 xl:h-11 bg-[#535353] text-white text-[20px] relative flex items-center cursor-pointer transition-all duration-100 ease-in-out",
             {
-              'w-[256px] bg-[#f5f5f5] text-black text-base rounded-t-[20px] rounded-b-none scale-100':
+              "w-[256px] bg-[#f5f5f5] text-black text-base rounded-t-[20px] rounded-b-none scale-100":
                 open,
-              'scale-75': !open,
+              "scale-75": !open,
             }
           )}
         >
           {/* Menu Icon with transition to move right when open */}
           <Menu
-            className={cn('absolute top-1/2 -translate-y-1/2 xl:ml-1', {
-              'left-5': open,
-              'left-3': !open,
+            className={cn("absolute top-1/2 -translate-y-1/2 xl:ml-1", {
+              "left-5": open,
+              "left-3": !open,
             })}
           />
 
           <span
-            className={cn('hidden xl:inline-flex xl:ml-11', {
-              'inline-flex !ml-14': open,
+            className={cn("hidden xl:inline-flex xl:ml-11", {
+              "inline-flex !ml-14": open,
             })}
           >
             All Categories
           </span>
 
           <ChevronDown
-            className={cn('hidden xl:inline-flex scale-75 absolute right-3', {
-              'inline-flex': open,
+            className={cn("hidden xl:inline-flex scale-75 absolute right-3", {
+              "inline-flex": open,
             })}
           />
         </div>
         {/* Dropdown */}
         <ul
           className={cn(
-            'absolute top-10 left-0 w-[256px] bg-[#f5f5f5] shadow-lg transition-all duration-100 ease-in-out scrollbar overflow-y-auto',
+            "absolute top-10 left-0 w-[256px] bg-[#f5f5f5] shadow-lg transition-all duration-100 ease-in-out scrollbar overflow-y-auto",
             {
-              'max-h-[523px] opacity-100': dropdownVisible, // Show dropdown
-              'max-h-0 opacity-0': !dropdownVisible, // Hide dropdown
+              "max-h-[523px] opacity-100": dropdownVisible, // Show dropdown
+              "max-h-0 opacity-0": !dropdownVisible, // Hide dropdown
             }
           )}
         >
@@ -102,5 +102,5 @@ export default function CategoriesMenu({
         </ul>
       </div>
     </div>
-  )
+  );
 }

@@ -1,35 +1,35 @@
-'use client'
-import { ProductType } from '@/lib/types'
-import { getProducts } from '@/queries/product'
-import { FC, useEffect, useState } from 'react'
-import ProductList from '../shared/product-list'
-import ProductPageStoreProductsSkeletonLoader from '../skeletons/product-page/store-products'
-import { ChevronRight } from 'lucide-react'
+"use client";
+import { ProductType } from "@/lib/types";
+import { getProducts } from "@/queries/product";
+import { FC, useEffect, useState } from "react";
+import ProductList from "../shared/product-list";
+import ProductPageStoreProductsSkeletonLoader from "../skeletons/product-page/store-products";
+import { ChevronRight } from "lucide-react";
 
 interface Props {
-  storeUrl: string
-  storeName: string
-  count: number
+  storeUrl: string;
+  storeName: string;
+  count: number;
 }
 
 const StoreProducts: FC<Props> = ({ storeUrl, count, storeName }) => {
-  const [products, setProducts] = useState<ProductType[]>([])
-  const [loading, setLoading] = useState(true)
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getStoreProducts()
-  }, [])
+    getStoreProducts();
+  }, []);
 
   const getStoreProducts = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
-      const res = await getProducts({ store: storeUrl }, '', 1, count)
-      setProducts(res.products)
-      setLoading(false)
+      const res = await getProducts({ store: storeUrl }, "", 1, count);
+      setProducts(res.products);
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
   return (
     <div className="pt-6" id="reviews">
       {/* Title */}
@@ -50,7 +50,7 @@ const StoreProducts: FC<Props> = ({ storeUrl, count, storeName }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StoreProducts
+export default StoreProducts;

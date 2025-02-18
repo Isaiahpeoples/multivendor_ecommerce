@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
 // React, Next.js imports
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // Custom components
-import CustomModal from '@/components/dashboard/shared/custom-modal'
-import SubCategoryDetails from '@/components/dashboard/forms/subCategory-details'
+import CustomModal from "@/components/dashboard/shared/custom-modal";
+import SubCategoryDetails from "@/components/dashboard/forms/subCategory-details";
 
 // UI components
 import {
@@ -20,8 +20,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,11 +29,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 
 // Hooks and utilities
-import { useToast } from '@/components/ui/use-toast'
-import { useModal } from '@/providers/modal-provider'
+import { useToast } from "@/components/ui/use-toast";
+import { useModal } from "@/providers/modal-provider";
 
 // Lucide icons
 import {
@@ -42,25 +42,25 @@ import {
   Edit,
   MoreHorizontal,
   Trash,
-} from 'lucide-react'
+} from "lucide-react";
 
 // Queries
-import { getAllCategories } from '@/queries/category'
-import { deleteSubCategory, getSubCategory } from '@/queries/subCategory'
+import { getAllCategories } from "@/queries/category";
+import { deleteSubCategory, getSubCategory } from "@/queries/subCategory";
 
 // Tanstack React Table
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef } from "@tanstack/react-table";
 
 // Prisma models
-import { Category } from '@prisma/client'
+import { Category } from "@prisma/client";
 
 // Types
-import { SubCategoryWithCategoryType } from '@/lib/types'
+import { SubCategoryWithCategoryType } from "@/lib/types";
 
 export const columns: ColumnDef<SubCategoryWithCategoryType>[] = [
   {
-    accessorKey: 'image',
-    header: '',
+    accessorKey: "image",
+    header: "",
     cell: ({ row }) => {
       return (
         <div className="relative h-44 min-w-64 rounded-xl overflow-hidden">
@@ -72,37 +72,38 @@ export const columns: ColumnDef<SubCategoryWithCategoryType>[] = [
             className="w-40 h-40 rounded-full object-cover shadow-2xl"
           />
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: 'name',
-    header: 'Name',
+    accessorKey: "name",
+    header: "Name",
     cell: ({ row }) => {
       return (
         <span className="font-extrabold text-lg capitalize">
           {row.original.name}
         </span>
-      )
+      );
     },
   },
+
   {
-    accessorKey: 'url',
-    header: 'URL',
+    accessorKey: "url",
+    header: "URL",
     cell: ({ row }) => {
-      return <span>/{row.original.url}</span>
+      return <span>/{row.original.url}</span>;
     },
   },
   {
-    accessorKey: 'category',
-    header: 'Category',
+    accessorKey: "category",
+    header: "Category",
     cell: ({ row }) => {
-      return <span>{row.original.category.name}</span>
+      return <span>{row.original.category.name}</span>;
     },
   },
   {
-    accessorKey: 'featured',
-    header: 'Featured',
+    accessorKey: "featured",
+    header: "Featured",
     cell: ({ row }) => {
       return (
         <span className="text-muted-foreground flex justify-center">
@@ -112,39 +113,44 @@ export const columns: ColumnDef<SubCategoryWithCategoryType>[] = [
             <BadgeMinus />
           )}
         </span>
-      )
+      );
     },
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => {
-      const rowData = row.original
-      return <CellActions rowData={rowData} />
+      const rowData = row.original;
+
+      return <CellActions rowData={rowData} />;
     },
   },
-]
+];
+
 // Define props interface for CellActions component
 interface CellActionsProps {
-  rowData: SubCategoryWithCategoryType
+  rowData: SubCategoryWithCategoryType;
 }
+
 // CellActions component definition
 const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
-  // Hooks
-  const { setOpen, setClose } = useModal()
-  const [loading, setLoading] = useState(false)
-  const { toast } = useToast()
-  const router = useRouter()
-  // Return null if rowData or rowData.id don't exist
-  if (!rowData || !rowData.id) return null
-  // Get categories
-  const [categories, setCategories] = useState<Category[]>([])
+  // Declare all hooks at the top
+  const { setOpen, setClose } = useModal();
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const categories = await getAllCategories()
-      setCategories(categories)
-    }
-    fetchCategories()
-  }, [])
+      const categories = await getAllCategories();
+      setCategories(categories);
+    };
+    fetchCategories();
+  }, []);
+
+  // Early return only after hooks are declared
+  if (!rowData || !rowData.id) return null;
+
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -160,9 +166,7 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
             className="flex gap-2"
             onClick={() => {
               setOpen(
-                // Custom modal component
                 <CustomModal>
-                  {/* Store details component */}
                   <SubCategoryDetails
                     categories={categories}
                     data={{ ...rowData }}
@@ -171,9 +175,9 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
                 async () => {
                   return {
                     rowData: await getSubCategory(rowData?.id),
-                  }
+                  };
                 }
-              )
+              );
             }}
           >
             <Edit size={15} />
@@ -203,15 +207,15 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
             disabled={loading}
             className="bg-destructive hover:bg-destructive mb-2 text-white"
             onClick={async () => {
-              setLoading(true)
-              await deleteSubCategory(rowData.id)
+              setLoading(true);
+              await deleteSubCategory(rowData.id);
               toast({
-                title: 'Deleted subCategory',
-                description: 'The subCategory has been deleted.',
-              })
-              setLoading(false)
-              router.refresh()
-              setClose()
+                title: "Deleted subCategory",
+                description: "The subCategory has been deleted.",
+              });
+              setLoading(false);
+              router.refresh();
+              setClose();
             }}
           >
             Delete
@@ -219,5 +223,5 @@ const CellActions: React.FC<CellActionsProps> = ({ rowData }) => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};

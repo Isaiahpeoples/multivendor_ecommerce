@@ -1,4 +1,4 @@
-import { SendIcon } from '@/components/store/icons'
+import { SendIcon } from "@/components/store/icons";
 
 export default function Newsletter() {
   return (
@@ -32,5 +32,5 @@ export default function Newsletter() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -24,7 +24,7 @@ export default function Header() {
   if (userCountryCookie) {
     userCountry = JSON.parse(userCountryCookie.value) as Country;
   }
-  
+
   return (
     <div className="bg-gradient-to-r from-slate-500 to-slate-800">
       <div className="h-full w-full lg:flex text-white px-4 lg:px-12">

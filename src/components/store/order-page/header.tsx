@@ -1,29 +1,29 @@
-'use client'
-import OrderStatusTag from '@/components/shared/order-status'
-import PaymentStatusTag from '@/components/shared/payment-status'
-import { Button } from '@/components/ui/button'
-import { OrderFulltType, OrderStatus, PaymentStatus } from '@/lib/types'
-import { ChevronLeft, ChevronRight, Download, Printer } from 'lucide-react'
-import React from 'react'
-import { generateOrderPDFBlob } from './pdf-invoice'
-import { downloadBlobAsFile, printPDF } from '@/lib/utils'
+"use client";
+import OrderStatusTag from "@/components/shared/order-status";
+import PaymentStatusTag from "@/components/shared/payment-status";
+import { Button } from "@/components/ui/button";
+import { OrderFulltType, OrderStatus, PaymentStatus } from "@/lib/types";
+import { ChevronLeft, ChevronRight, Download, Printer } from "lucide-react";
+import React from "react";
+import { generateOrderPDFBlob } from "./pdf-invoice";
+import { downloadBlobAsFile, printPDF } from "@/lib/utils";
 
 export default function OrderHeader({ order }: { order: OrderFulltType }) {
-  if (!order) return
+  if (!order) return;
 
   const handleDownload = async () => {
     try {
-      const pdfBlob = await generateOrderPDFBlob(order)
-      downloadBlobAsFile(pdfBlob, `Order_${order.id}.pdf`)
+      const pdfBlob = await generateOrderPDFBlob(order);
+      downloadBlobAsFile(pdfBlob, `Order_${order.id}.pdf`);
     } catch (error) {}
-  }
+  };
 
   const handlePrint = async () => {
     try {
-      const pdfBlob = await generateOrderPDFBlob(order)
-      printPDF(pdfBlob)
+      const pdfBlob = await generateOrderPDFBlob(order);
+      printPDF(pdfBlob);
     } catch (error) {}
-  }
+  };
 
   return (
     <div>
@@ -59,5 +59,5 @@ export default function OrderHeader({ order }: { order: OrderFulltType }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

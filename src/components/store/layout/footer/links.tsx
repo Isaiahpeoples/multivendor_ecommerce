@@ -1,5 +1,5 @@
-import { SubCategory } from '@prisma/client'
-import Link from 'next/link'
+import { SubCategory } from "@prisma/client";
+import Link from "next/link";
 
 export default function Links({ subs }: { subs: SubCategory[] }) {
   return (
@@ -21,7 +21,7 @@ export default function Links({ subs }: { subs: SubCategory[] }) {
       <div className="space-y-4 md:mt-10">
         <ul className="flex flex-col gap-y-1">
           {footer_links.slice(0, 6).map((link) => (
-            <Link href={link.link}>
+            <Link href={link.link} key={link.link}>
               <li>
                 <span>{link.title}</span>
               </li>
@@ -33,7 +33,7 @@ export default function Links({ subs }: { subs: SubCategory[] }) {
         <h1 className="text-lg font-bold">Customer care</h1>
         <ul className="flex flex-col gap-y-1">
           {footer_links.slice(6).map((link) => (
-            <Link href={link.link}>
+            <Link href={link.link} key={link.link}>
               <li>
                 <span>{link.title}</span>
               </li>
@@ -43,55 +43,55 @@ export default function Links({ subs }: { subs: SubCategory[] }) {
       </div>
       {/* Customer care */}
     </div>
-  )
+  );
 }
 const footer_links = [
   {
-    title: 'About',
-    link: '/about',
+    title: "About",
+    link: "/about",
   },
   {
-    title: 'Contact',
-    link: '/contact',
+    title: "Contact",
+    link: "/contact",
   },
   {
-    title: 'Wishlist',
-    link: '/profile/wishlist',
+    title: "Wishlist",
+    link: "/profile/wishlist",
   },
   {
-    title: 'Compare',
-    link: '/compare',
+    title: "Compare",
+    link: "/compare",
   },
   {
-    title: 'FAQ',
-    link: '/faq',
+    title: "FAQ",
+    link: "/faq",
   },
   {
-    title: 'Store Directory',
-    link: '/profile',
+    title: "Store Directory",
+    link: "/profile",
   },
   {
-    title: 'My Account',
-    link: '/profile',
+    title: "My Account",
+    link: "/profile",
   },
   {
-    title: 'Track your Order',
-    link: '/track-order',
+    title: "Track your Order",
+    link: "/track-order",
   },
   {
-    title: 'Customer Service',
-    link: '/customer-service',
+    title: "Customer Service",
+    link: "/customer-service",
   },
   {
-    title: 'Returns/Exchange',
-    link: '/returns-exchange',
+    title: "Returns/Exchange",
+    link: "/returns-exchange",
   },
   {
-    title: 'FAQs',
-    link: '/faqs',
+    title: "FAQs",
+    link: "/faqs",
   },
   {
-    title: 'Product Support',
-    link: '/product-support',
+    title: "Product Support",
+    link: "/product-support",
   },
-]
+];

@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 // React, Next.js
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 // UI Components
 import {
@@ -12,25 +12,25 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from "@/components/ui/command";
 
 // Icons
-import { icons } from '@/constants/icons'
+import { icons } from "@/constants/icons";
 
 // types
-import { DashboardSidebarMenuInterface } from '@/lib/types'
+import { DashboardSidebarMenuInterface } from "@/lib/types";
 
 // Utils
-import { cn } from '@/lib/utils'
+import { cn } from "@/lib/utils";
 
 export default function SidebarNavSeller({
   menuLinks,
 }: {
-  menuLinks: DashboardSidebarMenuInterface[]
+  menuLinks: DashboardSidebarMenuInterface[];
 }) {
-  const pathname = usePathname()
-  const storeUrlStart = pathname.split('/stores/')[1]
-  const activeStore = storeUrlStart ? storeUrlStart.split('/')[0] : ''
+  const pathname = usePathname();
+  const storeUrlStart = pathname.split("/stores/")[1];
+  const activeStore = storeUrlStart ? storeUrlStart.split("/")[0] : "";
 
   return (
     <nav className="relative grow">
@@ -40,15 +40,15 @@ export default function SidebarNavSeller({
           <CommandEmpty>No Links Found.</CommandEmpty>
           <CommandGroup className="overflow-visible pt-0 relative">
             {menuLinks.map((link, index) => {
-              let icon
-              const iconSearch = icons.find((icon) => icon.value === link.icon)
-              if (iconSearch) icon = <iconSearch.path />
+              let icon;
+              const iconSearch = icons.find((icon) => icon.value === link.icon);
+              if (iconSearch) icon = <iconSearch.path />;
               return (
                 <CommandItem
                   key={index}
-                  className={cn('w-full h-12 cursor-pointer mt-1', {
-                    'bg-accent text-accent-foreground':
-                      link.link === ''
+                  className={cn("w-full h-12 cursor-pointer mt-1", {
+                    "bg-accent text-accent-foreground":
+                      link.link === ""
                         ? pathname === `/dashboard/seller/stores/${activeStore}`
                         : `/dashboard/seller/stores/${activeStore}/${link.link}` ===
                           pathname,
@@ -62,11 +62,11 @@ export default function SidebarNavSeller({
                     <span>{link.label}</span>
                   </Link>
                 </CommandItem>
-              )
+              );
             })}
           </CommandGroup>
         </CommandList>
       </Command>
     </nav>
-  )
+  );
 }

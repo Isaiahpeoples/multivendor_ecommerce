@@ -1,5 +1,5 @@
-import { Check, ChevronRight, Package } from 'lucide-react'
-import { FC } from 'react'
+import { Check, ChevronRight, Package } from "lucide-react";
+import { FC } from "react";
 
 interface FastDeliveryProps {}
 
@@ -26,7 +26,7 @@ const FastDelivery: FC<FastDeliveryProps> = () => {
         <span>Refund if no delivery in time</span>
       </span>
     </div>
-  )
-}
+  );
+};
 
-export default FastDelivery
+export default FastDelivery;

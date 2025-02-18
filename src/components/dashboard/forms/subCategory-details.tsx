@@ -1,28 +1,28 @@
-'use client'
+"use client";
 
 // React
-import { FC, useEffect } from 'react'
+import { FC, useEffect } from "react";
 
 // Prisma model
-import { Category, SubCategory } from '@prisma/client'
+import { Category, SubCategory } from "@prisma/client";
 
 // Form handling utilities
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema
-import { SubCategoryFormSchema } from '@/lib/schemas'
+import { SubCategoryFormSchema } from "@/lib/schemas";
 
 // UI Components
-import { AlertDialog } from '@/components/ui/alert-dialog'
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -31,30 +31,30 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from '@/components/ui/form'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import ImageUpload from '../shared/image-upload'
+} from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import ImageUpload from "../shared/image-upload";
 
 // Queries
-import { upsertSubCategory } from '@/queries/subCategory'
+import { upsertSubCategory } from "@/queries/subCategory";
 
 // Utils
-import { v4 } from 'uuid'
-import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
+import { v4 } from "uuid";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select";
 
 interface SubCategoryDetailsProps {
-  data?: SubCategory
-  categories: Category[]
+  data?: SubCategory;
+  categories: Category[];
 }
 
 const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
@@ -62,12 +62,12 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
   categories,
 }) => {
   // Initializing necessary hooks
-  const { toast } = useToast() // Hook for displaying toast messages
-  const router = useRouter() // Hook for routing
+  const { toast } = useToast(); // Hook for displaying toast messages
+  const router = useRouter(); // Hook for routing
 
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof SubCategoryFormSchema>>({
-    mode: 'onChange', // Form validation mode
+    mode: "onChange", // Form validation mode
     resolver: zodResolver(SubCategoryFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
@@ -77,12 +77,12 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
       featured: data?.featured,
       categoryId: data?.categoryId,
     },
-  })
+  });
 
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting
+  const isLoading = form.formState.isSubmitting;
 
-  const formData = form.watch()
+  const formData = form.watch();
 
   // Reset form values when data changes
   useEffect(() => {
@@ -93,9 +93,9 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
         url: data?.url,
         featured: data?.featured,
         categoryId: data.categoryId,
-      })
+      });
     }
-  }, [data, form])
+  }, [data, form]);
 
   // Submit handler for form submission
   const handleSubmit = async (
@@ -112,30 +112,30 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
         categoryId: values.categoryId,
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
+      });
 
       // Displaying success message
       toast({
         title: data?.id
-          ? 'SubCategory has been updated.'
+          ? "SubCategory has been updated."
           : `Congratulations! '${response?.name}' is now created.`,
-      })
+      });
 
       // Redirect or Refresh data
       if (data?.id) {
-        router.refresh()
+        router.refresh();
       } else {
-        router.push('/dashboard/admin/subCategories')
+        router.push("/dashboard/admin/subCategories");
       }
     } catch (error: any) {
       // Handling form submission errors
       toast({
-        variant: 'destructive',
-        title: 'Oops!',
+        variant: "destructive",
+        title: "Oops!",
         description: error.toString(),
-      })
+      });
     }
-  }
+  };
 
   return (
     <AlertDialog>
@@ -145,7 +145,7 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
           <CardDescription>
             {data?.id
               ? `Update ${data?.name} SubCategory information.`
-              : ' Lets create a subCategory. You can edit subCategory later from the subCategories table or the subCategory page.'}
+              : " Lets create a subCategory. You can edit subCategory later from the subCategories table or the subCategory page."}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -263,17 +263,17 @@ const SubCategoryDetails: FC<SubCategoryDetailsProps> = ({
 
               <Button type="submit" disabled={isLoading}>
                 {isLoading
-                  ? 'loading...'
+                  ? "loading..."
                   : data?.id
-                  ? 'Save SubCategory information'
-                  : 'Create SubCategory'}
+                  ? "Save SubCategory information"
+                  : "Create SubCategory"}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
     </AlertDialog>
-  )
-}
+  );
+};
 
-export default SubCategoryDetails
+export default SubCategoryDetails;

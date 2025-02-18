@@ -1,13 +1,13 @@
-'use server'
+"use server";
 
 // Clerk
-import { currentUser } from '@clerk/nextjs/server'
+import { currentUser } from "@clerk/nextjs/server";
 
 // DB
-import { db } from '@/lib/db'
+import { db } from "@/lib/db";
 
 // Prisma model
-import { Category, SubCategory } from '@prisma/client'
+import { Category, SubCategory } from "@prisma/client";
 
 // Function: upsertSubCategory
 // Description: Upserts a subCategory into the database, updating if it exists or creating a new one if not.
@@ -18,19 +18,19 @@ import { Category, SubCategory } from '@prisma/client'
 export const upsertSubCategory = async (subCategory: SubCategory) => {
   try {
     // Get current user
-    const user = await currentUser()
+    const user = await currentUser();
 
     // Ensure user is authenticated
-    if (!user) throw new Error('Unauthenticated.')
+    if (!user) throw new Error("Unauthenticated.");
 
     // Verify admin permission
-    if (user.privateMetadata.role !== 'ADMIN')
+    if (user.privateMetadata.role !== "ADMIN")
       throw new Error(
-        'Unauthorized Access: Admin Privileges Required for Entry.'
-      )
+        "Unauthorized Access: Admin Privileges Required for Entry."
+      );
 
     // Ensure SubCategory data is provided
-    if (!subCategory) throw new Error('Please provide subCategory data.')
+    if (!subCategory) throw new Error("Please provide subCategory data.");
 
     // Throw error if category with same name or URL already exists
     const existingSubCategory = await db.subCategory.findFirst({
@@ -46,17 +46,17 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
           },
         ],
       },
-    })
+    });
 
     // Throw error if category with same name or URL already exists
     if (existingSubCategory) {
-      let errorMessage = ''
+      let errorMessage = "";
       if (existingSubCategory.name === subCategory.name) {
-        errorMessage = 'A SubCategory with the same name already exists'
+        errorMessage = "A SubCategory with the same name already exists";
       } else if (existingSubCategory.url === subCategory.url) {
-        errorMessage = 'A SubCategory with the same URL already exists'
+        errorMessage = "A SubCategory with the same URL already exists";
       }
-      throw new Error(errorMessage)
+      throw new Error(errorMessage);
     }
 
     // Upsert SubCategory into the database
@@ -66,13 +66,13 @@ export const upsertSubCategory = async (subCategory: SubCategory) => {
       },
       update: subCategory,
       create: subCategory,
-    })
-    return subCategoryDetails
+    });
+    return subCategoryDetails;
   } catch (error) {
     // Log and re-throw any errors
-    throw error
+    throw error;
   }
-}
+};
 
 // Function: getAllSubCategories
 // Description: Retrieves all subCategories from the database.
@@ -85,11 +85,11 @@ export const getAllSubCategories = async () => {
       category: true,
     },
     orderBy: {
-      updatedAt: 'desc',
+      updatedAt: "desc",
     },
-  })
-  return subCategories
-}
+  });
+  return subCategories;
+};
 
 // Function: getSubCategory
 // Description: Retrieves a specific SubCategory from the database.
@@ -99,16 +99,16 @@ export const getAllSubCategories = async () => {
 // Returns: Details of the requested SubCategory.
 export const getSubCategory = async (subCategoryId: string) => {
   // Ensure subCategory ID is provided
-  if (!subCategoryId) throw new Error('Please provide suCategory ID.')
+  if (!subCategoryId) throw new Error("Please provide suCategory ID.");
 
   // Retrieve subCategory
   const subCategory = await db.subCategory.findUnique({
     where: {
       id: subCategoryId,
     },
-  })
-  return subCategory
-}
+  });
+  return subCategory;
+};
 
 // Function: deleteSubCategory
 // Description: Deletes a SubCategory from the database.
@@ -118,26 +118,28 @@ export const getSubCategory = async (subCategoryId: string) => {
 // Returns: Response indicating success or failure of the deletion operation.
 export const deleteSubCategory = async (subCategoryId: string) => {
   // Get current user
-  const user = await currentUser()
+  const user = await currentUser();
 
   // Check if user is authenticated
-  if (!user) throw new Error('Unauthenticated.')
+  if (!user) throw new Error("Unauthenticated.");
 
   // Verify admin permission
-  if (user.privateMetadata.role !== 'ADMIN')
-    throw new Error('Unauthorized Access: Admin Privileges Required for Entry.')
+  if (user.privateMetadata.role !== "ADMIN")
+    throw new Error(
+      "Unauthorized Access: Admin Privileges Required for Entry."
+    );
 
   // Ensure subCategory ID is provided
-  if (!subCategoryId) throw new Error('Please provide category ID.')
+  if (!subCategoryId) throw new Error("Please provide category ID.");
 
   // Delete subCategory from the database
   const response = await db.subCategory.delete({
     where: {
       id: subCategoryId,
     },
-  })
-  return response
-}
+  });
+  return response;
+};
 
 // Function: getSubcategories
 // Description: Retrieves subcategories from the database, with options for limiting results and random selection.
@@ -151,15 +153,15 @@ export const getSubcategories = async (
 ): Promise<SubCategory[]> => {
   // Define SortOrder enum
   enum SortOrder {
-    asc = 'asc',
-    desc = 'desc',
+    asc = "asc",
+    desc = "desc",
   }
   try {
     // Define the query options
     const queryOptions = {
       take: limit || undefined, // Use the provided limit or undefined for no limit
       orderBy: random ? { createdAt: SortOrder.desc } : undefined, // Use SortOrder for ordering
-    }
+    };
 
     // If random selection is required, use a raw query to randomize
     if (random) {
@@ -167,15 +169,15 @@ export const getSubcategories = async (
     SELECT * FROM SubCategory
     ORDER BY RAND()
     LIMIT ${limit || 10} 
-    `
-      return subcategories
+    `;
+      return subcategories;
     } else {
       // Otherwise, fetch subcategories based on the defined query options
-      const subcategories = await db.subCategory.findMany(queryOptions)
-      return subcategories
+      const subcategories = await db.subCategory.findMany(queryOptions);
+      return subcategories;
     }
   } catch (error) {
     // Log and re-throw any errors
-    throw error
+    throw error;
   }
-}
+};

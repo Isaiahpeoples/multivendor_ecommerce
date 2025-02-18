@@ -124,7 +124,6 @@ const AddressDetails: FC<AddressDetailsProps> = ({
       setShow(false);
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error);
       toast({
         variant: "destructive",
         title: "Oops!",
@@ -147,7 +146,7 @@ const AddressDetails: FC<AddressDetailsProps> = ({
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
           <div className="space-y-2">
             <FormLabel>Contact information</FormLabel>
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
               <FormField
                 disabled={isLoading}
                 control={form.control}
@@ -180,7 +179,7 @@ const AddressDetails: FC<AddressDetailsProps> = ({
               control={form.control}
               name="phone"
               render={({ field }) => (
-                <FormItem className="flex-1 w-[calc(50%-8px)] !mt-3">
+                <FormItem className="flex-1 md:w-[calc(50%-8px)] !mt-3">
                   <FormControl>
                     <Input placeholder="Phone number*" {...field} />
                   </FormControl>
@@ -197,7 +196,7 @@ const AddressDetails: FC<AddressDetailsProps> = ({
                 control={form.control}
                 name="countryId"
                 render={({ field }) => (
-                  <FormItem className="flex-1 w-[calc(50%-8px)] !mt-3">
+                  <FormItem className="flex-1 md:w-[calc(50%-8px)] !mt-3">
                     <FormControl>
                       <CountrySelector
                         id={"countries"}
@@ -216,7 +215,7 @@ const AddressDetails: FC<AddressDetailsProps> = ({
                 )}
               />
             </div>
-            <div className="!mt-3 flex items-center justify-between gap-3">
+            <div className="!mt-3 flex flex-col gap-3">
               <FormField
                 disabled={isLoading}
                 control={form.control}

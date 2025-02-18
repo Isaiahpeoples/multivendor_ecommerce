@@ -1,25 +1,25 @@
-'use client'
+"use client";
 import {
   CartProductType,
   Country,
   ProductDataType,
   ProductVariantDataType,
   ShippingDetailsType,
-} from '@/lib/types'
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react'
-import ProductSwiper from './product-swiper'
-import ProductInfo from './product-info/product-info'
-import { isProductValidToAdd, updateProductHistory } from '@/lib/utils'
-import { useCartStore } from '@/cart-store/useCartStore'
-import useFromStore from '@/hooks/useFromStore'
-import { setCookie } from 'cookies-next'
-import ProductPageActions from './actions'
+} from "@/lib/types";
+import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import ProductSwiper from "./product-swiper";
+import ProductInfo from "./product-info/product-info";
+import { isProductValidToAdd, updateProductHistory } from "@/lib/utils";
+import { useCartStore } from "@/cart-store/useCartStore";
+import useFromStore from "@/hooks/useFromStore";
+import { setCookie } from "cookies-next";
+import ProductPageActions from "./actions";
 
 interface Props {
-  productData: ProductDataType
-  children: ReactNode
-  variantSlug: string
-  userCountry: Country
+  productData: ProductDataType;
+  children: ReactNode;
+  variantSlug: string;
+  userCountry: Country;
 }
 
 const ProductPageContainer: FC<Props> = ({
@@ -28,22 +28,22 @@ const ProductPageContainer: FC<Props> = ({
   children,
   userCountry,
 }) => {
-  const { id, slug, variants } = productData
+  const { id, slug, variants } = productData;
 
   const [variant, setVariant] = useState<ProductVariantDataType>(
     variants.find((v) => v.slug === variantSlug) || variants[0]
-  )
+  );
 
   useEffect(() => {
-    const variant = variants.find((v) => v.slug === variantSlug)
+    const variant = variants.find((v) => v.slug === variantSlug);
     if (variant) {
-      setVariant(variant)
+      setVariant(variant);
     }
-  }, [variantSlug])
+  }, [variantSlug]);
 
   const [sizeId, setSizeId] = useState(
-    variant.sizes.length === 1 ? variant.sizes[0].id : ''
-  )
+    variant.sizes.length === 1 ? variant.sizes[0].id : ""
+  );
 
   const {
     id: variantId,
@@ -52,12 +52,12 @@ const ProductPageContainer: FC<Props> = ({
     variantImage,
     weight,
     sizes,
-  } = variant
+  } = variant;
 
   // useState hook to manage the active image being displayed, initialized to the first image in the array
   const [activeImage, setActiveImage] = useState<{ url: string } | null>(
     images[0]
-  )
+  );
 
   // Initialize the default product data for the cart item
   const data: CartProductType = {
@@ -71,35 +71,35 @@ const ProductPageContainer: FC<Props> = ({
     variantImage: variantImage,
     quantity: 1,
     price: 0,
-    sizeId: sizeId || '',
-    size: '',
+    sizeId: sizeId || "",
+    size: "",
     stock: 1,
     weight: weight,
-    shippingMethod: '',
-    shippingService: '',
+    shippingMethod: "",
+    shippingService: "",
     shippingFee: 0,
     extraShippingFee: 0,
     deliveryTimeMin: 0,
     deliveryTimeMax: 0,
     isFreeShipping: false,
-  }
+  };
 
   // useState hook to manage the product's state in the cart
   const [productToBeAddedToCart, setProductToBeAddedToCart] =
-    useState<CartProductType>(data)
+    useState<CartProductType>(data);
 
-  const { stock } = productToBeAddedToCart
+  const { stock } = productToBeAddedToCart;
 
   // Usestate hook to manage product validity to be added to cart
-  const [isProductValid, setIsProductValid] = useState<boolean>(false)
+  const [isProductValid, setIsProductValid] = useState<boolean>(false);
 
   // Function to handle state changes for the product properties
   const handleChange = (property: keyof CartProductType, value: any) => {
     setProductToBeAddedToCart((prevProduct) => ({
       ...prevProduct,
       [property]: value,
-    }))
-  }
+    }));
+  };
 
   // Automatically update the product data in cart whenever `productData` or `variant` changes
   useEffect(() => {
@@ -115,7 +115,7 @@ const ProductPageContainer: FC<Props> = ({
       variantImage: variantImage,
       stock: variant.sizes.find((s) => s.id === sizeId)?.quantity || 1,
       weight: weight,
-    }))
+    }));
   }, [
     id,
     slug,
@@ -127,27 +127,29 @@ const ProductPageContainer: FC<Props> = ({
     weight,
     images,
     sizeId,
-  ])
+  ]);
 
   useEffect(() => {
-    const check = isProductValidToAdd(productToBeAddedToCart)
+    const check = isProductValidToAdd(productToBeAddedToCart);
     if (check !== isProductValid) {
-      setIsProductValid(check)
+      setIsProductValid(check);
     }
-  }, [productToBeAddedToCart])
+  }, [productToBeAddedToCart]);
 
   // Get the set Cart action to update items in cart
-  const setCart = useCartStore((state) => state.setCart)
+  const setCart = useCartStore((state) => state.setCart);
 
-  const cartItems = useFromStore(useCartStore, (state) => state.cart)
+  const cartItems = useFromStore(useCartStore, (state) => state.cart);
 
   // Keeping cart state updated
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       // Check if the "cart" key was changed in localStorage
-      if (event.key === 'cart') {
+      if (event.key === "cart") {
         try {
-          const parsedValue = event.newValue ? JSON.parse(event.newValue) : null
+          const parsedValue = event.newValue
+            ? JSON.parse(event.newValue)
+            : null;
 
           // Check if parsedValue and state are valid and then update the cart
           if (
@@ -155,72 +157,72 @@ const ProductPageContainer: FC<Props> = ({
             parsedValue.state &&
             Array.isArray(parsedValue.state.cart)
           ) {
-            setCart(parsedValue.state.cart)
+            setCart(parsedValue.state.cart);
           }
         } catch (error) {}
       }
-    }
+    };
 
     // Attach the event listener
-    window.addEventListener('storage', handleStorageChange)
+    window.addEventListener("storage", handleStorageChange);
 
     // Cleanup the event listener when the component unmounts
     return () => {
-      window.removeEventListener('storage', handleStorageChange)
-    }
-  }, [])
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Add product to history
-  updateProductHistory(variantId)
+  updateProductHistory(variantId);
 
   const maxQty = useMemo(() => {
     const search_product = cartItems?.find(
       (p) =>
         p.productId === id && p.variantId === variantId && p.sizeId === sizeId
-    )
+    );
     return search_product
       ? search_product.stock - search_product.quantity
-      : stock
-  }, [cartItems, id, variantId, sizeId, stock])
+      : stock;
+  }, [cartItems, id, variantId, sizeId, stock]);
 
   // Set view cookie
-  setCookie(`viewedProduct_${id}`, 'true', {
+  setCookie(`viewedProduct_${id}`, "true", {
     maxAge: 3600,
-    path: '/',
-  })
+    path: "/",
+  });
 
-  const [isFixed, setIsFixed] = useState(false)
-  const [offsetLeft, setOffsetLeft] = useState(0) // Holds the calculated left offset
+  const [isFixed, setIsFixed] = useState(false);
+  const [offsetLeft, setOffsetLeft] = useState(0); // Holds the calculated left offset
 
   const handleScroll = () => {
-    const childrenElement = document.getElementById('children-container')
+    const childrenElement = document.getElementById("children-container");
     if (childrenElement) {
-      const rect = childrenElement.getBoundingClientRect()
+      const rect = childrenElement.getBoundingClientRect();
       // Adjust the offset when the scroll position changes
       if (window.scrollY > 600) {
-        setIsFixed(true)
-        setOffsetLeft(rect.right) // Set the offset based on the children container's position
+        setIsFixed(true);
+        setOffsetLeft(rect.right); // Set the offset based on the children container's position
       } else {
-        setIsFixed(false)
+        setIsFixed(false);
       }
     }
-  }
+  };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll);
     // Recalculate the position when the window is resized (including zooming)
-    window.addEventListener('resize', handleScroll)
+    window.addEventListener("resize", handleScroll);
 
     // Initial calculation
-    handleScroll()
+    handleScroll();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
 
-  console.log('stock', productToBeAddedToCart.stock)
+  console.log("stock", productToBeAddedToCart.stock);
 
   return (
     <div className="relative">
@@ -250,11 +252,11 @@ const ProductPageContainer: FC<Props> = ({
             className={`w-full lg:w-[390px] ${
               isFixed
                 ? `lg:fixed lg:top-2 transition-all duration-300 transform` // Removed hardcoded `left` value
-                : 'relative'
+                : "relative"
             } z-20`}
             style={{
-              left: isFixed ? `${offsetLeft + 20}px` : 'auto', // Dynamically adjust position
-              transform: isFixed ? 'translateY(0)' : 'translateY(-10px)', // Example of a slight vertical translation when it becomes sticky
+              left: isFixed ? `${offsetLeft + 20}px` : "auto", // Dynamically adjust position
+              transform: isFixed ? "translateY(0)" : "translateY(-10px)", // Example of a slight vertical translation when it becomes sticky
             }}
           >
             <ProductPageActions
@@ -283,7 +285,7 @@ const ProductPageContainer: FC<Props> = ({
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductPageContainer
+export default ProductPageContainer;

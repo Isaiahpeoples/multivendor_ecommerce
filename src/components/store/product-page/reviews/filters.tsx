@@ -22,7 +22,7 @@ const ReviewsFilters: FC<Props> = ({ filters, setFilters, setSort, stats }) => {
         {/* All */}
         <div
           className={cn(
-            "bg-[#f5f5f5] text-main-primary border border-transparent rounded-full cursor-pointer py-1.5 px-4",
+            "bg-[#f5f5f5] text-main-primary border border-transparent rounded-full cursor-pointer py-1.5 px-4 xxx",
             {
               "bg-[#ffebed] text-[#fd384f] border-[#fd384f]":
                 !rating && !hasImages,

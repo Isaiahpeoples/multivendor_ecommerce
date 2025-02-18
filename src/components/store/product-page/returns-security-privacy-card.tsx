@@ -1,27 +1,27 @@
-import { ShieldCheck, Undo } from 'lucide-react'
-import { BarLoader } from 'react-spinners'
+import { ShieldCheck, Undo } from "lucide-react";
+import { BarLoader } from "react-spinners";
 
 export default function ReturnPrivacySecurityCard({
   returnPolicy,
   loading,
 }: {
-  returnPolicy?: string
-  loading: boolean
+  returnPolicy?: string;
+  loading: boolean;
 }) {
   return (
     <div className="mt-2 space-y-2">
       <Returns returnPolicy={returnPolicy} loading={loading} />
       <SecurityPrivacyCard />
     </div>
-  )
+  );
 }
 
 export const Returns = ({
   returnPolicy,
   loading,
 }: {
-  returnPolicy?: string
-  loading: boolean
+  returnPolicy?: string;
+  loading: boolean;
 }) => {
   return (
     <div className="space-y-1">
@@ -41,8 +41,8 @@ export const Returns = ({
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const SecurityPrivacyCard = () => {
   return (
@@ -59,5 +59,5 @@ export const SecurityPrivacyCard = () => {
         privacy and keep your personal details safe and secure.
       </p>
     </div>
-  )
-}
+  );
+};

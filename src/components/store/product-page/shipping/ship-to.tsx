@@ -2,9 +2,9 @@ import { MapPin } from "lucide-react";
 import { FC } from "react";
 
 interface Props {
-  countryName: string;
-  countryCode: string;
-  city: string | undefined;
+  countryName?: string;
+  countryCode?: string;
+  city?: string;
 }
 
 const ShipTo: FC<Props> = ({ countryName, countryCode, city }) => {
@@ -21,7 +21,7 @@ const ShipTo: FC<Props> = ({ countryName, countryCode, city }) => {
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ShipTo
+export default ShipTo;

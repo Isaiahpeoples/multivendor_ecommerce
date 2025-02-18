@@ -37,7 +37,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -197,7 +196,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({
       shippingFeeMethod: data?.shippingFeeMethod,
     },
   });
-  console.log("errors", form.formState.errors);
 
   const saleEndDate = form.getValues().saleEndDate || new Date().toISOString();
 
@@ -290,7 +288,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({
       }
     } catch (error: any) {
       // Handling form submission errors
-      console.log(error);
       toast({
         variant: "destructive",
         title: "Oops!",

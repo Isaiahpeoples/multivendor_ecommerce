@@ -26,6 +26,7 @@ export default function FiltersHeader({
   const queriesArray = Object.entries(queries);
   const queriesLength = queriesArray.reduce((count, [queryKey, queryValue]) => {
     if (queryKey === "sort") return count; // Exclude sort from the count
+    if (queryKey === "search" && queryValue === "") return count; // Exclude empty search from count
     return count + (Array.isArray(queryValue) ? queryValue.length : 1); // Count array lengths or single values
   }, 0);
 
@@ -81,6 +82,7 @@ export default function FiltersHeader({
       <div className="mt-3 flex flex-wrap gap-2">
         {queriesArray.map(([queryKey, queryValue]) => {
           if (queryKey === "sort") return null;
+          if (queryKey === "search" && queryValue === "") return null;
           const isArrayQuery = Array.isArray(queryValue);
           const queryValues = isArrayQuery ? queryValue : [queryValue];
 

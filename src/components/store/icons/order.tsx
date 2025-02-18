@@ -4,7 +4,7 @@ export default function OrderIcon() {
       width={512}
       height={512}
       viewBox="0 0 512 512"
-      style={{ color: 'currentColor' }}
+      style={{ color: "currentColor" }}
       xmlns="http://www.w3.org/2000/svg"
       className="h-7 w-7"
     >
@@ -14,7 +14,7 @@ export default function OrderIcon() {
         viewBox="0 0 512 512"
         fill="currentColor"
         role="img"
-        style={{ display: 'inline-block', verticalAlign: 'middle' }}
+        style={{ display: "inline-block", verticalAlign: "middle" }}
         xmlns="http://www.w3.org/2000/svg"
       >
         <g fill="currentColor">
@@ -25,5 +25,5 @@ export default function OrderIcon() {
         </g>
       </svg>
     </svg>
-  )
+  );
 }

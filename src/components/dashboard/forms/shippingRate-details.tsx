@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
 // React
-import { FC, useEffect } from 'react'
+import { FC, useEffect } from "react";
 
 // Form handling utilities
-import * as z from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Schema
-import { ShippingRateFormSchema } from '@/lib/schemas'
+import { ShippingRateFormSchema } from "@/lib/schemas";
 
 // UI Components
-import { AlertDialog } from '@/components/ui/alert-dialog'
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -27,25 +27,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Queries
-import { upsertShippingRate } from '@/queries/store'
+import { upsertShippingRate } from "@/queries/store";
 
 // Utils
-import { v4 } from 'uuid'
-import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
-import { CountryWithShippingRatesType } from '@/lib/types'
-import { NumberInput } from '@tremor/react'
-import { Textarea } from '@/components/ui/textarea'
+import { v4 } from "uuid";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { CountryWithShippingRatesType } from "@/lib/types";
+import { NumberInput } from "@tremor/react";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ShippingRateDetailsProps {
-  data?: CountryWithShippingRatesType
-  storeUrl: string
+  data?: CountryWithShippingRatesType;
+  storeUrl: string;
 }
 
 const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
@@ -53,12 +53,12 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
   storeUrl,
 }) => {
   // Initializing necessary hooks
-  const { toast } = useToast() // Hook for displaying toast messages
-  const router = useRouter() // Hook for routing
+  const { toast } = useToast(); // Hook for displaying toast messages
+  const router = useRouter(); // Hook for routing
 
   // Form hook for managing form state and validation
   const form = useForm<z.infer<typeof ShippingRateFormSchema>>({
-    mode: 'onChange', // Form validation mode
+    mode: "onChange", // Form validation mode
     resolver: zodResolver(ShippingRateFormSchema), // Resolver for form validation
     defaultValues: {
       // Setting default form values from data (if available)
@@ -66,7 +66,7 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
       countryName: data?.countryName,
       shippingService: data?.shippingRate
         ? data?.shippingRate.shippingService
-        : '',
+        : "",
       shippingFeePerItem: data?.shippingRate
         ? data?.shippingRate.shippingFeePerItem
         : 0,
@@ -85,19 +85,19 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
       deliveryTimeMax: data?.shippingRate
         ? data?.shippingRate.deliveryTimeMax
         : 1,
-      returnPolicy: data?.shippingRate ? data.shippingRate.returnPolicy : '',
+      returnPolicy: data?.shippingRate ? data.shippingRate.returnPolicy : "",
     },
-  })
+  });
 
   // Loading status based on form submission
-  const isLoading = form.formState.isSubmitting
+  const isLoading = form.formState.isSubmitting;
 
   // Reset form values when data changes
   useEffect(() => {
     if (data) {
-      form.reset(data)
+      form.reset(data);
     }
-  }, [data, form])
+  }, [data, form]);
 
   // Submit handler for form submission
   const handleSubmit = async (
@@ -107,7 +107,7 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
       // Upserting category data
       const response = await upsertShippingRate(storeUrl, {
         id: data?.shippingRate ? data.shippingRate.id : v4(),
-        countryId: data?.countryId ? data.countryId : '',
+        countryId: data?.countryId ? data.countryId : "",
         shippingService: values.shippingService,
         shippingFeePerItem: values.shippingFeePerItem,
         shippingFeeForAdditionalItem: values.shippingFeeForAdditionalItem,
@@ -116,29 +116,29 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
         deliveryTimeMin: values.deliveryTimeMin,
         deliveryTimeMax: values.deliveryTimeMax,
         returnPolicy: values.returnPolicy,
-        storeId: '',
+        storeId: "",
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
+      });
 
       if (response.id) {
         // Displaying success message
         toast({
-          title: 'Shipping rates updated sucessfully !',
-        })
+          title: "Shipping rates updated sucessfully !",
+        });
 
         // Redirect or Refresh data
-        router.refresh()
+        router.refresh();
       }
     } catch (error: any) {
       // Handling form submission errors
       toast({
-        variant: 'destructive',
-        title: 'Oops!',
+        variant: "destructive",
+        title: "Oops!",
         description: error.toString(),
-      })
+      });
     }
-  }
+  };
 
   return (
     <AlertDialog>
@@ -339,7 +339,7 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
               </div>
               <div className="mt-4">
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'loading...' : 'Save changes'}
+                  {isLoading ? "loading..." : "Save changes"}
                 </Button>
               </div>
             </form>
@@ -347,7 +347,7 @@ const ShippingRateDetails: FC<ShippingRateDetailsProps> = ({
         </CardContent>
       </Card>
     </AlertDialog>
-  )
-}
+  );
+};
 
-export default ShippingRateDetails
+export default ShippingRateDetails;

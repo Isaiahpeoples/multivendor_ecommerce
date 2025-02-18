@@ -1,28 +1,28 @@
-'use client'
+"use client";
 import {
   ProductVariantDataType,
   RatingStatisticsType,
   ReviewsFiltersType,
   ReviewsOrderType,
   ReviewWithImageType,
-} from '@/lib/types'
-import { FC, useEffect, useState } from 'react'
-import RatingCard from '../../cards/product-rating'
-import RatingStatisticsCard from '../../cards/rating-statistics'
-import ReviewCard from '../../cards/review'
-import ReviewsFilters from './filters'
-import ReviewsSort from './sort'
-import Paginaion from '../../shared/pagination'
-import ReviewDetails from '../../forms/review-details'
-import { getProductFilteredReviews } from '@/queries/product-optimized'
-import ProductPageReviewsSkeletonLoader from '../../skeletons/product-page/reviews'
-import { DotLoader } from 'react-spinners'
+} from "@/lib/types";
+import { FC, useEffect, useState } from "react";
+import RatingCard from "../../cards/product-rating";
+import RatingStatisticsCard from "../../cards/rating-statistics";
+import ReviewCard from "../../cards/review";
+import ReviewsFilters from "./filters";
+import ReviewsSort from "./sort";
+import Paginaion from "../../shared/pagination";
+import ReviewDetails from "../../forms/review-details";
+import { getProductFilteredReviews } from "@/queries/product-optimized";
+import ProductPageReviewsSkeletonLoader from "../../skeletons/product-page/reviews";
+import { DotLoader } from "react-spinners";
 
 interface Props {
-  productId: string
-  rating: number
-  variantsInfo: ProductVariantDataType[]
-  numReviews: number
+  productId: string;
+  rating: number;
+  variantsInfo: ProductVariantDataType[];
+  numReviews: number;
 }
 const defaultData = {
   ratingStatistics: [
@@ -34,7 +34,7 @@ const defaultData = {
   ],
   reviewsWithImagesCount: 0,
   totalReviews: 0,
-}
+};
 
 const ProductReviews: FC<Props> = ({
   productId,
@@ -42,57 +42,57 @@ const ProductReviews: FC<Props> = ({
   variantsInfo,
   numReviews,
 }) => {
-  const [loading, setLoading] = useState<boolean>(true)
-  const [filterLoading, setFilterLoading] = useState<boolean>(true)
-  const [data, setData] = useState<ReviewWithImageType[]>([])
+  const [loading, setLoading] = useState<boolean>(true);
+  const [filterLoading, setFilterLoading] = useState<boolean>(true);
+  const [data, setData] = useState<ReviewWithImageType[]>([]);
   const [statistics, setStatistics] =
-    useState<RatingStatisticsType>(defaultData)
-  const [averageRating, setAverageRating] = useState<number>(rating)
+    useState<RatingStatisticsType>(defaultData);
+  const [averageRating, setAverageRating] = useState<number>(rating);
 
-  const half = Math.ceil(data.length / 2)
+  const half = Math.ceil(data.length / 2);
 
   // Filtering
   const filtered_data = {
     rating: undefined,
     hasImages: undefined,
-  }
-  const [filters, setFilters] = useState<ReviewsFiltersType>(filtered_data)
+  };
+  const [filters, setFilters] = useState<ReviewsFiltersType>(filtered_data);
 
   // Sorting
-  const [sort, setSort] = useState<ReviewsOrderType>()
+  const [sort, setSort] = useState<ReviewsOrderType>();
 
   // Pagination
-  const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(4)
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(4);
 
   useEffect(() => {
     if (filters.rating || filters.hasImages || sort) {
-      setPage(1)
-      handleGetReviews()
+      setPage(1);
+      handleGetReviews();
     }
     if (page) {
-      handleGetReviews()
+      handleGetReviews();
     }
-  }, [filters, sort, page])
+  }, [filters, sort, page]);
 
   const handleGetReviews = async () => {
     try {
-      setFilterLoading(true)
+      setFilterLoading(true);
       const res = await getProductFilteredReviews(
         productId,
         filters,
         sort,
         page,
         pageSize
-      )
-      setData(res.reviews)
-      setStatistics(res.statistics)
-      setLoading(false)
-      setFilterLoading(false)
+      );
+      setData(res.reviews);
+      setStatistics(res.statistics);
+      setLoading(false);
+      setFilterLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="pt-6" id="reviews">
@@ -173,7 +173,7 @@ const ProductReviews: FC<Props> = ({
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductReviews
+export default ProductReviews;

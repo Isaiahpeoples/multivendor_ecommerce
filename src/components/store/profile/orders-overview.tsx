@@ -21,7 +21,7 @@ export default function OrdersOverview() {
           </div>
         </Link>
       </div>
-      <div className="grid grid-cols-4 py-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8">
         {menu.map((item) => (
           <Link key={item.link} href={item.link}>
             <div className="relative w-full flex flex-col justify-center items-center cursor-pointer">

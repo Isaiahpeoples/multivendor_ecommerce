@@ -1,28 +1,28 @@
-'use server'
+"use server";
 
-import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs/server'
-import { OfferTag } from '@prisma/client'
+import { db } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
+import { OfferTag } from "@prisma/client";
 
 // Function: getAllOfferTags
 // Description: Retrieves all offer tags from the database.
 // Permission Level: Public
 // Returns: Array of offer tags sorted by updatedAt date in ascending order.
 export const getAllOfferTags = async (storeUrl?: string) => {
-  let storeId: string | undefined
+  let storeId: string | undefined;
 
   if (storeUrl) {
     // Retrieve the storeId based on the storeUrl
     const store = await db.store.findUnique({
       where: { url: storeUrl },
-    })
+    });
 
     // If no store is found, return an empty array or handle as needed
     if (!store) {
-      return []
+      return [];
     }
 
-    storeId = store.id
+    storeId = store.id;
   }
 
   // Retrieve all offer tags from the database
@@ -45,12 +45,12 @@ export const getAllOfferTags = async (storeUrl?: string) => {
     },
     orderBy: {
       products: {
-        _count: 'desc', // Order by the count of associated products in descending order
+        _count: "desc", // Order by the count of associated products in descending order
       },
     },
-  })
-  return offerTgas
-}
+  });
+  return offerTgas;
+};
 
 // Function: upsertOfferTag
 // Description: Upserts an offer tag into the database, updating if it exists or creating a new one if not.
@@ -61,19 +61,19 @@ export const getAllOfferTags = async (storeUrl?: string) => {
 export const upsertOfferTag = async (offerTag: OfferTag) => {
   try {
     // Get current user
-    const user = await currentUser()
+    const user = await currentUser();
 
     // Ensure user is authenticated
-    if (!user) throw new Error('Unauthenticated.')
+    if (!user) throw new Error("Unauthenticated.");
 
     // Verify admin permission
-    if (user.privateMetadata.role !== 'ADMIN')
+    if (user.privateMetadata.role !== "ADMIN")
       throw new Error(
-        'Unauthorized Access: Admin Privileges Required for Entry.'
-      )
+        "Unauthorized Access: Admin Privileges Required for Entry."
+      );
 
     // Ensure offer tag data is provided
-    if (!offerTag) throw new Error('Please provide offer tag data.')
+    if (!offerTag) throw new Error("Please provide offer tag data.");
 
     // Throw error if offer tag with the same name or URL already exists
     const existingOfferTag = await db.offerTag.findFirst({
@@ -89,17 +89,17 @@ export const upsertOfferTag = async (offerTag: OfferTag) => {
           },
         ],
       },
-    })
+    });
 
     // Throw error if offer tag with the same name or URL already exists
     if (existingOfferTag) {
-      let errorMessage = ''
+      let errorMessage = "";
       if (existingOfferTag.name === offerTag.name) {
-        errorMessage = 'An offer tag with the same name already exists'
+        errorMessage = "An offer tag with the same name already exists";
       } else if (existingOfferTag.url === offerTag.url) {
-        errorMessage = 'An offer tag with the same URL already exists'
+        errorMessage = "An offer tag with the same URL already exists";
       }
-      throw new Error(errorMessage)
+      throw new Error(errorMessage);
     }
 
     // Upsert offer tag into the database
@@ -109,13 +109,13 @@ export const upsertOfferTag = async (offerTag: OfferTag) => {
       },
       update: offerTag,
       create: offerTag,
-    })
-    return offerTagDetails
+    });
+    return offerTagDetails;
   } catch (error) {
     // Log and re-throw any errors
-    throw error
+    throw error;
   }
-}
+};
 
 // Function: getOfferTag
 // Description: Retrieves a specific OfferTag from the database.
@@ -125,18 +125,18 @@ export const upsertOfferTag = async (offerTag: OfferTag) => {
 // Returns: Details of the requested OfferTag.
 export const getOfferTag = async (offerTagId: string) => {
   // Ensure offerTag ID is provided
-  if (!offerTagId) throw new Error('Please provide offer tag ID.')
+  if (!offerTagId) throw new Error("Please provide offer tag ID.");
 
   // Retrieve the offer tag from the database using the provided ID
   const offerTag = await db.offerTag.findUnique({
     where: {
       id: offerTagId,
     },
-  })
+  });
 
   // Return the retrieved offer tag details
-  return offerTag
-}
+  return offerTag;
+};
 
 // Function: deleteOfferTag
 // Description: Deletes an offer tag from the database by its ID.
@@ -147,29 +147,29 @@ export const getOfferTag = async (offerTagId: string) => {
 export const deleteOfferTag = async (offerTagId: string) => {
   try {
     // Get current user
-    const user = await currentUser()
+    const user = await currentUser();
 
     // Ensure user is authenticated
-    if (!user) throw new Error('Unauthenticated.')
+    if (!user) throw new Error("Unauthenticated.");
 
     // Verify admin permission
-    if (user.privateMetadata.role !== 'ADMIN')
+    if (user.privateMetadata.role !== "ADMIN")
       throw new Error(
-        'Unauthorized Access: Admin Privileges Required for Entry.'
-      )
+        "Unauthorized Access: Admin Privileges Required for Entry."
+      );
 
     // Ensure the offerTagId is provided
-    if (!offerTagId) throw new Error('Please provide the offer tag ID.')
+    if (!offerTagId) throw new Error("Please provide the offer tag ID.");
 
     // Delete offer tag from the database
     const response = await db.offerTag.delete({
       where: {
         id: offerTagId,
       },
-    })
-    return response
+    });
+    return response;
   } catch (error) {
     // Log and re-throw any errors
-    throw error
+    throw error;
   }
-}
+};

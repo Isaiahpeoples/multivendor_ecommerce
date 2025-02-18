@@ -4,7 +4,7 @@ export default function SendIcon() {
       width={512}
       height={512}
       viewBox="0 0 512 512"
-      style={{ color: 'currentColor' }}
+      style={{ color: "currentColor" }}
       xmlns="http://www.w3.org/2000/svg"
       className="h-6 w-6"
     >
@@ -25,5 +25,5 @@ export default function SendIcon() {
         </g>
       </svg>
     </svg>
-  )
+  );
 }

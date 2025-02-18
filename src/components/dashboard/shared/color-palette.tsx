@@ -1,11 +1,11 @@
 // React
-import { Dispatch, FC, SetStateAction, useState } from 'react'
+import { Dispatch, FC, SetStateAction, useState } from "react";
 
 // Pros definition
 interface ColorPaletteProps {
-  extractedColors?: string[] // Extracted Colors (Array of strings)
-  colors?: { color: string }[] // List of selected colors from form
-  setColors: Dispatch<SetStateAction<{ color: string }[]>> // Setter function for colors
+  extractedColors?: string[]; // Extracted Colors (Array of strings)
+  colors?: { color: string }[]; // List of selected colors from form
+  setColors: Dispatch<SetStateAction<{ color: string }[]>>; // Setter function for colors
 }
 
 // ColorPalette component for displaying a color palette
@@ -15,24 +15,24 @@ const ColorPalette: FC<ColorPaletteProps> = ({
   setColors,
 }) => {
   // State to track the active color
-  const [activeColor, setActiveColor] = useState<string>('')
+  const [activeColor, setActiveColor] = useState<string>("");
 
   // Handle Selecting/ Adding color to product colors
   const handleAddProductColor = (color: string) => {
-    if (!color || !setColors) return
+    if (!color || !setColors) return;
 
     // Ensure colorsData is not undefined, defaulting to an empty array if it is
-    const currentColorsData = colors ?? []
+    const currentColorsData = colors ?? [];
 
     // Check if the color already exists in colorsData
-    const existingColor = currentColorsData.find((c) => color === c.color)
-    if (existingColor) return
+    const existingColor = currentColorsData.find((c) => color === c.color);
+    if (existingColor) return;
 
     // Check for empty inputs and remove them
-    const newColors = currentColorsData.filter((c) => c.color !== '')
+    const newColors = currentColorsData.filter((c) => c.color !== "");
     // Add the new color to colorsData
-    setColors([...newColors, { color: color }])
-  }
+    setColors([...newColors, { color: color }]);
+  };
 
   // Color component for individual color block
   const Color = ({ color }: { color: string }) => {
@@ -48,8 +48,8 @@ const ColorPalette: FC<ColorPaletteProps> = ({
           {color}
         </div>
       </div>
-    )
-  }
+    );
+  };
   return (
     <div className="pt-10 w-[320px] h-[160px] rounded-b-md overflow-hidden">
       {/* Color palette container */}
@@ -59,14 +59,14 @@ const ColorPalette: FC<ColorPaletteProps> = ({
           {/* Active color circle */}
           <div
             className="absolute w-16 h-16 grid place-items-center shadow-lg rounded-full -top-10"
-            style={{ backgroundColor: activeColor || '#fff' }}
+            style={{ backgroundColor: activeColor || "#fff" }}
           >
             {/* Spinner icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="22"
               height="22"
-              fill={activeColor ? '#fff' : '#000'}
+              fill={activeColor ? "#fff" : "#000"}
               viewBox="0 0 16 16"
               className="animate-spin"
             >
@@ -84,7 +84,7 @@ const ColorPalette: FC<ColorPaletteProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ColorPalette
+export default ColorPalette;

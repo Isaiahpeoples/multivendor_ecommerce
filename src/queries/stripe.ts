@@ -37,7 +37,6 @@ export const createStripePaymentIntent = async (orderId: string) => {
       clientSecret: paymentIntent.client_secret,
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

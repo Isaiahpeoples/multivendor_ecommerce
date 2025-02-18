@@ -1,33 +1,33 @@
-'use client'
+"use client";
 
 // React, Next.js imports
-import Image from 'next/image'
+import Image from "next/image";
 
 // Tanstack React Table
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef } from "@tanstack/react-table";
 
 // Types
-import { OrderStatus, PaymentStatus, StoreOrderType } from '@/lib/types'
-import PaymentStatusTag from '@/components/shared/payment-status'
-import OrderStatusSelect from '@/components/dashboard/forms/order-status-select'
-import { Expand } from 'lucide-react'
-import { useModal } from '@/providers/modal-provider'
-import CustomModal from '@/components/dashboard/shared/custom-modal'
-import StoreOrderSummary from '@/components/dashboard/shared/store-order-summary'
+import { OrderStatus, PaymentStatus, StoreOrderType } from "@/lib/types";
+import PaymentStatusTag from "@/components/shared/payment-status";
+import OrderStatusSelect from "@/components/dashboard/forms/order-status-select";
+import { Expand } from "lucide-react";
+import { useModal } from "@/providers/modal-provider";
+import CustomModal from "@/components/dashboard/shared/custom-modal";
+import StoreOrderSummary from "@/components/dashboard/shared/store-order-summary";
 
 export const columns: ColumnDef<StoreOrderType>[] = [
   {
-    accessorKey: 'id',
-    header: 'Order',
+    accessorKey: "id",
+    header: "Order",
     cell: ({ row }) => {
-      return <span>{row.original.id}</span>
+      return <span>{row.original.id}</span>;
     },
   },
   {
-    accessorKey: 'products',
-    header: 'Products',
+    accessorKey: "products",
+    header: "Products",
     cell: ({ row }) => {
-      const images = row.original.items.map((product) => product.image)
+      const images = row.original.items.map((product) => product.image);
       return (
         <div className="flex flex-wrap gap-1">
           {images.map((img, i) => (
@@ -42,12 +42,12 @@ export const columns: ColumnDef<StoreOrderType>[] = [
             />
           ))}
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: 'paymentStatus',
-    header: 'Payment',
+    accessorKey: "paymentStatus",
+    header: "Payment",
     cell: ({ row }) => {
       return (
         <div>
@@ -56,12 +56,12 @@ export const columns: ColumnDef<StoreOrderType>[] = [
             isTable
           />
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => {
       return (
         <div>
@@ -71,31 +71,31 @@ export const columns: ColumnDef<StoreOrderType>[] = [
             storeId={row.original.storeId}
           />
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: 'total',
-    header: 'Total',
+    accessorKey: "total",
+    header: "Total",
     cell: ({ row }) => {
-      return <span>${row.original.total.toFixed(2)}</span>
+      return <span>${row.original.total.toFixed(2)}</span>;
     },
   },
   {
-    accessorKey: 'open',
-    header: '',
+    accessorKey: "open",
+    header: "",
     cell: ({ row }) => {
-      return <ViewOrderButton group={row.original} />
+      return <ViewOrderButton group={row.original} />;
     },
   },
-]
+];
 
 interface ViewOrderButtonProps {
-  group: StoreOrderType
+  group: StoreOrderType;
 }
 
 const ViewOrderButton: React.FC<ViewOrderButtonProps> = ({ group }) => {
-  const { setOpen } = useModal()
+  const { setOpen } = useModal();
 
   return (
     <button
@@ -105,7 +105,7 @@ const ViewOrderButton: React.FC<ViewOrderButtonProps> = ({ group }) => {
           <CustomModal maxWidth="!max-w-3xl">
             <StoreOrderSummary group={group} />
           </CustomModal>
-        )
+        );
       }}
     >
       View
@@ -113,5 +113,5 @@ const ViewOrderButton: React.FC<ViewOrderButtonProps> = ({ group }) => {
         <Expand className="w-5 stroke-black" />
       </span>
     </button>
-  )
-}
+  );
+};

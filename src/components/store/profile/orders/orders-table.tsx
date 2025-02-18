@@ -122,6 +122,7 @@ export default function OrdersTable({
                           <div className="flex">
                             {images.slice(0, 5).map((img, i) => (
                               <Image
+                                key={img}
                                 src={img}
                                 alt=""
                                 width={50}

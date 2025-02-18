@@ -8,7 +8,7 @@ export default function ProductCardSimple({
   product: SimpleProduct;
 }) {
   return (
-    <Link href={`/product/${product.slug}/${product.variantSlug}`}>
+    <Link href={`/product/${product.slug}?variant=${product.variantSlug}`}>
       <div className="w-[120px] h-[170px] relative flex flex-col rounded-md items-center justify-between p-2">
         <Image
           src={product.image}

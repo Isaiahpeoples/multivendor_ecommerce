@@ -1,21 +1,21 @@
-'use client'
-import { StoreDetailsType } from '@/lib/types'
-import { CircleCheckBig } from 'lucide-react'
-import Image from 'next/image'
-import ReactStars from 'react-rating-stars-component'
-import FollowStore from '../cards/follow-store'
-import { useState } from 'react'
+"use client";
+import { StoreDetailsType } from "@/lib/types";
+import { CircleCheckBig } from "lucide-react";
+import Image from "next/image";
+import ReactStars from "react-rating-stars-component";
+import FollowStore from "../cards/follow-store";
+import { useState } from "react";
 
 export default function StoreDEetails({
   details,
 }: {
-  details: StoreDetailsType
+  details: StoreDetailsType;
 }) {
-  const { averageRating, cover, description, logo, name, numReviews } = details
-  const numOfReviews = new Intl.NumberFormat().format(numReviews)
+  const { averageRating, cover, description, logo, name, numReviews } = details;
+  const numOfReviews = new Intl.NumberFormat().format(numReviews);
   const [followersCount, setFollowersCount] = useState<number>(
     details._count.followers
-  )
+  );
 
   return (
     <div className="relative w-full pb-28">
@@ -49,7 +49,7 @@ export default function StoreDEetails({
                   <span> Positive Feedback</span> <br />
                   <strong>{followersCount}</strong>
                   <strong>
-                    {followersCount > 1 ? ' Followers' : ' Follower'}
+                    {followersCount > 1 ? " Followers" : " Follower"}
                   </strong>
                 </div>
               </div>
@@ -65,5 +65,5 @@ export default function StoreDEetails({
         </div>
       </div>
     </div>
-  )
+  );
 }

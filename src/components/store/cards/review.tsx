@@ -1,24 +1,24 @@
-'use client'
-import ColorWheel from '@/components/shared/color-wheel'
-import { ReviewWithImageType } from '@/lib/types'
-import { censorName } from '@/lib/utils'
-import Image from 'next/image'
-import ReactStars from 'react-rating-stars-component'
+"use client";
+import ColorWheel from "@/components/shared/color-wheel";
+import { ReviewWithImageType } from "@/lib/types";
+import { censorName } from "@/lib/utils";
+import Image from "next/image";
+import ReactStars from "react-rating-stars-component";
 
 export default function ReviewCard({
   review,
 }: {
-  review: ReviewWithImageType
+  review: ReviewWithImageType;
 }) {
-  console.log(review)
-  const { images, user } = review
+  console.log(review);
+  const { images, user } = review;
   const colors = review.color
-    .split(',')
-    .filter((color) => color.trim() !== '') // Remove any empty strings
-    .map((color) => ({ name: color.trim() }))
+    .split(",")
+    .filter((color) => color.trim() !== "") // Remove any empty strings
+    .map((color) => ({ name: color.trim() }));
 
-  const { name } = user
-  const cesnoredName = `${name[0]}***${name[user.name.length - 1]}`
+  const { name } = user;
+  const cesnoredName = `${name[0]}***${name[user.name.length - 1]}`;
   return (
     <div className="border border-[#d8d8d8] rounded-xl flex h-fit relative py-4 px-2.5">
       <div className="w-16 px- space-y-1">
@@ -82,5 +82,5 @@ export default function ReviewCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

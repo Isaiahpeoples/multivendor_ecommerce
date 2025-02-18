@@ -12,7 +12,7 @@ export default async function UserMenu() {
   // Get the current user
   const user = await currentUser();
   return (
-    <div className="relative group">
+    <div className="relative group px-2">
       {/* Trigger */}
       <div>
         {user ? (
@@ -47,7 +47,7 @@ export default async function UserMenu() {
         className={cn(
           "hidden absolute top-0 -left-20 group-hover:block cursor-pointer",
           {
-            "-left-[200px] lg:-left-[148px]": user,
+            "-left-[200px] lg:-left-[138px]": user,
           }
         )}
       >

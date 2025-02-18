@@ -15,5 +15,5 @@ export default function CopyIcon() {
         fill="#2D68A8"
       />
     </svg>
-  )
+  );
 }

@@ -30,15 +30,15 @@ export default function ProductCard({ product }: { product: ProductType }) {
     <div>
       <div
         className={cn(
-          'group w-48 sm:w-[225px] relative transition-all duration-75 bg-white ease-in-out p-4 rounded-t-3xl border border-transparent hover:shadow-xl hover:border-border',
+          "group w-[190px] min-[480px]:w-[225px] relative transition-all duration-75 bg-white ease-in-out p-4 rounded-t-3xl border border-transparent hover:shadow-xl hover:border-border",
           {
-            '': true,
+            "": true,
           }
         )}
       >
         <div className="relative w-full h-full">
           <Link
-            href={`/product/${slug}/${variantSlug}`}
+            href={`/product/${slug}?variant=${variantSlug}`}
             className="w-full relative inline-block overflow-hidden"
           >
             {/* Images Swiper */}
@@ -90,5 +90,5 @@ export default function ProductCard({ product }: { product: ProductType }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

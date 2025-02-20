@@ -20,7 +20,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    /*
+
     // Query Elasticsearch with improved types
     const response = await client.search<{ _source: Product }>({
       index: "products",
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
 
     // Return results as a JSON response
     return NextResponse.json(results);
-     */
+
   } catch (error: any) {
     // Log the error and return a response
     return NextResponse.json({ message: error.message }, { status: 500 });

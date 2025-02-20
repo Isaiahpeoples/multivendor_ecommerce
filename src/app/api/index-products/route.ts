@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 // POST handler for indexing products and variants to Elasticsearch
 export async function POST() {
   try {
-    /*
     // Fetch products and their variants with images where order = 1 from the database using Prisma
     const products = await db.product.findMany({
       include: {
@@ -56,7 +55,6 @@ export async function POST() {
       },
       { status: 200 }
     );
-    */
   } catch (error: any) {
     // Handle any unexpected errors
     return NextResponse.json({ message: error.message }, { status: 500 });

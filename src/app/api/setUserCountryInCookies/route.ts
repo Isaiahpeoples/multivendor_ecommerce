@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    /*
     // Parse the incoming request body as JSON
     const body = await request.json();
     const { userCountry } = body;
@@ -22,7 +21,6 @@ export async function POST(request: Request) {
     });
 
     return response;
-    */
   } catch (error) {
     console.log(error);
     return new NextResponse("Couldn't save data", {

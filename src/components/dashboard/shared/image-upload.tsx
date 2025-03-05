@@ -74,11 +74,18 @@ const ImageUpload: FC<ImageUploadProps> = ({
             className="w-52 h-52 rounded-full object-cover absolute top-0 left-0 bottom-0 right-0"
           />
         )}
-        <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m">
-          {({ open }) => {
-            const onClick = () => {
-              open();
-            };
+        <div style={{ pointerEvents: "auto" }}>
+        <CldUploadWidget onSuccess={onUpload} uploadPreset="acba8r8m"
+          onClose={() => {
+              // Restore the pointer events (adjust as needed)
+              document.body.style.pointerEvents = "";
+            }}
+          >
+            {({ open }) => {
+              const onClick = () => {
+                document.body.style.pointerEvents = "auto";
+                open();
+              };
 
             return (
               <>
@@ -101,6 +108,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
             );
           }}
         </CldUploadWidget>
+        </div>
       </div>
     );
   } else if (type === "cover") {

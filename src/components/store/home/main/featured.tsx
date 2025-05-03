@@ -38,10 +38,10 @@ export default function Featured({ products }: { products: SimpleProduct[] }) {
           <div className="w-52 px-3 float-left relative h-[190px]">
             <div className="flex flex-col justify-center items-center h-[103px]">
               <h3 className="leading-5 font-bold my-1 text-white w-full">
-                Wecome Newcomers!
+                Welcome Newcomers!
               </h3>
               <p className="text-sm w-full text-white">
-                Enjoy shopping made easy like nothing before
+                Enjoy shopping made easy like nothing before.
               </p>
             </div>
             <div
@@ -50,7 +50,7 @@ export default function Featured({ products }: { products: SimpleProduct[] }) {
               style={{ backgroundImage: "url(/assets/images/ads/coupon.gif)" }}
             >
               <h3 className="text-[20px] leading-6 mt-[11px] mb-1 text-white w-full">
-                use &#39;MHAJJI&#39;
+                use &#39;MONEY&#39;
               </h3>
 
               <p className="overflow-hidden overflow-ellipsis w-full text-xs -translate-y-1">

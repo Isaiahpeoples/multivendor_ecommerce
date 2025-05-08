@@ -1,44 +1,72 @@
 <p align="center">
-<img src="https://online-project-images.s3.us-east-2.amazonaws.com/goshop/GoShop.png"  height="55%" width="55%" alt="GoShop Logo"/>
+  <img src="https://online-project-images.s3.us-east-2.amazonaws.com/goshop/GoShop.png" height="55%" width="55%" alt="GoShop Logo"/>
 </p>
 
 <div align="center" id="toc">
-<ul style="list-style: none">
-<summary>
- <h1>E-commerce Storefront</h1>
-</summary>
-</ul>
+  <ul style="list-style: none">
+	<summary>
+  	<h1>🛒 GoShop - Multi-Vendor E-commerce</h1>
+	</summary>
+  </ul>
 </div>
 
-<br>
+<div align="center">
 
-GoShop is a full-featured, Amazon-inspired e-commerce platform built with Next.js, TypeScript, MySQL, and Prisma, integrating Clerk for secure authentication and showcasing advanced multi-vendor functionality with responsive Storefront, Admin, and Seller Dashboards, customizable shipping logic, real-time search, dynamic product management, and a scalable, user-centric checkout system that highlights expertise in full-stack development and modern web architecture.
+[![Version](https://img.shields.io/badge/version-47.0.0-blue.svg)](https://github.com/Isaiahpeoples/multivendor_ecommerce)
+[![Built With](https://img.shields.io/badge/Built_with-Next.js_13-blue)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue)](https://www.typescriptlang.org/)
+[![ORM](https://img.shields.io/badge/ORM-Prisma-blue)](https://www.prisma.io/)
+[![DB](https://img.shields.io/badge/Database-MySQL-blue)](https://www.mysql.com/)
+[![Auth](https://img.shields.io/badge/Auth-Clerk-blue)](https://clerk.dev/)
 
-## 🚀 Technologies Used 🚀
+[![Deploy](https://img.shields.io/badge/Deploy-Vercel-brightgreen)](https://vercel.com/)
+[![Live](https://img.shields.io/badge/Live-Demo-brightgreen)](https://go-shop-store.com/)
 
-- **Next.js**: React framework for scalable, full-stack web apps.
-- **React**: Library for building the user interface.
-- **TypeScript**: Adds type safety and scalability to JavaScript code.
-- **Prisma**: Database ORM for schema management and database operations.
-- **Clerk**: User authentication and authorization.
-- **MySQL**: Relational database for structured data storage.
-- **Shadcn-ui**: Prebuilt, customizable UI components for React.
-- **Swiper.js**: Enables touch-friendly sliders and carousels with smooth transitions.
-- **Supabase**: Backend-as-a-service for database and authentication.
-- **Render**: Hosts and deploys web applications easily.
-- **Vercel**: Hosting and deployment for optimized speed and scalability.
-- **Railway**: Deploys app and infrastructure seamlessly to the cloud.
+</div>
+<br/>
 
-## 📑 Key Features 📑
+## 🛍️ Project Overview
 
-- **Multi-Vendor Support**: Separate dashboards for sellers, admins, and users.
-- **Responsive Storefront**: Mobile-friendly design with dynamic product displays.
-- **Advanced Shipping Logic**: Custom rates by country, quantity, or weight.
-- **Real-Time Features**: Live viewer count and instant search suggestions.
-- **Product Reviews**: Includes ratings, images, and Q&A sections.
-- **Cart & Checkout**: Live updates, coupons, and multi-payment support.
-- **User Profiles**: Manage orders, wishlists, addresses, and followed stores.
-- **ElasticSearch Filtering**: Fast, accurate product filtering and search results.
+**GoShop** is a comprehensive, Amazon-style multi-vendor e-commerce platform built with **Next.js**, **TypeScript**, and **MySQL**, and secured with **Clerk**. It features multi-role access (Admin, Seller, Buyer), advanced product filtering via **ElasticSearch**, real-time features, dynamic checkout, and modern UI using **Shadcn**, **Swiper.js**, and **TailwindCSS**.
+
+<br/>
+
+## 🚀 Technologies Used
+
+| Technology    	| Description                                                           	|
+|-------------------|---------------------------------------------------------------------------|
+| **Next.js**   	| ⚡ Full-stack framework for scalable apps and API integration.         	|
+| **React**     	| ⚛️ Component-based library for dynamic UIs.                           	|
+| **TypeScript**	| 🔒 Strong typing for robust, maintainable code.                       	|
+| **Prisma**    	| 🗄️ Modern ORM for database schema and queries.                        	|
+| **MySQL**     	| 💾 Relational database for structured, reliable data storage.         	|
+| **Clerk**     	| 🔐 Authentication and user management system.                         	|
+| **Shadcn-ui** 	| 🎨 Headless UI components styled with Tailwind CSS.                   	|
+| **Supabase**  	| ☁️ BaaS for database, auth, and real-time subscriptions.              	|
+| **Render / Vercel / Railway** | 🚀 Cloud deployment platforms.                          	|
+
+<br/>
+
+## 📸 Project Screenshot
+
+![GoShop Preview](https://online-project-images.s3.us-east-2.amazonaws.com/goshop/Go+Shop-1.png)
+
+*A powerful and scalable storefront supporting buyers, sellers, and admin dashboards.*
+
+<br/>
+
+## 📑 Key Features
+
+- 🧑‍🤝‍🧑 **Multi-Vendor Dashboards** – Tailored interfaces for sellers, admins, and buyers.  
+- 🔍 **ElasticSearch Filtering** – Blazing fast, full-text product search and filters.  
+- 🚚 **Custom Shipping Logic** – Rates by country, quantity, or weight.  
+- 🛒 **Real-Time Cart & Checkout** – Live updates, multi-gateway support with Stripe & PayPal.  
+- 📦 **Product Management** – Dynamic add/edit/delete with review & Q&A support.  
+- 🔐 **Secure Authentication** – Seamless login and registration via Clerk.  
+- 💬 **Live Viewer Count + Instant Search** – Boosts engagement and UX.  
+- 📱 **Mobile-Responsive UI** – Optimized for users on any device.
+
+<br/>
 
 ## 🔧 Installation & Setup 🔧
 
@@ -103,6 +131,8 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+<br/>
+
 ## 📂 Project Structure 📂
 
 - **/app: Main application directory with API routes and pages**
@@ -115,6 +145,8 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 - **/public: Static assets and images**
 
+<br/>
+
 ## 📌 Learn More 📌
 
 To learn more about Next.js, take a look at the following resources:
@@ -124,11 +156,23 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
+<br/>
+
 ## ❗Deploy on Vercel❗
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+<br/>
+
+## 🌐 Live Demo
+
+Check out the live version:  
+👉 [GoShop Live Demo](https://go-shop-store.com/)
+
+<br/>
+
 ### ⭐️ Support ⭐️
-If you found this project helpful or interesting, please give it a ⭐️! Your support helps to grow the project and boosts visibility. Thank you!
+If you found this project helpful, give it a ⭐️ Star!
+Your support makes a difference and encourages continued innovation.
